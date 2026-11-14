@@ -42,19 +42,18 @@ pub async fn lookup(ctx: &Ctx, input: &str) -> Record {
     };
     let key = cache_key(&q, ctx);
 
-    if ctx.opts.use_cache {
-        if let Some(bytes) = ctx.cache_get("results", &key, ctx.opts.cache_ttl, false).await {
-            if let Ok(mut rec) = serde_json::from_slice::<Record>(&bytes) {
-                rec.query = input.to_string();
-                if let Some(s) = &mut rec.source {
-                    s.cached = true;
-                }
-                // recompute time-relative signals; they drift while cached
-                let privacy = rec.signals.as_ref().and_then(|s| s.privacy_redacted);
-                rec.signals = signals(&rec, privacy);
-                return rec;
-            }
+    if ctx.opts.use_cache
+        && let Some(bytes) = ctx.cache_get("results", &key, ctx.opts.cache_ttl, false).await
+        && let Ok(mut rec) = serde_json::from_slice::<Record>(&bytes)
+    {
+        rec.query = input.to_string();
+        if let Some(s) = &mut rec.source {
+            s.cached = true;
         }
+        // recompute time-relative signals; they drift while cached
+        let privacy = rec.signals.as_ref().and_then(|s| s.privacy_redacted);
+        rec.signals = signals(&rec, privacy);
+        return rec;
     }
 
     let mut rec = Record::new(input, kind_of(&q));
@@ -83,8 +82,8 @@ pub async fn lookup(ctx: &Ctx, input: &str) -> Record {
         Ok(src) => {
             rec.source = Some(src);
             let has_registrant = rec.registrant.as_ref().is_some_and(|c| c.name.is_some() || c.org.is_some());
-            let privacy = (rec.kind == Kind::Domain && rec.result == Outcome::Registered)
-                .then_some(redacted || !has_registrant);
+            let privacy =
+                (rec.kind == Kind::Domain && rec.result == Outcome::Registered).then_some(redacted || !has_registrant);
             rec.signals = signals(&rec, privacy);
         }
         Err(e) => {
@@ -93,10 +92,11 @@ pub async fn lookup(ctx: &Ctx, input: &str) -> Record {
     }
     sanitize::record(&mut rec);
 
-    if ctx.opts.use_cache && rec.result != Outcome::Error {
-        if let Ok(bytes) = serde_json::to_vec(&rec) {
-            ctx.cache_put("results", &key, &bytes).await;
-        }
+    if ctx.opts.use_cache
+        && rec.result != Outcome::Error
+        && let Ok(bytes) = serde_json::to_vec(&rec)
+    {
+        ctx.cache_put("results", &key, &bytes).await;
     }
     rec
 }
@@ -149,7 +149,13 @@ async fn domain(ctx: &Ctx, rec: &mut Record, ascii: &str, redacted: &mut bool) -
     }
 }
 
-async fn ip_net(ctx: &Ctx, rec: &mut Record, net: IpNet, label: &str, redacted: &mut bool) -> Result<Source, LookupError> {
+async fn ip_net(
+    ctx: &Ctx,
+    rec: &mut Record,
+    net: IpNet,
+    label: &str,
+    redacted: &mut bool,
+) -> Result<Source, LookupError> {
     // Every RIR runs RDAP and redirects cross-RIR; ARIN is a sane default if bootstrap misses.
     let base = bootstrap::for_net(ctx, net).await?.unwrap_or_else(|| "https://rdap.arin.net/registry/".into());
     let url = format!("{base}ip/{label}");

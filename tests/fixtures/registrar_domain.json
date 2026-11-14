@@ -1,0 +1,16 @@
+{
+  "objectClassName": "domain",
+  "ldhName": "example.test",
+  "entities": [
+    {
+      "objectClassName": "entity",
+      "roles": ["registrant"],
+      "vcardArray": ["vcard", [["version", {}, "text", "4.0"],
+        ["fn", {}, "text", "REDACTED FOR PRIVACY"],
+        ["org", {}, "text", "Example Holdings Ltd"],
+        ["adr", { "cc": "GB" }, "text", ["", "", "", "", "", "", ""]],
+        ["email", {}, "text", "Please query the RDDS service of the Registrar of Record"]]]
+    }
+  ],
+  "redacted": [{ "name": { "type": "Registrant Name" }, "method": "removal" }]
+}

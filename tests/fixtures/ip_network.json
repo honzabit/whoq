@@ -1,0 +1,16 @@
+{
+  "objectClassName": "ip network",
+  "handle": "NET-198-51-100-0-1",
+  "startAddress": "198.51.100.0",
+  "endAddress": "198.51.100.255",
+  "cidr0_cidrs": [{ "v4prefix": "198.51.100.0", "length": 24 }],
+  "name": "FIXTURE-NET",
+  "type": "ASSIGNMENT",
+  "country": "NL",
+  "status": ["active"],
+  "entities": [
+    { "roles": ["registrant"], "vcardArray": ["vcard", [["fn", {}, "text", "Fixture Networks BV"]]] },
+    { "roles": ["abuse"], "vcardArray": ["vcard", [["fn", {}, "text", "Abuse"], ["email", {}, "text", "abuse@fixture.test"]]] }
+  ],
+  "remarks": [{ "title": "Note", "description": ["Synthetic network for whoq tests"] }]
+}

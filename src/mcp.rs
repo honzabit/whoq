@@ -6,7 +6,7 @@ use crate::lookup::lookup;
 use crate::model::Outcome;
 use crate::output;
 use futures::StreamExt;
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use std::sync::Arc;
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
 
@@ -22,9 +22,9 @@ fn tools() -> Value {
             "name": "lookup",
             "title": "WHOIS / RDAP lookup",
             "description": format!("Look up registration data for domains, IPs, CIDRs or ASNs via RDAP (with WHOIS fallback). \
-Accepts URLs and email addresses too (reduced to the registrable domain). Returns normalized records with \
-registrar, dates, status, nameservers, abuse contacts, and computed signals (age_days, expires_in_days, young, \
-expiring_soon, recently_transferred, privacy_redacted, on_hold). {UNTRUSTED}"),
+    Accepts URLs and email addresses too (reduced to the registrable domain). Returns normalized records with \
+    registrar, dates, status, nameservers, abuse contacts, and computed signals (age_days, expires_in_days, young, \
+    expiring_soon, recently_transferred, privacy_redacted, on_hold). {UNTRUSTED}"),
             "inputSchema": {
                 "type": "object",
                 "properties": {
@@ -42,8 +42,8 @@ expiring_soon, recently_transferred, privacy_redacted, on_hold). {UNTRUSTED}"),
             "name": "enrich_ips",
             "title": "IP owner enrichment (bulk)",
             "description": format!("Map up to 1000 IPs to ASN, AS name, country and BGP prefix (Team Cymru), optionally \
-plus registry org, network name and abuse contact (`rdap: true`, slower). Lookups are deduplicated by network and cached. \
-Private/reserved IPs are flagged and never sent upstream. Use this for log triage instead of calling `lookup` per IP. {UNTRUSTED}"),
+    plus registry org, network name and abuse contact (`rdap: true`, slower). Lookups are deduplicated by network and cached. \
+    Private/reserved IPs are flagged and never sent upstream. Use this for log triage instead of calling `lookup` per IP. {UNTRUSTED}"),
             "inputSchema": {
                 "type": "object",
                 "properties": {
@@ -59,7 +59,7 @@ Private/reserved IPs are flagged and never sent upstream. Use this for log triag
             "name": "check_availability",
             "title": "Domain availability",
             "description": "Check whether domains are registered. `available: true` means the registry has no record \
-(premium/reserved names may still be blocked). `available: null` means the check failed.",
+    (premium/reserved names may still be blocked). `available: null` means the check failed.",
             "inputSchema": {
                 "type": "object",
                 "properties": {
@@ -111,10 +111,10 @@ async fn call(ctx: &Arc<Ctx>, name: &str, args: &Value) -> Result<Value, String>
     match name {
         "lookup" => {
             let mut qs = strings(&args["queries"]);
-            if qs.is_empty() {
-                if let Some(q) = args["query"].as_str() {
-                    qs.push(q.to_string());
-                }
+            if qs.is_empty()
+                && let Some(q) = args["query"].as_str()
+            {
+                qs.push(q.to_string());
             }
             if qs.is_empty() || qs.len() > MAX_BATCH {
                 return Err(format!("`queries` must contain 1..={MAX_BATCH} items"));
@@ -251,7 +251,9 @@ pub async fn serve(ctx: Arc<Ctx>) -> anyhow::Result<()> {
         let msg: Value = match serde_json::from_str(&line) {
             Ok(v) => v,
             Err(e) => {
-                let _ = tx.send(json!({ "jsonrpc": "2.0", "id": null, "error": { "code": -32700, "message": e.to_string() } }));
+                let _ = tx.send(
+                    json!({ "jsonrpc": "2.0", "id": null, "error": { "code": -32700, "message": e.to_string() } }),
+                );
                 continue;
             }
         };

@@ -28,7 +28,9 @@ pub fn parse_date(s: &str) -> Option<String> {
                 return Some(d.and_utc());
             }
         }
-        for f in ["%Y-%m-%d", "%Y.%m.%d", "%Y/%m/%d", "%d.%m.%Y", "%d-%b-%Y", "%d-%B-%Y", "%d/%m/%Y", "%Y%m%d", "%b %d %Y"] {
+        for f in
+            ["%Y-%m-%d", "%Y.%m.%d", "%Y/%m/%d", "%d.%m.%Y", "%d-%b-%Y", "%d-%B-%Y", "%d/%m/%Y", "%Y%m%d", "%b %d %Y"]
+        {
             if let Ok(d) = NaiveDate::parse_from_str(s, f) {
                 return Some(d.and_hms_opt(0, 0, 0)?.and_utc());
             }
@@ -156,7 +158,10 @@ mod tests {
 
     #[test]
     fn statuses() {
-        assert_eq!(status("clientTransferProhibited https://icann.org/epp#clientTransferProhibited"), "client transfer prohibited");
+        assert_eq!(
+            status("clientTransferProhibited https://icann.org/epp#clientTransferProhibited"),
+            "client transfer prohibited"
+        );
         assert_eq!(status("client delete prohibited"), "client delete prohibited");
         assert_eq!(status("ok"), "ok");
         assert_eq!(status("ACTIVE"), "active");

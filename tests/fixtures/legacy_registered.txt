@@ -1,0 +1,11 @@
+% Fixture registry WHOIS server
+Domain Name: OLD.LEGACY
+Registrar: Legacy Registrar AG
+Registrar IANA ID: 4242
+Creation Date: 1999-09-09
+Registry Expiry Date: 2098-09-09T00:00:00Z
+Name Server: NS.OLD.LEGACY
+Name Server: NS2.OLD.LEGACY
+Domain Status: ok https://icann.org/epp#ok
+DNSSEC: unsigned
+>>> Last update of WHOIS database: 2026-11-14T00:00:00Z <<<

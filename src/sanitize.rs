@@ -38,10 +38,7 @@ pub fn clean(s: &str, max: usize) -> String {
 
 /// Multi-line clean for raw text: keeps `\n`, drops other controls.
 pub fn clean_multiline(s: &str) -> String {
-    s.chars()
-        .filter(|&c| c == '\n' || !is_dangerous(c))
-        .map(|c| if c == '\t' { ' ' } else { c })
-        .collect()
+    s.chars().filter(|&c| c == '\n' || !is_dangerous(c)).map(|c| if c == '\t' { ' ' } else { c }).collect()
 }
 
 fn truncate(s: String, max: usize) -> String {

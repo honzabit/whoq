@@ -3,8 +3,8 @@
 use crate::ctx::{Ctx, LookupError};
 use crate::model::{AsnInfo, Contact, Network, Record, Registrar};
 use crate::normalize::{dedupe, parse_date, real, status};
-use reqwest::header::{ACCEPT, RETRY_AFTER};
 use reqwest::StatusCode;
+use reqwest::header::{ACCEPT, RETRY_AFTER};
 use serde_json::Value;
 use std::time::Duration;
 
@@ -151,11 +151,11 @@ fn apply_common(r: &mut Record, v: &Value, redacted: &mut bool) {
             }
         }
     }
-    if r.status.is_empty() {
-        if let Some(st) = v["status"].as_array() {
-            r.status = st.iter().filter_map(|s| s.as_str()).map(status).collect();
-            dedupe(&mut r.status);
-        }
+    if r.status.is_empty()
+        && let Some(st) = v["status"].as_array()
+    {
+        r.status = st.iter().filter_map(|s| s.as_str()).map(status).collect();
+        dedupe(&mut r.status);
     }
     // RFC 9537 redaction markers
     if v["redacted"].as_array().is_some_and(|a| !a.is_empty()) {
@@ -174,15 +174,12 @@ pub fn apply_domain(r: &mut Record, v: &Value, redacted: &mut bool) {
     if r.unicode_name.is_none() {
         r.unicode_name = str_of(v, "unicodeName").filter(|u| Some(u.to_lowercase()) != r.name.clone());
     }
-    if r.nameservers.is_empty() {
-        if let Some(ns) = v["nameservers"].as_array() {
-            r.nameservers = ns
-                .iter()
-                .filter_map(|n| n["ldhName"].as_str())
-                .map(|s| s.trim_end_matches('.').to_lowercase())
-                .collect();
-            dedupe(&mut r.nameservers);
-        }
+    if r.nameservers.is_empty()
+        && let Some(ns) = v["nameservers"].as_array()
+    {
+        r.nameservers =
+            ns.iter().filter_map(|n| n["ldhName"].as_str()).map(|s| s.trim_end_matches('.').to_lowercase()).collect();
+        dedupe(&mut r.nameservers);
     }
     if r.dnssec.is_none() {
         r.dnssec = v["secureDNS"]["delegationSigned"].as_bool();
@@ -194,7 +191,9 @@ pub fn apply_domain(r: &mut Record, v: &Value, redacted: &mut bool) {
         set(
             &mut reg.iana_id,
             e["publicIds"].as_array().and_then(|ids| {
-                ids.iter().find(|i| i["type"].as_str().is_some_and(|t| t.contains("IANA"))).and_then(|i| str_of(i, "identifier"))
+                ids.iter()
+                    .find(|i| i["type"].as_str().is_some_and(|t| t.contains("IANA")))
+                    .and_then(|i| str_of(i, "identifier"))
             }),
         );
         set(&mut reg.url, vcard_text(e, "url"));
@@ -293,6 +292,11 @@ pub fn registrar_link(v: &Value, self_url: &str) -> Option<String> {
         .filter(|l| l["rel"].as_str() == Some("related"))
         .filter(|l| l["type"].as_str().is_none_or(|t| t.contains("rdap")))
         .filter_map(|l| l["href"].as_str())
-        .find(|h| h.starts_with("https://") && h.contains("/domain/") && !h.eq_ignore_ascii_case(self_url))
+        // never downgrade https -> http
+        .find(|h| {
+            (h.starts_with("https://") || (h.starts_with("http://") && self_url.starts_with("http://")))
+                && h.contains("/domain/")
+                && !h.eq_ignore_ascii_case(self_url)
+        })
         .map(str::to_string)
 }

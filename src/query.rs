@@ -20,10 +20,10 @@ pub fn parse(input: &str) -> Result<Query, String> {
 
     // ASN: AS15169, as15169
     let upper = s.to_ascii_uppercase();
-    if let Some(rest) = upper.strip_prefix("AS") {
-        if let Ok(n) = rest.parse::<u32>() {
-            return Ok(Query::Asn(n));
-        }
+    if let Some(rest) = upper.strip_prefix("AS")
+        && let Ok(n) = rest.parse::<u32>()
+    {
+        return Ok(Query::Asn(n));
     }
     if let Ok(ip) = s.parse::<IpAddr>() {
         return Ok(Query::Ip(ip));
@@ -44,15 +44,13 @@ pub fn parse(input: &str) -> Result<Query, String> {
     if let Some(inner) = host.strip_prefix('[') {
         // [v6]:port
         let inner = inner.split(']').next().unwrap_or(inner);
-        return inner
-            .parse::<IpAddr>()
-            .map(Query::Ip)
-            .map_err(|_| format!("invalid IPv6 address: {inner}"));
+        return inner.parse::<IpAddr>().map(Query::Ip).map_err(|_| format!("invalid IPv6 address: {inner}"));
     }
-    if let Some((h, port)) = host.rsplit_once(':') {
-        if !port.is_empty() && port.chars().all(|c| c.is_ascii_digit()) {
-            host = h;
-        }
+    if let Some((h, port)) = host.rsplit_once(':')
+        && !port.is_empty()
+        && port.chars().all(|c| c.is_ascii_digit())
+    {
+        host = h;
     }
     let host = host.trim_end_matches('.');
     if let Ok(ip) = host.parse::<IpAddr>() {
@@ -69,7 +67,8 @@ pub fn parse(input: &str) -> Result<Query, String> {
         return Err(format!("invalid domain name: {host}"));
     }
 
-    let registrable = registrable_domain(&ascii).ok_or_else(|| format!("{ascii} is a public suffix, not a registrable domain"))?;
+    let registrable =
+        registrable_domain(&ascii).ok_or_else(|| format!("{ascii} is a public suffix, not a registrable domain"))?;
     let (unicode, _) = idna::domain_to_unicode(&registrable);
     let unicode = (unicode != registrable).then_some(unicode);
     Ok(Query::Domain { ascii: registrable, unicode })
@@ -80,15 +79,10 @@ pub fn parse(input: &str) -> Result<Query, String> {
 /// the `.io` registry knows about.
 pub fn registrable_domain(name: &str) -> Option<String> {
     let mut suffix = psl::suffix_str(name)?.to_string();
-    loop {
-        match psl::suffix(suffix.as_bytes()).and_then(|s| s.typ()) {
-            Some(psl::Type::Private) => {
-                // drop one label from the private suffix and re-resolve on the remainder
-                let (_, rest) = suffix.split_once('.')?;
-                suffix = psl::suffix_str(rest)?.to_string();
-            }
-            _ => break,
-        }
+    while let Some(psl::Type::Private) = psl::suffix(suffix.as_bytes()).and_then(|s| s.typ()) {
+        // drop one label from the private suffix and re-resolve on the remainder
+        let (_, rest) = suffix.split_once('.')?;
+        suffix = psl::suffix_str(rest)?.to_string();
     }
     if name == suffix {
         return None;

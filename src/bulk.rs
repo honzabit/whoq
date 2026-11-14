@@ -5,6 +5,7 @@
 //!   gives ASN, AS name, BGP prefix, country, RIR.
 //! - RDAP (`--rdap`): network name, org, abuse contact. One request per *network*, not per IP —
 //!   every answer is cached by its CIDR and reused for all other IPs inside it.
+//!
 //! Both caches persist on disk (default 7 days) so repeated runs are mostly offline.
 
 use crate::ctx::Ctx;
@@ -65,6 +66,18 @@ pub fn extract_field(line: &str, field: usize, delim: Option<char>) -> Vec<IpAdd
     col.map(|c| extract(c.trim_matches('"'))).unwrap_or_default()
 }
 
+/// Numeric weight from a 1-based field. Accepts `1,234`, `1_234` and `12.0`.
+pub fn parse_weight(line: &str, field: usize, delim: Option<char>) -> Option<usize> {
+    let col = match delim {
+        Some(d) => line.split(d).nth(field - 1),
+        None => line.split_whitespace().nth(field - 1),
+    }?;
+    let s: String = col.trim().trim_matches('"').chars().filter(|c| *c != ',' && *c != '_').collect();
+    s.parse::<usize>()
+        .ok()
+        .or_else(|| s.parse::<f64>().ok().filter(|f| *f >= 0.0 && f.is_finite()).map(|f| f.round() as usize))
+}
+
 /// Non-routable addresses never leave the machine.
 pub fn is_private(ip: &IpAddr) -> bool {
     match ip {
@@ -113,10 +126,10 @@ impl<T: Clone> NetCache<T> {
     pub fn get(&self, ip: IpAddr) -> Option<T> {
         let m = if ip.is_ipv4() { &self.v4 } else { &self.v6 };
         for (len, nets) in m.iter().rev() {
-            if let Ok(n) = IpNet::new(ip, *len) {
-                if let Some(v) = nets.get(&n.trunc()) {
-                    return Some(v.clone());
-                }
+            if let Ok(n) = IpNet::new(ip, *len)
+                && let Some(v) = nets.get(&n.trunc())
+            {
+                return Some(v.clone());
             }
         }
         None
@@ -226,6 +239,43 @@ pub struct Engine {
     pub stats: Stats,
 }
 
+/// Parse the cache file, dropping expired, malformed and superseded entries
+/// (latest write per source+network wins). Returns (kept, total lines).
+fn compact_entries(text: &str, cutoff: u64) -> (Vec<Persisted>, usize) {
+    let mut latest: HashMap<(String, String), Persisted> = HashMap::new();
+    let mut total = 0;
+    for line in text.lines().filter(|l| !l.trim().is_empty()) {
+        total += 1;
+        let Ok(e) = serde_json::from_str::<Persisted>(line) else { continue };
+        if e.t < cutoff || e.net.parse::<IpNet>().is_err() {
+            continue;
+        }
+        let key = (e.k.clone(), e.net.clone());
+        if latest.get(&key).is_none_or(|old| e.t >= old.t) {
+            latest.insert(key, e);
+        }
+    }
+    let mut kept: Vec<Persisted> = latest.into_values().collect();
+    kept.sort_by(|a, b| a.t.cmp(&b.t).then(a.net.cmp(&b.net)));
+    (kept, total)
+}
+
+/// Atomic rewrite (temp file + rename). A run appending concurrently may lose its
+/// newest entries; that only costs a re-lookup later.
+fn rewrite(path: &std::path::Path, kept: &[Persisted]) {
+    let mut buf = String::new();
+    for e in kept {
+        if let Ok(s) = serde_json::to_string(e) {
+            buf.push_str(&s);
+            buf.push('\n');
+        }
+    }
+    let tmp = path.with_extension(format!("compact{}", std::process::id()));
+    if std::fs::write(&tmp, buf).is_ok() && std::fs::rename(&tmp, path).is_err() {
+        let _ = std::fs::remove_file(&tmp);
+    }
+}
+
 fn now_secs() -> u64 {
     SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0)
 }
@@ -274,18 +324,22 @@ impl Engine {
         let Some(p) = self.cache_file() else { return };
         let Ok(text) = std::fs::read_to_string(&p) else { return };
         let cutoff = now_secs().saturating_sub(self.opts.cache_ttl.as_secs());
-        let (mut c, mut r) = (self.cymru.lock().unwrap(), self.rdap.lock().unwrap());
-        for line in text.lines() {
-            let Ok(e) = serde_json::from_str::<Persisted>(line) else { continue };
-            let Ok(net) = e.net.parse::<IpNet>() else { continue };
-            if e.t < cutoff {
-                continue;
+        let (kept, total) = compact_entries(&text, cutoff);
+        {
+            let (mut c, mut r) = (self.cymru.lock().unwrap(), self.rdap.lock().unwrap());
+            for e in &kept {
+                let Ok(net) = e.net.parse::<IpNet>() else { continue };
+                match (e.k.as_str(), &e.c, &e.r) {
+                    ("cymru", Some(v), _) => c.insert(net, v.clone()),
+                    ("rdap", _, Some(v)) => r.insert(net, v.clone()),
+                    _ => {}
+                }
             }
-            match (e.k.as_str(), e.c, e.r) {
-                ("cymru", Some(v), _) => c.insert(net, v),
-                ("rdap", _, Some(v)) => r.insert(net, v),
-                _ => {}
-            }
+        }
+        // Append-only grows forever; rewrite once a meaningful share is expired or duplicate.
+        let dead = total - kept.len();
+        if dead >= 500 || (total > 0 && dead * 4 >= total && dead > 20) {
+            rewrite(&p, &kept);
         }
     }
 
@@ -347,11 +401,7 @@ impl Engine {
                 registry: opt_clean(parts[4]),
                 as_name: opt_clean(&parts[6..].join("|")),
             };
-            let net = info
-                .prefix
-                .as_deref()
-                .and_then(|p| p.parse::<IpNet>().ok())
-                .unwrap_or_else(|| IpNet::from(ip));
+            let net = info.prefix.as_deref().and_then(|p| p.parse::<IpNet>().ok()).unwrap_or_else(|| IpNet::from(ip));
             cache.insert(net, info.clone());
             pbuf.push(Persisted { k: "cymru".into(), net: net.to_string(), t, c: Some(info), r: None });
             answered.insert(ip);
@@ -377,10 +427,10 @@ impl Engine {
         }
         let n = rec.network.unwrap_or_default();
         let mut nets: Vec<IpNet> = n.cidr.iter().filter_map(|c| c.parse().ok()).collect();
-        if nets.is_empty() {
-            if let (Some(a), Some(b)) = (&n.start, &n.end) {
-                nets = range_to_nets(a, b);
-            }
+        if nets.is_empty()
+            && let (Some(a), Some(b)) = (&n.start, &n.end)
+        {
+            nets = range_to_nets(a, b);
         }
         if nets.is_empty() || !nets.iter().any(|x| x.contains(&ip)) {
             nets = vec![IpNet::from(ip)];
@@ -398,7 +448,8 @@ impl Engine {
         let mut cache = self.rdap.lock().unwrap();
         let mut pbuf = self.persist_buf.lock().unwrap();
         for net in nets {
-            let scope = if self.opts.precise && net.prefix_len() < b.prefix_len() && net.contains(&ip) { b } else { net };
+            let scope =
+                if self.opts.precise && net.prefix_len() < b.prefix_len() && net.contains(&ip) { b } else { net };
             cache.insert(scope, info.clone());
             pbuf.push(Persisted { k: "rdap".into(), net: scope.to_string(), t, c: None, r: Some(info.clone()) });
         }
@@ -510,7 +561,13 @@ pub fn summarize(seen: &HashMap<IpAddr, (Owner, usize)>, top: usize) -> Vec<Grou
         } else {
             ("unknown".into(), "unknown".into())
         };
-        let e = g.entry(key).or_insert_with(|| Group { asn: o.asn, owner, country: o.country.clone(), hits: 0, unique_ips: 0 });
+        let e = g.entry(key).or_insert_with(|| Group {
+            asn: o.asn,
+            owner,
+            country: o.country.clone(),
+            hits: 0,
+            unique_ips: 0,
+        });
         e.hits += hits;
         e.unique_ips += 1;
     }
@@ -523,11 +580,7 @@ pub fn summarize(seen: &HashMap<IpAddr, (Owner, usize)>, top: usize) -> Vec<Grou
 }
 
 pub fn csv_escape(s: &str) -> String {
-    if s.contains([',', '"', '\n', '\r']) {
-        format!("\"{}\"", s.replace('"', "\"\""))
-    } else {
-        s.to_string()
-    }
+    if s.contains([',', '"', '\n', '\r']) { format!("\"{}\"", s.replace('"', "\"\"")) } else { s.to_string() }
 }
 
 #[cfg(test)]
@@ -542,6 +595,43 @@ mod tests {
         assert!(extract("deadbeef cafe:babe 2026-11-14 :: 10:20").is_empty());
         let f: Vec<String> = extract_field("a,b,9.9.9.9,c", 3, Some(',')).iter().map(|i| i.to_string()).collect();
         assert_eq!(f, vec!["9.9.9.9"]);
+    }
+
+    #[test]
+    fn compaction_keeps_latest_unexpired() {
+        let line = |k: &str, net: &str, t: u64, asn: u32| {
+            serde_json::to_string(&Persisted {
+                k: k.into(),
+                net: net.into(),
+                t,
+                c: Some(CymruInfo { asn: Some(asn), ..Default::default() }),
+                r: None,
+            })
+            .unwrap()
+        };
+        let text = [
+            line("cymru", "8.8.8.0/24", 100, 1), // superseded
+            line("cymru", "8.8.8.0/24", 200, 2), // kept
+            line("cymru", "1.1.1.0/24", 50, 3),  // expired
+            line("rdap", "8.8.8.0/24", 150, 4),  // different source: kept
+            "not json".to_string(),              // malformed
+            line("cymru", "garbage", 300, 5),    // bad net
+        ]
+        .join("\n");
+        let (kept, total) = compact_entries(&text, 60);
+        assert_eq!(total, 6);
+        assert_eq!(kept.len(), 2);
+        let c = kept.iter().find(|e| e.k == "cymru").unwrap();
+        assert_eq!((c.t, c.c.as_ref().unwrap().asn), (200, Some(2)));
+    }
+
+    #[test]
+    fn weights() {
+        assert_eq!(parse_weight("8.8.8.8\t4171", 2, None), Some(4171));
+        assert_eq!(parse_weight("8.8.8.8;1_234", 2, Some(';')), Some(1234));
+        assert_eq!(parse_weight("8.8.8.8 12.0", 2, None), Some(12));
+        assert_eq!(parse_weight("8.8.8.8 n/a", 2, None), None);
+        assert_eq!(parse_weight("8.8.8.8", 2, None), None);
     }
 
     #[test]

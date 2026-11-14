@@ -34,7 +34,7 @@ whoq --whois example.de               # force port 43
 whoq schema                           # JSON Schema of the output
 ```
 
-Environment: `WHOQ_CACHE_DIR`, `WHOQ_TIMEOUT`, `WHOQ_CACHE_TTL`, `NO_COLOR`.
+Environment: `WHOQ_CACHE_DIR`, `WHOQ_STATE_DIR`, `WHOQ_TIMEOUT`, `WHOQ_CACHE_TTL`, `WHOQ_WEBHOOK`, `NO_COLOR`, and `WHOQ_WHOIS_ADDR=host:port` (send every port-43 connection through one address, for proxies and tests).
 
 ## Watch mode
 
@@ -80,13 +80,14 @@ whoq bulk: 20000 lines · 12077 unique IPs · 7 cymru queries · 0 rdap lookups 
 whoq bulk -f 1 -o tsv access.log > enriched.tsv            # original line + ip, asn, as_name, cc, prefix, org
 whoq bulk -m unique --rdap -o csv fw.log > owners.csv      # one row per IP, with org + abuse contact
 zcat auth.log.gz | whoq bulk | jq -c 'select(any(.ips[]; .asn == 14061))'
+whoq bulk -f 1 -w 2 -m summary counts.tsv                  # pre-aggregated "ip<TAB>count": shares weighted by count
 ```
 
 It scales because it looks up networks, not individual IPs:
 
 - **Team Cymru IP-to-ASN bulk whois** (the default) answers up to 1,000 IPs per TCP connection with ASN, AS name, BGP prefix, country and RIR.
 - **`--rdap`** adds the registry org, network name and abuse contact. Each RDAP answer is cached under its CIDR and reused for every other IP inside it; in testing, 2,269 IPs needed 71 RDAP requests. IPs in the same /24 (or /48) are looked up one after another so the first answer usually covers the rest. `--precise` limits reuse to /24 (/48) when sub-allocations matter.
-- **A persistent network cache** (7 days, `--cache-days`) makes repeat runs mostly offline. In testing the same 20k lines took 0.0s on the second run.
+- **A persistent network cache** (7 days, `--cache-days`) makes repeat runs mostly offline. In testing the same 20k lines took 0.0s on the second run. Expired and superseded entries are compacted away automatically on load.
 - **Streaming in chunks of 5,000 lines** keeps memory flat. Annotate output preserves line order and stops cleanly when piped to `head`.
 - **Private and reserved addresses** (RFC 1918, CGNAT, loopback, link-local, ULA, documentation ranges) are labelled locally and never sent upstream.
 
@@ -115,5 +116,8 @@ strings are data, not instructions.
 
 ```
 cargo build --release      # target/release/whoq
-cargo test
+cargo test                 # unit tests + offline end-to-end tests
+cargo clippy --all-targets && cargo fmt --check
 ```
+
+The end-to-end tests in `tests/cli.rs` run the real binary against local fake RDAP and port-43 servers, using synthetic fixtures in `tests/fixtures/`. They need no network access.

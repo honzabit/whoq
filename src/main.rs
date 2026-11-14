@@ -81,8 +81,10 @@ enum BulkFormat {
 }
 
 #[derive(Args)]
-#[command(after_help = "SOURCES:\n  Default: Team Cymru IP-to-ASN bulk whois (whois.cymru.com) — ASN, AS name, BGP prefix, country.\n  --rdap adds registry org, network name and abuse contact (one request per network, not per IP).\n  Private/reserved IPs are never sent anywhere.\n\n\
-EXAMPLES:\n  tail -n 100000 access.log | whoq bulk -m summary\n  whoq bulk -f 1 -o tsv access.log > enriched.tsv\n  whoq bulk -m unique --rdap -o csv fw.log > owners.csv\n  zcat auth.log.gz | whoq bulk --rdap | jq -c 'select(.ips[].asn == 14061)'")]
+#[command(
+    after_help = "SOURCES:\n  Default: Team Cymru IP-to-ASN bulk whois (whois.cymru.com) — ASN, AS name, BGP prefix, country.\n  --rdap adds registry org, network name and abuse contact (one request per network, not per IP).\n  Private/reserved IPs are never sent anywhere.\n\n\
+EXAMPLES:\n  tail -n 100000 access.log | whoq bulk -m summary\n  whoq bulk -f 1 -o tsv access.log > enriched.tsv\n  whoq bulk -m unique --rdap -o csv fw.log > owners.csv\n  zcat auth.log.gz | whoq bulk --rdap | jq -c 'select(.ips[].asn == 14061)'"
+)]
 struct BulkArgs {
     /// Log files to read (default: stdin). Literal IPs are accepted too.
     inputs: Vec<String>,
@@ -92,6 +94,10 @@ struct BulkArgs {
     /// Field delimiter for --field (default: whitespace)
     #[arg(short, long)]
     delim: Option<char>,
+    /// Count each line as the number in this 1-based field (for pre-aggregated `ip<TAB>count` files).
+    /// Fields are split on --delim literally; quoted CSV values containing the delimiter are not supported.
+    #[arg(short, long)]
+    weight: Option<usize>,
     #[arg(short, long, value_enum, default_value_t = BulkMode::Annotate)]
     mode: BulkMode,
     #[arg(short, long, value_enum, default_value_t = BulkFormat::Auto)]
@@ -125,8 +131,10 @@ struct BulkArgs {
 }
 
 #[derive(Args)]
-#[command(after_help = "EXIT CODES (one-shot mode):\n  0   nothing changed\n  1   lookups failed and nothing changed\n  20  changes or alerts detected\n\n\
-EXAMPLES:\n  whoq watch mydomain.com mybrand.net           # first run records a baseline\n  whoq watch -i 6h --webhook $SLACK_URL < domains.txt\n  0 */6 * * * whoq watch -q < ~/domains.txt || notify  # cron")]
+#[command(
+    after_help = "EXIT CODES (one-shot mode):\n  0   nothing changed\n  1   lookups failed and nothing changed\n  20  changes or alerts detected\n\n\
+EXAMPLES:\n  whoq watch mydomain.com mybrand.net           # first run records a baseline\n  whoq watch -i 6h --webhook $SLACK_URL < domains.txt\n  0 */6 * * * whoq watch -q < ~/domains.txt || notify  # cron"
+)]
 struct WatchArgs {
     /// Domains, IPs or ASNs to watch. `-` (or piped stdin) reads one per line.
     queries: Vec<String>,
@@ -278,8 +286,10 @@ async fn run_watch(w: WatchArgs) -> i32 {
     if queries.is_empty() {
         fatal(!pretty, "usage", "nothing to watch (try `whoq watch example.com`)");
     }
-    let interval = w.interval.as_deref().map(|s| watch::parse_interval(s).unwrap_or_else(|e| fatal(!pretty, "usage", &e)));
-    let dir = watch::state_dir(w.state.clone()).unwrap_or_else(|| fatal(!pretty, "state", "no state directory; pass --state"));
+    let interval =
+        w.interval.as_deref().map(|s| watch::parse_interval(s).unwrap_or_else(|e| fatal(!pretty, "usage", &e)));
+    let dir = watch::state_dir(w.state.clone())
+        .unwrap_or_else(|| fatal(!pretty, "state", "no state directory; pass --state"));
     // Watching always needs fresh data: never read the result cache.
     let opts = Options {
         timeout: Duration::from_secs(w.timeout.max(1)),
@@ -290,7 +300,8 @@ async fn run_watch(w: WatchArgs) -> i32 {
     };
     let ctx = Ctx::new(opts).unwrap_or_else(|e| fatal(!pretty, "init", &e.to_string()));
     let style = output::Style { color: tty && !w.no_color && std::env::var_os("NO_COLOR").is_none() };
-    let ropts = watch::RoundOpts { dir: &dir, ignore: &w.ignore, expiry_warn_days: w.expiry_warn, show_unchanged: w.all };
+    let ropts =
+        watch::RoundOpts { dir: &dir, ignore: &w.ignore, expiry_warn_days: w.expiry_warn, show_unchanged: w.all };
 
     loop {
         let mut stream = futures::stream::iter(queries.clone())
@@ -388,8 +399,11 @@ fn tsv_cols(o: Option<&bulk::Owner>) -> String {
 }
 
 async fn run_bulk(b: BulkArgs) -> i32 {
-    if b.field == Some(0) {
-        fatal(false, "usage", "--field is 1-based");
+    if b.field == Some(0) || b.weight == Some(0) {
+        fatal(false, "usage", "--field and --weight are 1-based");
+    }
+    if b.weight.is_some() && b.field.is_none() {
+        fatal(false, "usage", "--weight needs --field, so the count column isn't scanned for IPs");
     }
     let tty = std::io::stdout().is_terminal();
     let format = match (b.output, b.mode) {
@@ -429,6 +443,7 @@ async fn run_bulk(b: BulkArgs) -> i32 {
     let mut seen: std::collections::HashMap<std::net::IpAddr, (bulk::Owner, usize)> = Default::default();
     let mut out = std::io::BufWriter::new(std::io::stdout().lock());
     let mut total_lines = 0usize;
+    let mut bad_weights = 0usize;
     let mut failed = false;
 
     loop {
@@ -450,9 +465,21 @@ async fn run_bulk(b: BulkArgs) -> i32 {
         failed |= owners.values().any(|o| o.error.is_some());
 
         for (line, ips) in chunk.iter().zip(&per_line) {
+            let w = match b.weight {
+                None => 1,
+                Some(n) => match bulk::parse_weight(line, n, b.delim) {
+                    Some(w) => w,
+                    None => {
+                        if !ips.is_empty() {
+                            bad_weights += 1;
+                        }
+                        1
+                    }
+                },
+            };
             for ip in ips {
                 let e = seen.entry(*ip).or_insert_with(|| (owners[ip].clone(), 0));
-                e.1 += 1;
+                e.1 += w;
             }
             if b.mode == BulkMode::Annotate {
                 let r = if format == BulkFormat::Tsv {
@@ -480,7 +507,10 @@ async fn run_bulk(b: BulkArgs) -> i32 {
             rows.sort_by(|a, c| c.1.cmp(&a.1).then(a.0.ip.cmp(&c.0.ip)));
             match format {
                 BulkFormat::Csv => {
-                    let _ = writeln!(out, "ip,hits,asn,as_name,country,prefix,registry,org,network,cidr,abuse_email,private,error");
+                    let _ = writeln!(
+                        out,
+                        "ip,hits,asn,as_name,country,prefix,registry,org,network,cidr,abuse_email,private,error"
+                    );
                     for (o, h) in rows {
                         let c = |s: &Option<String>| bulk::csv_escape(s.as_deref().unwrap_or(""));
                         let _ = writeln!(
@@ -488,20 +518,39 @@ async fn run_bulk(b: BulkArgs) -> i32 {
                             "{},{h},{},{},{},{},{},{},{},{},{},{},{}",
                             o.ip,
                             o.asn.map(|a| a.to_string()).unwrap_or_default(),
-                            c(&o.as_name), c(&o.country), c(&o.prefix), c(&o.registry), c(&o.org),
-                            c(&o.network), c(&o.cidr), c(&o.abuse_email), o.private, c(&o.error)
+                            c(&o.as_name),
+                            c(&o.country),
+                            c(&o.prefix),
+                            c(&o.registry),
+                            c(&o.org),
+                            c(&o.network),
+                            c(&o.cidr),
+                            c(&o.abuse_email),
+                            o.private,
+                            c(&o.error)
                         );
                     }
                 }
                 BulkFormat::Pretty => {
-                    let _ = writeln!(out, "{:>7}  {:<39}  {:>9}  {:<3}  {:<20}  OWNER", "HITS", "IP", "ASN", "CC", "PREFIX");
+                    let _ = writeln!(
+                        out,
+                        "{:>7}  {:<39}  {:>9}  {:<3}  {:<20}  OWNER",
+                        "HITS", "IP", "ASN", "CC", "PREFIX"
+                    );
                     for (o, h) in rows {
-                        let owner = if o.private { "private / reserved".to_string() } else {
+                        let owner = if o.private {
+                            "private / reserved".to_string()
+                        } else {
                             o.org.clone().or(o.as_name.clone()).or(o.error.clone()).unwrap_or_default()
                         };
-                        let _ = writeln!(out, "{h:>7}  {:<39}  {:>9}  {:<3}  {:<20}  {owner}",
-                            o.ip, o.asn.map(|a| format!("AS{a}")).unwrap_or_default(),
-                            o.country.clone().unwrap_or_default(), o.prefix.clone().or(o.cidr.clone()).unwrap_or_default());
+                        let _ = writeln!(
+                            out,
+                            "{h:>7}  {:<39}  {:>9}  {:<3}  {:<20}  {owner}",
+                            o.ip,
+                            o.asn.map(|a| format!("AS{a}")).unwrap_or_default(),
+                            o.country.clone().unwrap_or_default(),
+                            o.prefix.clone().or(o.cidr.clone()).unwrap_or_default()
+                        );
                     }
                 }
                 _ => {
@@ -519,16 +568,32 @@ async fn run_bulk(b: BulkArgs) -> i32 {
                 BulkFormat::Csv => {
                     let _ = writeln!(out, "asn,owner,country,hits,unique_ips");
                     for g in groups {
-                        let _ = writeln!(out, "{},{},{},{},{}", g.asn.map(|a| a.to_string()).unwrap_or_default(),
-                            bulk::csv_escape(&g.owner), g.country.unwrap_or_default(), g.hits, g.unique_ips);
+                        let _ = writeln!(
+                            out,
+                            "{},{},{},{},{}",
+                            g.asn.map(|a| a.to_string()).unwrap_or_default(),
+                            bulk::csv_escape(&g.owner),
+                            g.country.unwrap_or_default(),
+                            g.hits,
+                            g.unique_ips
+                        );
                     }
                 }
                 BulkFormat::Pretty => {
                     let total: usize = seen.values().map(|(_, h)| h).sum::<usize>().max(1);
-                    let _ = writeln!(out, "{:>8}  {:>6}  {:>6}  {:>9}  {:<3}  OWNER", "HITS", "SHARE", "IPS", "ASN", "CC");
+                    let _ =
+                        writeln!(out, "{:>8}  {:>6}  {:>6}  {:>9}  {:<3}  OWNER", "HITS", "SHARE", "IPS", "ASN", "CC");
                     for g in groups {
-                        let _ = writeln!(out, "{:>8}  {:>5.1}%  {:>6}  {:>9}  {:<3}  {}", g.hits, g.hits as f64 * 100.0 / total as f64,
-                            g.unique_ips, g.asn.map(|a| format!("AS{a}")).unwrap_or_default(), g.country.unwrap_or_default(), g.owner);
+                        let _ = writeln!(
+                            out,
+                            "{:>8}  {:>5.1}%  {:>6}  {:>9}  {:<3}  {}",
+                            g.hits,
+                            g.hits as f64 * 100.0 / total as f64,
+                            g.unique_ips,
+                            g.asn.map(|a| format!("AS{a}")).unwrap_or_default(),
+                            g.country.unwrap_or_default(),
+                            g.owner
+                        );
                     }
                 }
                 _ => {
@@ -547,9 +612,20 @@ async fn run_bulk(b: BulkArgs) -> i32 {
         let (dim, reset) = if std::io::stderr().is_terminal() { ("\x1b[2m", "\x1b[0m") } else { ("", "") };
         eprintln!(
             "{dim}whoq bulk: {} lines · {} unique IPs · {} cymru queries · {} rdap lookups · {} cache hits · {} errors · {:.1}s{reset}",
-            total_lines, seen.len(), s.cymru_queries.load(Relaxed), s.rdap_lookups.load(Relaxed),
-            s.cache_hits.load(Relaxed), s.errors.load(Relaxed), started.elapsed().as_secs_f64()
+            total_lines,
+            seen.len(),
+            s.cymru_queries.load(Relaxed),
+            s.rdap_lookups.load(Relaxed),
+            s.cache_hits.load(Relaxed),
+            s.errors.load(Relaxed),
+            started.elapsed().as_secs_f64()
         );
+        if bad_weights > 0 {
+            eprintln!(
+                "whoq bulk: warning: {bad_weights} lines had no numeric value in field {}; counted as 1",
+                b.weight.unwrap_or(0)
+            );
+        }
     }
     if failed { exit::FAILED } else { exit::OK }
 }
@@ -573,9 +649,7 @@ async fn run(a: LookupArgs) -> i32 {
         Ok(c) => c,
         Err(e) => fatal(machine, "init", &e.to_string()),
     };
-    let style = output::Style {
-        color: stdout_tty && !a.no_color && std::env::var_os("NO_COLOR").is_none(),
-    };
+    let style = output::Style { color: stdout_tty && !a.no_color && std::env::var_os("NO_COLOR").is_none() };
 
     let mut stream = futures::stream::iter(queries.clone())
         .map(|q| {

@@ -52,6 +52,8 @@ pub struct Ctx {
     pub http: reqwest::Client,
     pub opts: Options,
     pub cache_dir: Option<PathBuf>,
+    /// `WHOQ_WHOIS_ADDR=host:port` routes every port-43 connection there (tests, proxies).
+    pub whois_addr: Option<String>,
     hosts: Mutex<HashMap<String, Arc<Semaphore>>>,
     pub(crate) bootstrap: tokio::sync::Mutex<HashMap<&'static str, Arc<crate::bootstrap::Registry>>>,
     pub(crate) whois_servers: Mutex<HashMap<String, Option<String>>>,
@@ -65,13 +67,13 @@ impl Ctx {
             .connect_timeout(Duration::from_secs(8))
             .https_only(false) // some bootstrap entries are http; we prefer https when offered
             .build()?;
-        let cache_dir = std::env::var_os("WHOQ_CACHE_DIR")
-            .map(PathBuf::from)
-            .or_else(|| dirs::cache_dir().map(|d| d.join("whoq")));
+        let cache_dir =
+            std::env::var_os("WHOQ_CACHE_DIR").map(PathBuf::from).or_else(|| dirs::cache_dir().map(|d| d.join("whoq")));
         Ok(Arc::new(Ctx {
             http,
             opts,
             cache_dir,
+            whois_addr: std::env::var("WHOQ_WHOIS_ADDR").ok().filter(|s| !s.is_empty()),
             hosts: Mutex::new(HashMap::new()),
             bootstrap: tokio::sync::Mutex::new(HashMap::new()),
             whois_servers: Mutex::new(HashMap::new()),
@@ -84,10 +86,8 @@ impl Ctx {
     }
 
     fn cache_path(&self, bucket: &str, key: &str) -> Option<PathBuf> {
-        let safe: String = key
-            .chars()
-            .map(|c| if c.is_ascii_alphanumeric() || c == '.' || c == '-' { c } else { '_' })
-            .collect();
+        let safe: String =
+            key.chars().map(|c| if c.is_ascii_alphanumeric() || c == '.' || c == '-' { c } else { '_' }).collect();
         Some(self.cache_dir.as_ref()?.join(bucket).join(format!("{safe}.json")))
     }
 

@@ -13,13 +13,23 @@ pub async fn query(ctx: &Ctx, server: &str, q: &str) -> Result<String, LookupErr
     let sem = ctx.host_limit(server);
     let _permit = sem.acquire().await.expect("semaphore closed");
     let fut = async {
-        let mut s = TcpStream::connect((server, 43)).await.map_err(|e| LookupError::Network(format!("{server}:43: {e}")))?;
+        let conn = match &ctx.whois_addr {
+            Some(addr) => TcpStream::connect(addr.as_str()).await,
+            None => TcpStream::connect((server, 43)).await,
+        };
+        let mut s = conn.map_err(|e| LookupError::Network(format!("{server}:43: {e}")))?;
         s.write_all(format!("{q}\r\n").as_bytes()).await.map_err(|e| LookupError::Network(e.to_string()))?;
         let mut buf = Vec::new();
-        (&mut s).take(MAX_RESPONSE as u64).read_to_end(&mut buf).await.map_err(|e| LookupError::Network(e.to_string()))?;
+        (&mut s)
+            .take(MAX_RESPONSE as u64)
+            .read_to_end(&mut buf)
+            .await
+            .map_err(|e| LookupError::Network(e.to_string()))?;
         Ok::<_, LookupError>(String::from_utf8_lossy(&buf).into_owned())
     };
-    tokio::time::timeout(ctx.opts.timeout, fut).await.map_err(|_| LookupError::Timeout(format!("{server}:43 timed out")))?
+    tokio::time::timeout(ctx.opts.timeout, fut)
+        .await
+        .map_err(|_| LookupError::Timeout(format!("{server}:43 timed out")))?
 }
 
 /// Ask IANA which WHOIS server handles a TLD.
@@ -60,9 +70,8 @@ pub fn pairs(text: &str) -> Vec<(String, String)> {
             continue;
         }
         // key: value, where the colon is followed by whitespace or end-of-line (not "http://")
-        let kv = t.char_indices().find(|&(i, c)| {
-            c == ':' && t[i + 1..].chars().next().is_none_or(|n| n.is_whitespace())
-        });
+        let kv =
+            t.char_indices().find(|&(i, c)| c == ':' && t[i + 1..].chars().next().is_none_or(|n| n.is_whitespace()));
         match kv {
             Some((i, _)) if i > 0 && i < 48 => {
                 let key = t[..i].trim().trim_end_matches('.').trim().to_lowercase();
@@ -120,21 +129,42 @@ pub fn parse(r: &mut Record, text: &str, redacted: &mut bool) -> Option<String> 
             "registrar abuse contact email" => first(&mut reg.abuse_email, Some(v)),
             "registrar abuse contact phone" => first(&mut reg.abuse_phone, Some(v)),
             "registrar whois server" | "whois server" | "refer" => first(&mut referral, Some(v)),
-            "creation date" | "created" | "created on" | "registered on" | "registration time" | "registered"
-            | "domain registration date" | "created date" | "registration date" | "domain record activated" => {
-                first(&mut r.created, parse_date(&v))
-            }
-            "updated date" | "last updated" | "changed" | "last modified" | "modified" | "last update"
-            | "last-update" | "domain record last updated" => first(&mut r.updated, parse_date(&v)),
-            "registry expiry date" | "registrar registration expiration date" | "expiration date" | "expiry date"
-            | "expires" | "expires on" | "paid-till" | "renewal date" | "expire date" | "valid until"
-            | "domain expiration date" | "expiration time" => first(&mut r.expires, parse_date(&v)),
+            "creation date"
+            | "created"
+            | "created on"
+            | "registered on"
+            | "registration time"
+            | "registered"
+            | "domain registration date"
+            | "created date"
+            | "registration date"
+            | "domain record activated" => first(&mut r.created, parse_date(&v)),
+            "updated date"
+            | "last updated"
+            | "changed"
+            | "last modified"
+            | "modified"
+            | "last update"
+            | "last-update"
+            | "domain record last updated" => first(&mut r.updated, parse_date(&v)),
+            "registry expiry date"
+            | "registrar registration expiration date"
+            | "expiration date"
+            | "expiry date"
+            | "expires"
+            | "expires on"
+            | "paid-till"
+            | "renewal date"
+            | "expire date"
+            | "valid until"
+            | "domain expiration date"
+            | "expiration time" => first(&mut r.expires, parse_date(&v)),
             "domain status" | "status" | "state" => r.status.push(status(&v)),
             "name server" | "nameserver" | "nameservers" | "nserver" | "name servers" | "dns" | "host name" => {
-                if let Some(ns) = v.split_whitespace().next() {
-                    if ns.contains('.') {
-                        r.nameservers.push(ns.trim_end_matches('.').to_lowercase());
-                    }
+                if let Some(ns) = v.split_whitespace().next()
+                    && ns.contains('.')
+                {
+                    r.nameservers.push(ns.trim_end_matches('.').to_lowercase());
                 }
             }
             "dnssec" => {
@@ -169,7 +199,12 @@ fn looks_registered(r: &Record) -> bool {
 }
 
 /// Full port-43 domain lookup, following one registrar referral.
-pub async fn lookup_domain(ctx: &Ctx, r: &mut Record, domain: &str, redacted: &mut bool) -> Result<Vec<String>, LookupError> {
+pub async fn lookup_domain(
+    ctx: &Ctx,
+    r: &mut Record,
+    domain: &str,
+    redacted: &mut bool,
+) -> Result<Vec<String>, LookupError> {
     let tld = domain.rsplit('.').next().unwrap_or(domain);
     let server = server_for(ctx, tld)
         .await?
@@ -183,12 +218,14 @@ pub async fn lookup_domain(ctx: &Ctx, r: &mut Record, domain: &str, redacted: &m
         r.result = Outcome::Registered;
         if let Some(refsrv) = referral {
             let refsrv = refsrv.trim_start_matches("whois://").trim_end_matches('/').to_lowercase();
-            if !refsrv.is_empty() && refsrv != server && !refsrv.contains(' ') {
-                if let Ok(t2) = query(ctx, &refsrv, domain).await {
-                    parse(r, &t2, redacted);
-                    servers.push(format!("whois://{refsrv}"));
-                    raws.push(serde_json::json!({ "server": refsrv, "text": t2 }));
-                }
+            if !refsrv.is_empty()
+                && refsrv != server
+                && !refsrv.contains(' ')
+                && let Ok(t2) = query(ctx, &refsrv, domain).await
+            {
+                parse(r, &t2, redacted);
+                servers.push(format!("whois://{refsrv}"));
+                raws.push(serde_json::json!({ "server": refsrv, "text": t2 }));
             }
         }
     } else {

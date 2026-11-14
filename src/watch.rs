@@ -4,7 +4,7 @@
 use crate::model::{Outcome, Record};
 use chrono::Utc;
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Map, Value};
+use serde_json::{Map, Value, json};
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
@@ -101,9 +101,11 @@ fn stable(rec: &Record) -> Map<String, Value> {
 fn severity(field: &str, removed: &[Value]) -> (&'static str, Option<String>) {
     let lock_removed = removed.iter().filter_map(|v| v.as_str()).find(|s| s.contains("transfer prohibited"));
     match field {
-        "status" if lock_removed.is_some() => ("high", Some(format!("transfer lock removed ({})", lock_removed.unwrap()))),
-        "result" | "nameservers" | "registrar.name" | "registrar.iana_id" | "transferred" | "created" | "network.org"
-        | "asn.org" | "network.cidr" => ("high", None),
+        "status" if lock_removed.is_some() => {
+            ("high", Some(format!("transfer lock removed ({})", lock_removed.unwrap())))
+        }
+        "result" | "nameservers" | "registrar.name" | "registrar.iana_id" | "transferred" | "created"
+        | "network.org" | "asn.org" | "network.cidr" => ("high", None),
         "status" | "expires" | "dnssec" | "abuse_email" | "network.name" | "asn.name" => ("medium", None),
         f if f.starts_with("registrant.") || f.starts_with("registrar.") => ("medium", None),
         _ => ("low", None),
@@ -142,11 +144,11 @@ pub fn diff(old: &Record, new: &Record, ignore: &[String]) -> Vec<Change> {
         }
         if k == "expires" {
             // a later expiry is just a renewal — good news, not an alarm
-            if let (Some(Value::String(os)), Some(Value::String(ns))) = (o, n) {
-                if ns > os {
-                    sev = "low";
-                    note = Some("renewed".into());
-                }
+            if let (Some(Value::String(os)), Some(Value::String(ns))) = (o, n)
+                && ns > os
+            {
+                sev = "low";
+                note = Some("renewed".into());
             }
         }
         out.push(Change {
@@ -214,7 +216,13 @@ pub fn process(rec: Record, o: &RoundOpts) -> Vec<Value> {
 
     // Threshold alerts fire once per expiry date (a renewal changes the date and re-arms them).
     if let (Some(days), Some(exp)) = (rec.signals.as_ref().and_then(|s| s.expires_in_days), rec.expires.as_ref()) {
-        let kind = if days < 0 { Some("expired") } else if days <= o.expiry_warn_days { Some("expiring") } else { None };
+        let kind = if days < 0 {
+            Some("expired")
+        } else if days <= o.expiry_warn_days {
+            Some("expiring")
+        } else {
+            None
+        };
         if let Some(kind) = kind {
             let id = format!("{kind}:{exp}");
             if !alerts_sent.contains(&id) {
@@ -265,8 +273,10 @@ pub fn summary(events: &[Value]) -> String {
             match e["event"].as_str() {
                 Some("alert") => format!("{name}: {} ({})", e["alert"].as_str().unwrap_or(""), e["expires_in_days"]),
                 _ => {
-                    let fields: Vec<&str> =
-                        e["changes"].as_array().map(|c| c.iter().filter_map(|x| x["field"].as_str()).collect()).unwrap_or_default();
+                    let fields: Vec<&str> = e["changes"]
+                        .as_array()
+                        .map(|c| c.iter().filter_map(|x| x["field"].as_str()).collect())
+                        .unwrap_or_default();
                     format!("{name}: {} changed [{}]", fields.join(", "), e["severity"].as_str().unwrap_or(""))
                 }
             }
@@ -334,7 +344,9 @@ mod tests {
         assert_eq!(get("registrar.name").severity, "high");
         assert_eq!(get("expires").note.as_deref(), Some("renewed"));
         assert_eq!(worst(&c), "high");
-        assert!(diff(&a, &b, &["nameservers".into(), "status".into(), "registrar".into(), "expires".into()]).is_empty());
+        assert!(
+            diff(&a, &b, &["nameservers".into(), "status".into(), "registrar".into(), "expires".into()]).is_empty()
+        );
     }
 
     #[test]

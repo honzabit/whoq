@@ -4,18 +4,20 @@ use crate::model::{Kind, Outcome, Record};
 use chrono::{DateTime, Utc};
 use serde_json::{Map, Value};
 
-pub const BRIEF_DOMAIN: &[&str] = &[
+pub const BRIEF_DOMAIN: &[&str] =
+    &["result", "name", "registrar.name", "created", "expires", "nameservers", "signals", "error.code"];
+pub const BRIEF_NET: &[&str] = &[
     "result",
     "name",
-    "registrar.name",
-    "created",
-    "expires",
-    "nameservers",
-    "signals",
+    "network.name",
+    "network.cidr",
+    "network.country",
+    "network.org",
+    "asn.name",
+    "asn.org",
+    "abuse_email",
     "error.code",
 ];
-pub const BRIEF_NET: &[&str] =
-    &["result", "name", "network.name", "network.cidr", "network.country", "network.org", "asn.name", "asn.org", "abuse_email", "error.code"];
 
 fn get_path<'a>(v: &'a Value, path: &str) -> Option<&'a Value> {
     path.split('.').try_fold(v, |cur, k| cur.get(k)).filter(|v| !v.is_null())
@@ -111,7 +113,12 @@ pub fn pretty(rec: &Record, st: &Style) -> String {
         row("Registrar", s);
     }
     let sig = rec.signals.clone().unwrap_or_default();
-    for (label, val) in [("Created", &rec.created), ("Updated", &rec.updated), ("Expires", &rec.expires), ("Transferred", &rec.transferred)] {
+    for (label, val) in [
+        ("Created", &rec.created),
+        ("Updated", &rec.updated),
+        ("Expires", &rec.expires),
+        ("Transferred", &rec.transferred),
+    ] {
         if let Some((d, r)) = val.as_deref().and_then(rel) {
             let mut r = st.dim(&format!("({r})"));
             if label == "Expires" && sig.expiring_soon == Some(true) {
@@ -133,7 +140,8 @@ pub fn pretty(rec: &Record, st: &Style) -> String {
         row("DNSSEC", if d { st.paint("32", "signed") } else { st.dim("unsigned") });
     }
     if let Some(c) = &rec.registrant {
-        let mut parts: Vec<String> = [&c.org, &c.name, &c.country, &c.email].iter().filter_map(|x| (*x).clone()).collect();
+        let mut parts: Vec<String> =
+            [&c.org, &c.name, &c.country, &c.email].iter().filter_map(|x| (*x).clone()).collect();
         if c.name.is_none() && c.org.is_none() {
             parts.insert(0, st.dim("redacted"));
         }
@@ -230,7 +238,8 @@ pub fn pretty_event(e: &Value, st: &Style) -> String {
                 let field = c["field"].as_str().unwrap_or("");
                 let csev = c["severity"].as_str().unwrap_or("low");
                 let label = st.paint(sev_color(csev), &format!("{field:<16}"));
-                let note = c["note"].as_str().map(|n| st.paint(sev_color(csev), &format!("  ← {n}"))).unwrap_or_default();
+                let note =
+                    c["note"].as_str().map(|n| st.paint(sev_color(csev), &format!("  ← {n}"))).unwrap_or_default();
                 let removed = c["removed"].as_array().filter(|a| !a.is_empty());
                 let added = c["added"].as_array().filter(|a| !a.is_empty());
                 if removed.is_some() || added.is_some() {
@@ -238,7 +247,11 @@ pub fn pretty_event(e: &Value, st: &Style) -> String {
                     for (sign, list, color) in [("-", removed, "31"), ("+", added, "32")] {
                         if let Some(l) = list {
                             let lead = if first { label.clone() } else { " ".repeat(16) };
-                            out.push_str(&format!("  {lead}  {}{}\n", st.paint(color, &format!("{sign} {}", show(&Value::Array(l.clone())))), if first { note.clone() } else { String::new() }));
+                            out.push_str(&format!(
+                                "  {lead}  {}{}\n",
+                                st.paint(color, &format!("{sign} {}", show(&Value::Array(l.clone())))),
+                                if first { note.clone() } else { String::new() }
+                            ));
                             first = false;
                         }
                     }

@@ -103,10 +103,8 @@ pub async fn for_domain(ctx: &Ctx, ascii: &str) -> Result<Option<String>, Lookup
     let mut best: Option<(usize, &Vec<String>)> = None;
     for (entries, urls) in &reg.services {
         for e in entries {
-            if ascii == e || ascii.ends_with(&format!(".{e}")) {
-                if best.is_none_or(|(l, _)| e.len() > l) {
-                    best = Some((e.len(), urls));
-                }
+            if (ascii == e || ascii.ends_with(&format!(".{e}"))) && best.is_none_or(|(l, _)| e.len() > l) {
+                best = Some((e.len(), urls));
             }
         }
     }
@@ -122,10 +120,11 @@ pub async fn for_net(ctx: &Ctx, net: IpNet) -> Result<Option<String>, LookupErro
     let mut best: Option<(u8, &Vec<String>)> = None;
     for (entries, urls) in &reg.services {
         for e in entries {
-            if let Ok(block) = e.parse::<IpNet>() {
-                if block.contains(&net) && best.is_none_or(|(l, _)| block.prefix_len() > l) {
-                    best = Some((block.prefix_len(), urls));
-                }
+            if let Ok(block) = e.parse::<IpNet>()
+                && block.contains(&net)
+                && best.is_none_or(|(l, _)| block.prefix_len() > l)
+            {
+                best = Some((block.prefix_len(), urls));
             }
         }
     }
@@ -140,10 +139,10 @@ pub async fn for_asn(ctx: &Ctx, asn: u32) -> Result<Option<String>, LookupError>
                 Some((a, b)) => (a.parse::<u32>(), b.parse::<u32>()),
                 None => (e.parse::<u32>(), e.parse::<u32>()),
             };
-            if let (Ok(lo), Ok(hi)) = (lo, hi) {
-                if (lo..=hi).contains(&asn) {
-                    return Ok(pick(urls));
-                }
+            if let (Ok(lo), Ok(hi)) = (lo, hi)
+                && (lo..=hi).contains(&asn)
+            {
+                return Ok(pick(urls));
             }
         }
     }
