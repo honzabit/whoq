@@ -1,0 +1,253 @@
+//! Rendering: human tables, JSON / NDJSON, field projection.
+
+use crate::model::{Kind, Outcome, Record};
+use chrono::{DateTime, Utc};
+use serde_json::{Map, Value};
+
+pub const BRIEF_DOMAIN: &[&str] = &[
+    "result",
+    "name",
+    "registrar.name",
+    "created",
+    "expires",
+    "nameservers",
+    "signals",
+    "error.code",
+];
+pub const BRIEF_NET: &[&str] =
+    &["result", "name", "network.name", "network.cidr", "network.country", "network.org", "asn.name", "asn.org", "abuse_email", "error.code"];
+
+fn get_path<'a>(v: &'a Value, path: &str) -> Option<&'a Value> {
+    path.split('.').try_fold(v, |cur, k| cur.get(k)).filter(|v| !v.is_null())
+}
+
+/// Project a record onto dotted paths. Output keys are the paths themselves.
+pub fn project(rec: &Record, fields: &[String]) -> Value {
+    let full = serde_json::to_value(rec).unwrap_or(Value::Null);
+    let mut out = Map::new();
+    out.insert("query".into(), full["query"].clone());
+    for f in fields {
+        if let Some(v) = get_path(&full, f) {
+            out.insert(f.clone(), v.clone());
+        }
+    }
+    Value::Object(out)
+}
+
+pub fn brief_fields(rec: &Record) -> Vec<String> {
+    let list = if rec.kind == Kind::Domain { BRIEF_DOMAIN } else { BRIEF_NET };
+    list.iter().map(|s| s.to_string()).collect()
+}
+
+// ---------- human output ----------
+
+pub struct Style {
+    pub color: bool,
+}
+
+impl Style {
+    fn paint(&self, code: &str, s: &str) -> String {
+        if self.color { format!("\x1b[{code}m{s}\x1b[0m") } else { s.to_string() }
+    }
+    fn dim(&self, s: &str) -> String {
+        self.paint("2", s)
+    }
+    fn bold(&self, s: &str) -> String {
+        self.paint("1", s)
+    }
+}
+
+fn rel(s: &str) -> Option<(String, String)> {
+    let d = DateTime::parse_from_rfc3339(s).ok()?.with_timezone(&Utc);
+    let days = (d - Utc::now()).num_days();
+    let human = |n: i64| -> String {
+        let n = n.abs();
+        if n >= 730 {
+            format!("{}y", n / 365)
+        } else if n >= 60 {
+            format!("{}mo", n / 30)
+        } else {
+            format!("{n}d")
+        }
+    };
+    let r = if days >= 0 { format!("in {}", human(days)) } else { format!("{} ago", human(days)) };
+    Some((d.format("%Y-%m-%d").to_string(), r))
+}
+
+pub fn pretty(rec: &Record, st: &Style) -> String {
+    let mut out = String::new();
+    let (badge, code) = match rec.result {
+        Outcome::Registered => ("● registered", "33"),
+        Outcome::Available => ("○ available", "1;32"),
+        Outcome::Found => ("● found", "36"),
+        Outcome::NotFound => ("○ not found", "35"),
+        Outcome::Error => ("✕ error", "1;31"),
+    };
+    let title = match (&rec.name, &rec.unicode_name) {
+        (Some(n), Some(u)) => format!("{u} ({n})"),
+        (Some(n), None) => n.clone(),
+        _ => rec.query.clone(),
+    };
+    out.push_str(&format!("{}  {}", st.bold(&title), st.paint(code, badge)));
+    if rec.source.as_ref().is_some_and(|s| s.cached) {
+        out.push_str(&st.dim("  (cached)"));
+    }
+    out.push('\n');
+
+    let mut row = |k: &str, v: String| {
+        if !v.is_empty() {
+            out.push_str(&format!("  {}  {}\n", st.dim(&format!("{k:<12}")), v));
+        }
+    };
+
+    if let Some(e) = &rec.error {
+        row("Error", st.paint("31", &format!("{} — {}", e.code, e.message)));
+    }
+    if let Some(g) = &rec.registrar {
+        let mut s = g.name.clone().unwrap_or_default();
+        if let Some(id) = &g.iana_id {
+            s.push_str(&st.dim(&format!("  IANA #{id}")));
+        }
+        row("Registrar", s);
+    }
+    let sig = rec.signals.clone().unwrap_or_default();
+    for (label, val) in [("Created", &rec.created), ("Updated", &rec.updated), ("Expires", &rec.expires), ("Transferred", &rec.transferred)] {
+        if let Some((d, r)) = val.as_deref().and_then(rel) {
+            let mut r = st.dim(&format!("({r})"));
+            if label == "Expires" && sig.expiring_soon == Some(true) {
+                r = st.paint("1;31", &format!("({}) expiring soon", r));
+            }
+            if label == "Created" && sig.young == Some(true) {
+                r = st.paint("1;31", "⚠ newly registered");
+            }
+            row(label, format!("{d}  {r}"));
+        }
+    }
+    if !rec.status.is_empty() {
+        row("Status", rec.status.join(", "));
+    }
+    if !rec.nameservers.is_empty() {
+        row("Nameservers", rec.nameservers.join(", "));
+    }
+    if let Some(d) = rec.dnssec {
+        row("DNSSEC", if d { st.paint("32", "signed") } else { st.dim("unsigned") });
+    }
+    if let Some(c) = &rec.registrant {
+        let mut parts: Vec<String> = [&c.org, &c.name, &c.country, &c.email].iter().filter_map(|x| (*x).clone()).collect();
+        if c.name.is_none() && c.org.is_none() {
+            parts.insert(0, st.dim("redacted"));
+        }
+        row("Registrant", parts.join(" · "));
+    } else if sig.privacy_redacted == Some(true) {
+        row("Registrant", st.dim("redacted"));
+    }
+    if let Some(n) = &rec.network {
+        let range = match (&n.start, &n.end) {
+            (Some(a), Some(b)) => format!("{a} – {b}"),
+            _ => String::new(),
+        };
+        row("Network", [n.name.clone(), n.net_type.clone()].into_iter().flatten().collect::<Vec<_>>().join("  "));
+        row("Org", n.org.clone().unwrap_or_default());
+        row("CIDR", n.cidr.join(", "));
+        row("Range", range);
+        row("Country", n.country.clone().unwrap_or_default());
+    }
+    if let Some(a) = &rec.asn {
+        row("AS name", a.name.clone().unwrap_or_default());
+        row("Org", a.org.clone().unwrap_or_default());
+        row("Country", a.country.clone().unwrap_or_default());
+    }
+    if let Some(a) = &rec.abuse_email {
+        row("Abuse", a.clone());
+    }
+    if let Some(s) = &rec.source {
+        let srv = s.servers.first().cloned().unwrap_or_default();
+        row("Source", st.dim(&format!("{} · {}", s.protocol, srv)));
+    }
+    out
+}
+
+pub fn pretty_projection(v: &Value, st: &Style) -> String {
+    let mut out = String::new();
+    if let Value::Object(m) = v {
+        out.push_str(&st.bold(m.get("query").and_then(|q| q.as_str()).unwrap_or("")));
+        out.push('\n');
+        for (k, val) in m.iter().filter(|(k, _)| *k != "query") {
+            let s = match val {
+                Value::String(s) => s.clone(),
+                other => other.to_string(),
+            };
+            out.push_str(&format!("  {}  {}\n", st.dim(&format!("{k:<16}")), s));
+        }
+    }
+    out
+}
+
+fn show(v: &Value) -> String {
+    match v {
+        Value::String(s) => s.clone(),
+        Value::Array(a) => a.iter().map(show).collect::<Vec<_>>().join(", "),
+        Value::Null => "∅".into(),
+        other => other.to_string(),
+    }
+}
+
+/// Human rendering of a `whoq watch` event.
+pub fn pretty_event(e: &Value, st: &Style) -> String {
+    let name = e["name"].as_str().unwrap_or("?");
+    let sev_color = |s: &str| match s {
+        "high" => "1;31",
+        "medium" => "33",
+        _ => "2",
+    };
+    let mut out = String::new();
+    match e["event"].as_str().unwrap_or("") {
+        "baseline" => out.push_str(&format!("{}  {}\n", st.bold(name), st.dim("baseline recorded"))),
+        "unchanged" => out.push_str(&format!("{}  {}\n", st.bold(name), st.dim("unchanged"))),
+        "error" => out.push_str(&format!(
+            "{}  {}\n",
+            st.bold(name),
+            st.paint("31", &format!("✕ {}", e["error"]["message"].as_str().unwrap_or("error")))
+        )),
+        "alert" => {
+            let what = match e["alert"].as_str() {
+                Some("expiring") => format!("⏰ expires in {} days ({})", e["expires_in_days"], show(&e["expires"])),
+                Some("expired") => format!("⏰ EXPIRED {} days ago", -e["expires_in_days"].as_i64().unwrap_or(0)),
+                Some("on_hold") => format!("⛔ on hold: {}", show(&e["status"])),
+                other => other.unwrap_or("alert").to_string(),
+            };
+            out.push_str(&format!("{}  {}\n", st.bold(name), st.paint("1;31", &what)));
+        }
+        "changed" => {
+            let sev = e["severity"].as_str().unwrap_or("low");
+            out.push_str(&format!(
+                "{}  {}  {}\n",
+                st.bold(name),
+                st.paint(sev_color(sev), &format!("▲ changed ({sev})")),
+                st.dim(&format!("since {}", show(&e["since"])))
+            ));
+            for c in e["changes"].as_array().into_iter().flatten() {
+                let field = c["field"].as_str().unwrap_or("");
+                let csev = c["severity"].as_str().unwrap_or("low");
+                let label = st.paint(sev_color(csev), &format!("{field:<16}"));
+                let note = c["note"].as_str().map(|n| st.paint(sev_color(csev), &format!("  ← {n}"))).unwrap_or_default();
+                let removed = c["removed"].as_array().filter(|a| !a.is_empty());
+                let added = c["added"].as_array().filter(|a| !a.is_empty());
+                if removed.is_some() || added.is_some() {
+                    let mut first = true;
+                    for (sign, list, color) in [("-", removed, "31"), ("+", added, "32")] {
+                        if let Some(l) = list {
+                            let lead = if first { label.clone() } else { " ".repeat(16) };
+                            out.push_str(&format!("  {lead}  {}{}\n", st.paint(color, &format!("{sign} {}", show(&Value::Array(l.clone())))), if first { note.clone() } else { String::new() }));
+                            first = false;
+                        }
+                    }
+                } else {
+                    out.push_str(&format!("  {label}  {} → {}{note}\n", st.dim(&show(&c["old"])), show(&c["new"])));
+                }
+            }
+        }
+        _ => {}
+    }
+    out
+}

@@ -1,0 +1,24 @@
+[package]
+name = "whoq"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0.104"
+chrono = { version = "0.4.45", default-features = false, features = ["clock", "std"] }
+clap = { version = "4.6.7", features = ["derive", "env", "wrap_help"] }
+dirs = "7.0.0"
+futures = "0.3.34"
+idna = "1.1.0"
+ipnet = "2.12.2"
+psl = "2.1.254"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls", "gzip", "brotli"] }
+schemars = "1"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = { version = "1.0.154", features = ["preserve_order"] }
+tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros", "net", "io-util", "io-std", "time", "sync", "fs"] }
+
+[profile.release]
+lto = true
+strip = true
+codegen-units = 1
