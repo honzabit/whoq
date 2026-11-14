@@ -2,12 +2,13 @@
 //! Exposes read-only lookup tools to agents.
 
 use crate::ctx::Ctx;
-use crate::lookup::lookup;
+use crate::lookup::lookup_with;
 use crate::model::Outcome;
 use crate::output;
 use futures::StreamExt;
 use serde_json::{Value, json};
 use std::sync::Arc;
+use std::time::Duration;
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
 
 const PROTOCOLS: &[&str] = &["2025-11-25", "2025-06-18", "2025-03-26", "2024-11-05"];
@@ -32,7 +33,10 @@ fn tools() -> Value {
                                  "description": "e.g. [\"example.com\", \"8.8.8.8\", \"AS13335\", \"https://sub.foo.co.uk/x\"]" },
                     "fields": { "type": "array", "items": { "type": "string" },
                                 "description": "Optional dotted paths to return (e.g. [\"registrar.name\",\"expires\"]); omit for the full record." },
-                    "brief": { "type": "boolean", "description": "Return a compact summary (default true)." }
+                    "brief": { "type": "boolean", "description": "Return a compact summary (default true)." },
+                    "max_age": { "type": ["string", "integer"],
+                                 "description": "Serve a cached result only if younger than this, otherwise fetch fresh: \
+    seconds, or a string like \"30m\", \"6h\", \"2d\". 0 forces a fresh lookup. Default: the server's --max-age (1h)." }
                 },
                 "required": ["queries"]
             },
@@ -76,11 +80,11 @@ fn strings(v: &Value) -> Vec<String> {
     v.as_array().map(|a| a.iter().filter_map(|x| x.as_str().map(str::to_string)).collect()).unwrap_or_default()
 }
 
-async fn run_batch(ctx: &Arc<Ctx>, qs: Vec<String>) -> Vec<crate::model::Record> {
+async fn run_batch(ctx: &Arc<Ctx>, qs: Vec<String>, max_age: Duration) -> Vec<crate::model::Record> {
     futures::stream::iter(qs)
         .map(|q| {
             let ctx = ctx.clone();
-            async move { lookup(&ctx, &q).await }
+            async move { lookup_with(&ctx, &q, max_age).await }
         })
         .buffered(8)
         .collect()
@@ -121,7 +125,13 @@ async fn call(ctx: &Arc<Ctx>, name: &str, args: &Value) -> Result<Value, String>
             }
             let fields = strings(&args["fields"]);
             let brief = args["brief"].as_bool().unwrap_or(true);
-            let recs = run_batch(ctx, qs).await;
+            let max_age = match &args["max_age"] {
+                Value::Null => ctx.opts.cache_ttl,
+                Value::Number(n) => Duration::from_secs(n.as_u64().ok_or("`max_age` must be a non-negative integer")?),
+                Value::String(s) => crate::normalize::parse_duration(s)?,
+                _ => return Err("`max_age` must be seconds or a string like \"30m\"".into()),
+            };
+            let recs = run_batch(ctx, qs, max_age).await;
             let results: Vec<Value> = recs
                 .iter()
                 .map(|r| {
@@ -141,7 +151,7 @@ async fn call(ctx: &Arc<Ctx>, name: &str, args: &Value) -> Result<Value, String>
             if ds.is_empty() || ds.len() > MAX_BATCH {
                 return Err(format!("`domains` must contain 1..={MAX_BATCH} items"));
             }
-            let recs = run_batch(ctx, ds).await;
+            let recs = run_batch(ctx, ds, ctx.opts.cache_ttl).await;
             let results: Vec<Value> = recs
                 .iter()
                 .map(|r| {

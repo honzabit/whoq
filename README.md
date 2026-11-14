@@ -31,10 +31,14 @@ whoq -f registrar.name,expires,signals.expires_in_days example.com
 cat domains.txt | whoq -j 16 -o ndjson
 whoq --raw example.com                # include upstream responses
 whoq --whois example.de               # force port 43
+whoq --max-age 1d example.com         # cached if under a day old, else fetch fresh
+whoq --max-age 0 example.com          # always fetch fresh (still refreshes the cache)
 whoq schema                           # JSON Schema of the output
 ```
 
-Environment: `WHOQ_CACHE_DIR`, `WHOQ_STATE_DIR`, `WHOQ_TIMEOUT`, `WHOQ_CACHE_TTL`, `WHOQ_WEBHOOK`, `NO_COLOR`, and `WHOQ_WHOIS_ADDR=host:port` (send every port-43 connection through one address, for proxies and tests).
+`--max-age` takes `90s`, `30m`, `6h`, `2d`, `1w` or plain seconds; the default is `1h`. Whether a result came from cache shows up in `source.cached`, and `source.fetched_at` gives its time. `--no-cache` skips both reading and writing. Cache location: `~/Library/Caches/whoq` (macOS) or `~/.cache/whoq` (Linux).
+
+Environment: `WHOQ_CACHE_DIR`, `WHOQ_STATE_DIR`, `WHOQ_TIMEOUT`, `WHOQ_MAX_AGE`, `WHOQ_WEBHOOK`, `NO_COLOR`, and `WHOQ_WHOIS_ADDR=host:port` (send every port-43 connection through one address, for proxies and tests).
 
 ## Watch mode
 
@@ -103,7 +107,7 @@ Modes: `annotate` (default; NDJSON or `-o tsv`), `unique` (NDJSON, CSV or table)
 
 Claude Code: `claude mcp add whoq -- whoq mcp`
 
-Tools: `lookup` (queries, fields, brief), `check_availability` (domains) and `enrich_ips` (up to 1,000 IPs or log fragments; `rdap`, `summary`). All are read-only. Output is
+Tools: `lookup` (queries, fields, brief, `max_age`: e.g. `"6h"`, or `0` to force fresh), `check_availability` (domains) and `enrich_ips` (up to 1,000 IPs or log fragments; `rdap`, `summary`). All are read-only. Output is
 wrapped in `<untrusted-registry-data>` and the tool descriptions warn the model that registrant-controlled
 strings are data, not instructions.
 

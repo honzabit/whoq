@@ -36,6 +36,12 @@ fn cache_key(q: &Query, ctx: &Ctx) -> String {
 }
 
 pub async fn lookup(ctx: &Ctx, input: &str) -> Record {
+    lookup_with(ctx, input, ctx.opts.cache_ttl).await
+}
+
+/// Like [`lookup`], but serve from cache only if the cached record is younger than `max_age`
+/// (zero = always fetch fresh). A fresh result still refreshes the cache.
+pub async fn lookup_with(ctx: &Ctx, input: &str, max_age: std::time::Duration) -> Record {
     let q = match query::parse(input) {
         Ok(q) => q,
         Err(e) => return Record::new(input, Kind::Domain).fail("invalid_query", e),
@@ -43,7 +49,8 @@ pub async fn lookup(ctx: &Ctx, input: &str) -> Record {
     let key = cache_key(&q, ctx);
 
     if ctx.opts.use_cache
-        && let Some(bytes) = ctx.cache_get("results", &key, ctx.opts.cache_ttl, false).await
+        && !max_age.is_zero()
+        && let Some(bytes) = ctx.cache_get("results", &key, max_age, false).await
         && let Ok(mut rec) = serde_json::from_slice::<Record>(&bytes)
     {
         rec.query = input.to_string();

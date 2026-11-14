@@ -287,19 +287,11 @@ pub fn summary(events: &[Value]) -> String {
 
 /// Parse `90`, `90s`, `15m`, `6h`, `1d`.
 pub fn parse_interval(s: &str) -> Result<std::time::Duration, String> {
-    let s = s.trim();
-    let (num, mult) = match s.chars().last() {
-        Some('s') => (&s[..s.len() - 1], 1),
-        Some('m') => (&s[..s.len() - 1], 60),
-        Some('h') => (&s[..s.len() - 1], 3600),
-        Some('d') => (&s[..s.len() - 1], 86400),
-        _ => (s, 1),
-    };
-    let n: u64 = num.parse().map_err(|_| format!("invalid interval: {s} (use e.g. 30m, 6h, 1d)"))?;
-    if n * mult < 60 {
+    let d = crate::normalize::parse_duration(s)?;
+    if d.as_secs() < 60 {
         return Err("interval must be at least 60s (be kind to registries)".into());
     }
-    Ok(std::time::Duration::from_secs(n * mult))
+    Ok(d)
 }
 
 #[cfg(test)]

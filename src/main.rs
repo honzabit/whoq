@@ -176,9 +176,11 @@ struct CommonArgs {
     /// Per-request timeout in seconds
     #[arg(long, default_value_t = 15, env = "WHOQ_TIMEOUT")]
     timeout: u64,
-    /// Result cache TTL in seconds
-    #[arg(long, default_value_t = 3600, env = "WHOQ_CACHE_TTL")]
-    cache_ttl: u64,
+    /// Use a cached result only if it is younger than AGE, otherwise fetch fresh and refresh the
+    /// cache (e.g. 90s, 30m, 6h, 2d, 1w; bare number = seconds; 0 = always fetch fresh)
+    #[arg(long, value_name = "AGE", default_value = "1h", env = "WHOQ_MAX_AGE", alias = "cache-ttl",
+          value_parser = normalize::parse_duration)]
+    max_age: Duration,
     /// Don't read or write the result cache
     #[arg(long)]
     no_cache: bool,
@@ -227,8 +229,8 @@ struct LookupArgs {
 fn options(c: &CommonArgs, raw: bool, force_whois: bool) -> Options {
     Options {
         timeout: Duration::from_secs(c.timeout.max(1)),
-        cache_ttl: Duration::from_secs(c.cache_ttl),
-        use_cache: !c.no_cache && c.cache_ttl > 0,
+        cache_ttl: c.max_age,
+        use_cache: !c.no_cache,
         raw,
         force_whois,
     }

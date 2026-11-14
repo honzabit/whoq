@@ -107,6 +107,21 @@ pub fn real(s: Option<String>, redacted_flag: &mut bool) -> Option<String> {
     Some(s)
 }
 
+/// `90`, `90s`, `30m`, `6h`, `2d`, `1w` -> Duration. A bare number is seconds; `0` is allowed.
+pub fn parse_duration(s: &str) -> Result<std::time::Duration, String> {
+    let s = s.trim();
+    let (num, mult) = match s.char_indices().last() {
+        Some((i, 's')) => (&s[..i], 1),
+        Some((i, 'm')) => (&s[..i], 60),
+        Some((i, 'h')) => (&s[..i], 3600),
+        Some((i, 'd')) => (&s[..i], 86400),
+        Some((i, 'w')) => (&s[..i], 7 * 86400),
+        _ => (s, 1),
+    };
+    let n: u64 = num.trim().parse().map_err(|_| format!("invalid duration: {s:?} (use e.g. 90s, 30m, 6h, 2d, 1w)"))?;
+    n.checked_mul(mult).map(std::time::Duration::from_secs).ok_or_else(|| format!("duration too large: {s}"))
+}
+
 pub fn dedupe(v: &mut Vec<String>) {
     let mut seen = std::collections::HashSet::new();
     v.retain(|x| seen.insert(x.clone()));
@@ -154,6 +169,19 @@ mod tests {
         assert_eq!(parse_date("2020-05-05 (YYYY-MM-DD)").unwrap(), "2020-05-05T00:00:00Z");
         assert_eq!(parse_date("2024-12-11T10:00:00+01:00").unwrap(), "2024-12-11T09:00:00Z");
         assert!(parse_date("before Aug-1996").is_none());
+    }
+
+    #[test]
+    fn durations() {
+        assert_eq!(parse_duration("0").unwrap().as_secs(), 0);
+        assert_eq!(parse_duration("3600").unwrap().as_secs(), 3600);
+        assert_eq!(parse_duration("90s").unwrap().as_secs(), 90);
+        assert_eq!(parse_duration("30m").unwrap().as_secs(), 1800);
+        assert_eq!(parse_duration("2d").unwrap().as_secs(), 172800);
+        assert_eq!(parse_duration("1w").unwrap().as_secs(), 604800);
+        assert!(parse_duration("soon").is_err());
+        assert!(parse_duration("-5m").is_err());
+        assert!(parse_duration("").is_err());
     }
 
     #[test]

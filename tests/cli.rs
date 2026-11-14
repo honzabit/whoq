@@ -56,6 +56,40 @@ fn result_cache_serves_repeat_lookups() {
 }
 
 #[test]
+fn max_age_serves_fresh_enough_cache_and_refetches_stale() {
+    let env = Env::new("maxage");
+    with_example(&env);
+    env.run(&["example.test"], None);
+    assert_eq!(env.http.hits_for(REG), 1);
+
+    // Age the cached record by two hours.
+    let dir = env.dir.join("cache/results");
+    let two_hours_ago = std::time::SystemTime::now() - std::time::Duration::from_secs(7200);
+    for e in std::fs::read_dir(&dir).unwrap().flatten() {
+        std::fs::File::options().write(true).open(e.path()).unwrap().set_modified(two_hours_ago).unwrap();
+    }
+
+    let v = json(&env.run(&["--json", "--max-age", "3h", "example.test"], None));
+    assert_eq!(v["source"]["cached"], true, "2h-old record is within 3h");
+    assert_eq!(env.http.hits_for(REG), 1);
+
+    let v = json(&env.run(&["--json", "--max-age", "90m", "example.test"], None));
+    assert!(v["source"].get("cached").is_none_or(|c| c == false), "2h-old record is too stale for 90m");
+    assert_eq!(env.http.hits_for(REG), 2);
+
+    // The refetch refreshed the cache, so the default 1h now serves it.
+    assert_eq!(json(&env.run(&["--json", "example.test"], None))["source"]["cached"], true);
+    assert_eq!(env.http.hits_for(REG), 2);
+
+    // 0 always goes upstream.
+    env.run(&["--max-age", "0", "example.test"], None);
+    assert_eq!(env.http.hits_for(REG), 3);
+
+    let bad = env.run(&["--max-age", "soon", "example.test"], None);
+    assert_eq!(code(&bad), 2);
+}
+
+#[test]
 fn unregistered_domain_is_available_with_exit_10() {
     let env = Env::new("avail");
     let out = env.run(&["--json", "free-name.test"], None);
@@ -296,4 +330,33 @@ fn schema_command_emits_json_schema() {
     let v = json(&env.run(&["schema"], None));
     assert_eq!(v["title"], "Record");
     assert!(v["properties"]["signals"].is_object());
+}
+
+#[test]
+fn mcp_lookup_honors_max_age() {
+    let env = Env::new("mcpmaxage");
+    with_example(&env);
+    let call = |args: Value| {
+        let reqs = [
+            json!({"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"t","version":"0"}}}),
+            json!({"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"lookup","arguments":args}}),
+        ];
+        let input: String = reqs.iter().map(|r| format!("{r}\n")).collect();
+        let out = env.run(&["mcp"], Some(&input));
+        ndjson(&out).into_iter().find(|v| v["id"] == 2).unwrap()["result"].clone()
+    };
+    call(json!({"queries":["example.test"]}));
+    assert_eq!(env.http.hits_for(REG), 1);
+    call(json!({"queries":["example.test"],"max_age":"1h"}));
+    assert_eq!(env.http.hits_for(REG), 1, "fresh-enough cache is served");
+    call(json!({"queries":["example.test"],"max_age":0}));
+    assert_eq!(env.http.hits_for(REG), 2, "max_age 0 forces a refetch");
+    // Two hours old: stale for the server default (1h), but fine for a per-call max_age of 3h.
+    let two_hours_ago = std::time::SystemTime::now() - std::time::Duration::from_secs(7200);
+    for e in std::fs::read_dir(env.dir.join("cache/results")).unwrap().flatten() {
+        std::fs::File::options().write(true).open(e.path()).unwrap().set_modified(two_hours_ago).unwrap();
+    }
+    call(json!({"queries":["example.test"],"max_age":"3h"}));
+    assert_eq!(env.http.hits_for(REG), 2, "per-call max_age overrides the server default");
+    assert_eq!(call(json!({"queries":["example.test"],"max_age":"later"}))["isError"], true);
 }
