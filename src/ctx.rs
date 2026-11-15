@@ -56,11 +56,13 @@ pub struct Live {
     pub dns: bool,
     /// MX, SPF, DMARC, DKIM, MTA-STS, TLS-RPT, BIMI for domains.
     pub mail: bool,
+    /// The certificate the host presents. Unlike the others, this connects to the target.
+    pub tls: bool,
 }
 
 impl Live {
     pub fn any(self) -> bool {
-        self.dns || self.mail
+        self.dns || self.mail || self.tls
     }
 }
 
@@ -70,10 +72,13 @@ pub struct Ctx {
     pub cache_dir: Option<PathBuf>,
     /// `WHOQ_WHOIS_ADDR=host:port` routes every port-43 connection there (tests, proxies).
     pub whois_addr: Option<String>,
+    /// `WHOQ_TLS_ADDR=host:port` routes every `--tls` connection there (tests).
+    pub tls_addr: Option<String>,
     hosts: Mutex<HashMap<String, Arc<Semaphore>>>,
     pub(crate) bootstrap: tokio::sync::Mutex<HashMap<&'static str, Arc<crate::bootstrap::Registry>>>,
     pub(crate) whois_servers: Mutex<HashMap<String, Option<String>>>,
     pub(crate) resolver: tokio::sync::OnceCell<Result<crate::dns::Resolvers, String>>,
+    pub(crate) tls: std::sync::OnceLock<Result<crate::tls::Tools, String>>,
 }
 
 impl Ctx {
@@ -91,10 +96,12 @@ impl Ctx {
             opts,
             cache_dir,
             whois_addr: std::env::var("WHOQ_WHOIS_ADDR").ok().filter(|s| !s.is_empty()),
+            tls_addr: std::env::var("WHOQ_TLS_ADDR").ok().filter(|s| !s.is_empty()),
             hosts: Mutex::new(HashMap::new()),
             bootstrap: tokio::sync::Mutex::new(HashMap::new()),
             whois_servers: Mutex::new(HashMap::new()),
             resolver: tokio::sync::OnceCell::new(),
+            tls: std::sync::OnceLock::new(),
         }))
     }
 

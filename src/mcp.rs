@@ -42,7 +42,11 @@ fn tools() -> Value {
     and CAA, plus signals resolves and parked. Never contacts the target's servers directly." },
                     "mail": { "type": "boolean", "description": "Add mail posture for domains (default false): MX and mail provider, \
     SPF, DMARC policy, DKIM selectors (common names only), MTA-STS, TLS-RPT, BIMI, plus signals accepts_mail and spoofable. \
-    About 25 DNS queries per domain." }
+    About 25 DNS queries per domain." },
+                    "tls": { "type": "boolean", "description": "Add the TLS certificate the host presents (default false): \
+    issuer, names, expiry, protocol, and whether it is valid (problem says why not), plus signals cert_valid and \
+    cert_expiring_soon. Checks the exact host given, so pass a URL or subdomain to check that host. Unlike dns and mail, \
+    this connects to the target's server, which can see the connection." }
                 },
                 "required": ["queries"]
             },
@@ -140,7 +144,7 @@ async fn call(ctx: &Arc<Ctx>, name: &str, args: &Value) -> Result<Value, String>
                 _ => return Err("`max_age` must be seconds or a string like \"30m\"".into()),
             };
             let flag = |k: &str| args[k].as_bool().unwrap_or(false);
-            let live = Live { dns: flag("dns"), mail: flag("mail") };
+            let live = Live { dns: flag("dns"), mail: flag("mail"), tls: flag("tls") };
             let recs = run_batch(ctx, qs, max_age, live).await;
             let results: Vec<Value> = recs
                 .iter()

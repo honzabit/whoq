@@ -45,18 +45,33 @@ pub async fn lookup(ctx: &Ctx, input: &str) -> Record {
 pub async fn lookup_with(ctx: &Ctx, input: &str, max_age: std::time::Duration, live: Live) -> Record {
     let mut rec = registration(ctx, input, max_age).await;
     if live.any() {
-        let touched = match query::parse(input) {
-            Ok(Query::Ip(ip)) if live.dns => {
-                rec.rdns = Some(crate::dns::rdns(ctx, ip).await);
-                true
-            }
-            Ok(Query::Domain { ascii, .. }) if rec.result != Outcome::Available => {
-                crate::dns::domain(ctx, &mut rec, &ascii, live).await;
-                true
-            }
+        let q = query::parse(input).ok();
+        let checkable = match &q {
+            Some(Query::Domain { .. }) => rec.result != Outcome::Available,
+            Some(Query::Ip(_)) => true,
             _ => false,
         };
-        if touched {
+        let tls_target = if live.tls && checkable { query::endpoint(input) } else { None };
+        let dns_pass = async {
+            match &q {
+                Some(Query::Ip(ip)) if live.dns => {
+                    rec.rdns = Some(crate::dns::rdns(ctx, *ip).await);
+                }
+                Some(Query::Domain { ascii, .. }) if checkable && (live.dns || live.mail) => {
+                    crate::dns::domain(ctx, &mut rec, ascii, live).await;
+                }
+                _ => {}
+            }
+        };
+        let tls_pass = async {
+            match &tls_target {
+                Some((host, port)) => Some(crate::tls::check(ctx, host, *port).await),
+                None => None,
+            }
+        };
+        let ((), tls) = tokio::join!(dns_pass, tls_pass);
+        rec.tls = tls;
+        if checkable {
             let privacy = rec.signals.as_ref().and_then(|s| s.privacy_redacted);
             rec.signals = signals(&rec, privacy);
         }

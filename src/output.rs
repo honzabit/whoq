@@ -39,6 +39,8 @@ pub fn project(rec: &Record, fields: &[String]) -> Value {
 /// Extra brief fields when live DNS / mail was requested.
 const BRIEF_DNS: &[&str] = &["dns.provider", "dns.hosting", "dns.error"];
 const BRIEF_MAIL: &[&str] = &["mail.provider", "mail.null_mx", "mail.spf.all", "mail.dmarc.policy", "mail.error"];
+const BRIEF_TLS: &[&str] =
+    &["tls.valid", "tls.problem", "tls.issuer", "tls.not_after", "tls.expires_in_days", "tls.error"];
 
 pub fn brief_fields(rec: &Record) -> Vec<String> {
     let list = if rec.kind == Kind::Domain { BRIEF_DOMAIN } else { BRIEF_NET };
@@ -48,6 +50,9 @@ pub fn brief_fields(rec: &Record) -> Vec<String> {
     }
     if rec.mail.is_some() {
         v.extend(BRIEF_MAIL.iter().map(|s| s.to_string()));
+    }
+    if rec.tls.is_some() {
+        v.extend(BRIEF_TLS.iter().map(|s| s.to_string()));
     }
     if rec.rdns.is_some() {
         v.push("rdns".into());
@@ -281,6 +286,41 @@ pub fn pretty(rec: &Record, st: &Style) -> String {
             .collect();
         if !extras.is_empty() {
             row("Mail extras", extras.join(", "));
+        }
+    }
+    if let Some(t) = &rec.tls {
+        let target = match t.port {
+            Some(p) => format!("{}:{p}", t.host.as_deref().unwrap_or("")),
+            None => t.host.clone().unwrap_or_default(),
+        };
+        if let Some(e) = &t.error {
+            row("TLS", st.paint("31", e));
+        } else {
+            let verdict = match (t.valid, &t.problem) {
+                (Some(true), _) => st.paint("32", "✓ valid"),
+                (_, Some(p)) => st.paint("1;31", &format!("✗ {p}")),
+                _ => st.paint("1;31", "✗ invalid"),
+            };
+            let proto = t.protocol.as_deref().map(|p| format!(" · {p}")).unwrap_or_default();
+            row("TLS", format!("{verdict}  {}", st.dim(&format!("{target}{proto}"))));
+            if let Some(i) = &t.issuer {
+                row("Issuer", if t.self_signed { format!("{i}  {}", st.dim("(self-signed)")) } else { i.clone() });
+            }
+            if let (Some(na), Some(d)) = (&t.not_after, t.expires_in_days) {
+                let date = na.get(..10).unwrap_or(na);
+                let rel = match d {
+                    d if d < 0 => st.paint("1;31", &format!("expired {}d ago", -d)),
+                    d if d < 14 => st.paint("33", &format!("in {d}d")),
+                    d => st.dim(&format!("in {d}d")),
+                };
+                row("Cert expires", format!("{date}  {rel}"));
+            }
+            if !t.names.is_empty() {
+                let shown = t.names.iter().take(6).cloned().collect::<Vec<_>>().join(", ");
+                let total = t.names_total.unwrap_or(t.names.len());
+                let more = if total > 6 { st.dim(&format!(" +{}", total - 6)) } else { String::new() };
+                row("Cert names", format!("{shown}{more}"));
+            }
         }
     }
     if let Some(s) = &rec.source {

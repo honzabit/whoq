@@ -291,6 +291,83 @@ pub struct Env {
     pub http: Http,
     pub whois: Whois,
     pub dns: Dns,
+    /// Address of the fake TLS server, once `serve_tls` started one.
+    tls_addr: Mutex<Option<String>>,
+}
+
+/// Certificates the fake TLS server can present. All but `SelfSigned` come from a test CA
+/// that `WHOQ_TLS_CA` makes the only trusted root.
+#[derive(Clone, Copy)]
+pub enum Cert {
+    /// For example.test and www.example.test, valid for a year from 2026-01-01.
+    Valid,
+    Expired,
+    SelfSigned,
+    /// Valid, but only for other.test.
+    WrongName,
+}
+
+fn issue(
+    kind: Cert,
+    dir: &Path,
+) -> (Vec<rustls::pki_types::CertificateDer<'static>>, rustls::pki_types::PrivateKeyDer<'static>) {
+    use rcgen::{BasicConstraints, CertificateParams, DnType, IsCa, Issuer, KeyPair};
+    let mut ca = CertificateParams::new(Vec::<String>::new()).unwrap();
+    ca.is_ca = IsCa::Ca(BasicConstraints::Unconstrained);
+    ca.distinguished_name.push(DnType::OrganizationName, "Whoq Test");
+    ca.distinguished_name.push(DnType::CommonName, "Whoq Test CA");
+    let ca_key = KeyPair::generate().unwrap();
+    let ca_cert = ca.self_signed(&ca_key).unwrap();
+    std::fs::write(dir.join("ca.pem"), ca_cert.pem()).unwrap();
+
+    let names = match kind {
+        Cert::WrongName => vec!["other.test".to_string()],
+        _ => vec!["example.test".to_string(), "www.example.test".to_string()],
+    };
+    let mut leaf = CertificateParams::new(names.clone()).unwrap();
+    leaf.distinguished_name.push(DnType::CommonName, names[0].clone());
+    (leaf.not_before, leaf.not_after) = match kind {
+        Cert::Expired => (rcgen::date_time_ymd(2024, 1, 1), rcgen::date_time_ymd(2025, 1, 1)),
+        _ => (rcgen::date_time_ymd(2026, 1, 1), rcgen::date_time_ymd(2099, 1, 1)),
+    };
+    let key = KeyPair::generate().unwrap();
+    let cert = match kind {
+        Cert::SelfSigned => leaf.self_signed(&key).unwrap(),
+        _ => leaf.signed_by(&key, &Issuer::new(ca, ca_key)).unwrap(),
+    };
+    let key_der = rustls::pki_types::PrivateKeyDer::try_from(key.serialize_der()).unwrap();
+    (vec![cert.der().clone()], key_der)
+}
+
+/// A TLS server presenting `kind` to every client; completes the handshake, then waits for close.
+fn serve_tls(kind: Cert, dir: &Path) -> String {
+    let (chain, key) = issue(kind, dir);
+    let cfg = rustls::ServerConfig::builder_with_provider(Arc::new(rustls::crypto::ring::default_provider()))
+        .with_safe_default_protocol_versions()
+        .unwrap()
+        .with_no_client_auth()
+        .with_single_cert(chain, key)
+        .unwrap();
+    let cfg = Arc::new(cfg);
+    let l = TcpListener::bind("127.0.0.1:0").unwrap();
+    let addr = l.local_addr().unwrap().to_string();
+    thread::spawn(move || {
+        for mut tcp in l.incoming().flatten() {
+            let cfg = cfg.clone();
+            thread::spawn(move || {
+                let mut conn = rustls::ServerConnection::new(cfg).unwrap();
+                while conn.is_handshaking() {
+                    if conn.complete_io(&mut tcp).is_err() {
+                        return;
+                    }
+                }
+                let _ = conn.complete_io(&mut tcp);
+                let mut sink = [0u8; 512];
+                let _ = rustls::Stream::new(&mut conn, &mut tcp).read(&mut sink);
+            });
+        }
+    });
+    addr
 }
 
 impl Env {
@@ -312,7 +389,18 @@ impl Env {
         boot("ipv4.json", format!(r#"[[["198.51.100.0/24"],["{b}/rir/"]]]"#));
         boot("ipv6.json", "[]".into());
         boot("asn.json", format!(r#"[[["64496-64511"],["{b}/rir/"]]]"#));
-        Env { dir, http, whois, dns: Dns::start() }
+        Env { dir, http, whois, dns: Dns::start(), tls_addr: Mutex::new(None) }
+    }
+
+    /// Start a TLS server presenting `kind`; `--tls` connections from `run` go there.
+    pub fn serve_tls(&self, kind: Cert) {
+        *self.tls_addr.lock().unwrap() = Some(serve_tls(kind, &self.dir));
+    }
+
+    /// Point `--tls` at a port nobody listens on.
+    pub fn tls_unreachable(&self) {
+        let l = TcpListener::bind("127.0.0.1:0").unwrap();
+        *self.tls_addr.lock().unwrap() = Some(l.local_addr().unwrap().to_string());
     }
 
     /// Fixture with `{{BASE}}` replaced by the fake server's URL.
@@ -332,6 +420,15 @@ impl Env {
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .stderr(Stdio::piped());
+        if let Some(addr) = &*self.tls_addr.lock().unwrap() {
+            cmd.env("WHOQ_TLS_ADDR", addr);
+        }
+        let ca = self.dir.join("ca.pem");
+        if ca.exists() {
+            cmd.env("WHOQ_TLS_CA", ca);
+        } else {
+            cmd.env_remove("WHOQ_TLS_CA");
+        }
         let mut child = cmd.spawn().expect("spawn whoq");
         {
             let mut si = child.stdin.take().unwrap();

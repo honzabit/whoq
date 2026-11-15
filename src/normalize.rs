@@ -145,11 +145,14 @@ pub fn signals(r: &Record, privacy_redacted: Option<bool>) -> Option<Signals> {
     };
     let dns = r.dns.as_ref().filter(|d| d.error.is_none());
     let mail = r.mail.as_ref().filter(|m| m.error.is_none());
+    let tls = r.tls.as_ref().filter(|t| t.error.is_none());
     let sig = Signals {
         resolves: dns.map(|d| !d.a.is_empty() || !d.aaaa.is_empty()),
         parked: dns.filter(|d| !d.ns.is_empty()).map(|d| d.provider.as_deref().is_some_and(|p| p.contains("parking"))),
         accepts_mail: mail.map(|m| !m.mx.is_empty() && !m.null_mx),
         spoofable: mail.map(|m| m.dmarc.as_ref().and_then(|d| d.policy.as_deref()).is_none_or(|p| p == "none")),
+        cert_valid: tls.and_then(|t| t.valid),
+        cert_expiring_soon: tls.and_then(|t| t.expires_in_days).map(|d| d < 14),
         age_days: age,
         expires_in_days: exp,
         young: age.map(|a| a < 30),

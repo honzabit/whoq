@@ -10,6 +10,7 @@ mod output;
 mod query;
 mod rdap;
 mod sanitize;
+mod tls;
 mod watch;
 mod whois43;
 
@@ -237,6 +238,11 @@ struct LookupArgs {
     /// MTA-STS, TLS-RPT, BIMI. About 25 DNS queries per domain.
     #[arg(long)]
     mail: bool,
+    /// Add the TLS certificate the host presents: issuer, names, expiry, validity. Checks the
+    /// exact host given (`https://shop.example.com:8443` checks that host and port), IPs too.
+    /// Unlike --dns and --mail, this CONNECTS TO THE TARGET, which can see it.
+    #[arg(long)]
+    tls: bool,
     /// Parallel lookups
     #[arg(short = 'j', long, default_value_t = 8)]
     concurrency: usize,
@@ -702,7 +708,7 @@ async fn run(a: LookupArgs) -> i32 {
         fatal(machine, "usage", "no queries given (try `whoq example.com` or `whoq --help`)");
     }
 
-    let ctx = match Ctx::new(options(&a.common, a.raw, a.whois, Live { dns: a.dns, mail: a.mail })) {
+    let ctx = match Ctx::new(options(&a.common, a.raw, a.whois, Live { dns: a.dns, mail: a.mail, tls: a.tls })) {
         Ok(c) => c,
         Err(e) => fatal(machine, "init", &e.to_string()),
     };

@@ -32,15 +32,7 @@ pub fn parse(input: &str) -> Result<Query, String> {
         return Ok(Query::Cidr(net.trunc()));
     }
 
-    // Peel URL / email / port decorations down to a host.
-    let mut host = s;
-    if let Some(i) = host.find("://") {
-        host = &host[i + 3..];
-    }
-    host = host.split(['/', '?', '#']).next().unwrap_or(host);
-    if let Some(i) = host.rfind('@') {
-        host = &host[i + 1..];
-    }
+    let mut host = authority(s);
     if let Some(inner) = host.strip_prefix('[') {
         // [v6]:port
         let inner = inner.split(']').next().unwrap_or(inner);
@@ -72,6 +64,43 @@ pub fn parse(input: &str) -> Result<Query, String> {
     let (unicode, _) = idna::domain_to_unicode(&registrable);
     let unicode = (unicode != registrable).then_some(unicode);
     Ok(Query::Domain { ascii: registrable, unicode })
+}
+
+/// Peel URL scheme, path and userinfo / email local part: `https://u@h:8443/x` -> `h:8443`.
+fn authority(s: &str) -> &str {
+    let mut host = s;
+    if let Some(i) = host.find("://") {
+        host = &host[i + 3..];
+    }
+    host = host.split(['/', '?', '#']).next().unwrap_or(host);
+    if let Some(i) = host.rfind('@') {
+        host = &host[i + 1..];
+    }
+    host
+}
+
+/// Where a TLS check should connect: the exact host given (not the registrable domain) and
+/// its port, if any. `https://shop.example.com:8443/x` -> (`shop.example.com`, Some(8443)).
+pub fn endpoint(input: &str) -> Option<(String, Option<u16>)> {
+    let s = input.trim();
+    if let Ok(ip) = s.parse::<IpAddr>() {
+        return Some((ip.to_string(), None));
+    }
+    let host = authority(s);
+    if let Some(inner) = host.strip_prefix('[') {
+        let (ip, rest) = inner.split_once(']')?;
+        let port = rest.strip_prefix(':').and_then(|p| p.parse().ok());
+        return Some((ip.parse::<IpAddr>().ok()?.to_string(), port));
+    }
+    let (host, port) = match host.rsplit_once(':') {
+        Some((h, p)) if p.parse::<u16>().is_ok() => (h, p.parse().ok()),
+        _ => (host, None),
+    };
+    let host = host.trim_end_matches('.');
+    if let Ok(ip) = host.parse::<IpAddr>() {
+        return Some((ip.to_string(), port));
+    }
+    Some((idna::domain_to_ascii(host).ok()?, port))
 }
 
 /// Reduce a hostname to the name actually held at the registry (`www.foo.co.uk` -> `foo.co.uk`).
@@ -123,5 +152,15 @@ mod tests {
         assert!(matches!(parse("2001:4860::8888").unwrap(), Query::Ip(_)));
         assert!(matches!(parse("http://[2001:db8::1]:80/").unwrap(), Query::Ip(_)));
         assert!(matches!(parse("1.1.1.0/24").unwrap(), Query::Cidr(_)));
+    }
+
+    #[test]
+    fn endpoints() {
+        let e = |s: &str| endpoint(s).unwrap();
+        assert_eq!(e("example.com"), ("example.com".into(), None));
+        assert_eq!(e("https://Shop.Example.com:8443/x?y"), ("shop.example.com".into(), Some(8443)));
+        assert_eq!(e("1.1.1.1"), ("1.1.1.1".into(), None));
+        assert_eq!(e("https://[2001:db8::1]:444/"), ("2001:db8::1".into(), Some(444)));
+        assert_eq!(e("münchen.de"), ("xn--mnchen-3ya.de".into(), None));
     }
 }

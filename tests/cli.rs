@@ -2,7 +2,7 @@
 
 mod common;
 
-use common::{Env, Rr, code, json, ndjson, stdout};
+use common::{Cert, Env, Rr, code, json, ndjson, stdout};
 use serde_json::{Value, json};
 
 const REG: &str = "/registry/domain/example.test";
@@ -558,4 +558,100 @@ fn mcp_lookup_and_enrich_accept_dns_flags() {
         by_id[&4]["result"]["structuredContent"]["results"][0]["ptr"], "dns.google",
         "old `rdns` name still works"
     );
+}
+
+// ---------------- --tls ----------------
+
+#[test]
+fn tls_reads_and_validates_the_certificate() {
+    let env = Env::new("tls");
+    with_example(&env);
+    env.serve_tls(Cert::Valid);
+    let out = env.run(&["--json", "--tls", "example.test"], None);
+    assert_eq!(code(&out), 0, "stderr: {}", String::from_utf8_lossy(&out.stderr));
+    let v = json(&out);
+    let t = &v["tls"];
+    assert_eq!(t["host"], "example.test");
+    assert_eq!(t["valid"], true, "{t}");
+    assert!(t.get("problem").is_none() && t.get("port").is_none());
+    assert_eq!(t["issuer"], "Whoq Test (Whoq Test CA)");
+    assert_eq!(t["subject"], "example.test");
+    assert_eq!(t["names"], json!(["example.test", "www.example.test"]));
+    assert_eq!(t["not_after"], "2099-01-01T00:00:00Z");
+    assert_eq!(t["protocol"], "TLS 1.3");
+    assert_eq!(t["key"], "EC 256");
+    assert_eq!(t["sha256"].as_str().unwrap().len(), 64);
+    assert_eq!(
+        (v["signals"]["cert_valid"].clone(), v["signals"]["cert_expiring_soon"].clone()),
+        (json!(true), json!(false))
+    );
+    assert!(env.dns.queries.lock().unwrap().is_empty(), "--tls alone sends no DNS queries through whoq's resolver");
+
+    let cached = json(&env.run(&["--json", "example.test"], None));
+    assert_eq!(cached["source"]["cached"], true);
+    assert!(cached.get("tls").is_none(), "TLS is live data, never cached");
+
+    // The exact host and port given are checked, not the registrable domain.
+    let v = json(&env.run(&["--json", "--tls", "https://www.example.test:8443/login"], None));
+    assert_eq!(v["name"], "example.test");
+    assert_eq!((v["tls"]["host"].clone(), v["tls"]["port"].clone()), (json!("www.example.test"), json!(8443)));
+    assert_eq!(v["tls"]["valid"], true);
+
+    let pretty = stdout(&env.run(&["-o", "pretty", "--tls", "example.test"], None));
+    for want in ["✓ valid", "TLS 1.3", "Whoq Test (Whoq Test CA)", "2099-01-01", "www.example.test"] {
+        assert!(pretty.contains(want), "missing {want:?} in:\n{pretty}");
+    }
+    let brief = json(&env.run(&["--json", "-b", "--tls", "example.test"], None));
+    assert_eq!(brief["tls.valid"], true);
+    assert_eq!(brief["tls.issuer"], "Whoq Test (Whoq Test CA)");
+}
+
+#[test]
+fn tls_explains_invalid_certificates() {
+    for (kind, problem) in
+        [(Cert::Expired, "expired"), (Cert::SelfSigned, "self-signed"), (Cert::WrongName, "not valid for this name")]
+    {
+        let env = Env::new("tlsbad");
+        with_example(&env);
+        env.serve_tls(kind);
+        let v = json(&env.run(&["--json", "--tls", "example.test"], None));
+        assert_eq!(v["tls"]["valid"], false, "{problem}: {}", v["tls"]);
+        assert_eq!(v["tls"]["problem"], problem);
+        assert_eq!(v["signals"]["cert_valid"], false);
+        assert!(v["tls"]["issuer"].is_string(), "a bad certificate is still described");
+        if matches!(kind, Cert::Expired) {
+            assert!(v["tls"]["expires_in_days"].as_i64().unwrap() < 0);
+            assert_eq!(v["signals"]["cert_expiring_soon"], true);
+            let pretty = stdout(&env.run(&["-o", "pretty", "--tls", "example.test"], None));
+            assert!(pretty.contains("✗ expired") && pretty.contains("expired "), "{pretty}");
+        }
+        if matches!(kind, Cert::SelfSigned) {
+            assert_eq!(v["tls"]["self_signed"], true);
+        }
+    }
+
+    let env = Env::new("tlsdown");
+    with_example(&env);
+    env.tls_unreachable();
+    let out = env.run(&["--json", "--tls", "example.test"], None);
+    assert_eq!(code(&out), 0, "a failed TLS check doesn't fail the lookup");
+    let v = json(&out);
+    assert!(v["tls"]["error"].as_str().unwrap().starts_with("example.test:443"), "{}", v["tls"]);
+    assert!(v["signals"].get("cert_valid").is_none(), "no cert signals without a certificate");
+}
+
+#[test]
+fn mcp_lookup_accepts_tls() {
+    let env = Env::new("mcptls");
+    with_example(&env);
+    env.serve_tls(Cert::Valid);
+    let reqs = [
+        json!({"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"t","version":"0"}}}),
+        json!({"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"lookup","arguments":{"queries":["example.test"],"tls":true}}}),
+    ];
+    let input: String = reqs.iter().map(|r| format!("{r}\n")).collect();
+    let out = ndjson(&env.run(&["mcp"], Some(&input)));
+    let r = &out.iter().find(|v| v["id"] == 2).unwrap()["result"]["structuredContent"]["results"][0];
+    assert_eq!(r["tls.valid"], true, "{r}");
+    assert_eq!(r["signals"]["cert_valid"], true);
 }

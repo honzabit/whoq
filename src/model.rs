@@ -121,12 +121,70 @@ pub struct Signals {
     /// (`--dns`) Nameservers belong to a domain-parking service.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub parked: Option<bool>,
-    /// (`--dns`) Has MX records that accept mail (no MX or a null MX means false).
+    /// (`--mail`) Has MX records that accept mail (no MX or a null MX means false).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub accepts_mail: Option<bool>,
-    /// (`--dns`) No DMARC record, or DMARC `p=none`: mail forging this domain in `From:` is not rejected.
+    /// (`--mail`) No DMARC record, or DMARC `p=none`: mail forging this domain in `From:` is not rejected.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub spoofable: Option<bool>,
+    /// (`--tls`) The certificate chains to a trusted root, is in date and covers the host.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cert_valid: Option<bool>,
+    /// (`--tls`) The certificate expires within 14 days (or already has).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cert_expiring_soon: Option<bool>,
+}
+
+/// The certificate a host presents on connect (`--tls`). This check talks to the target itself.
+#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema, PartialEq)]
+pub struct Tls {
+    /// Host checked: the exact host given (e.g. `shop.example.com`), not the registrable domain.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub host: Option<String>,
+    /// Port, when not 443.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub port: Option<u16>,
+    /// Address actually connected to.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ip: Option<String>,
+    /// Negotiated protocol, e.g. `TLS 1.3`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub protocol: Option<String>,
+    /// Chain verified against the Mozilla root store, in date, and valid for `host`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub valid: Option<bool>,
+    /// Why it isn't valid: `expired`, `self-signed`, `not valid for this name`, ...
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub problem: Option<String>,
+    /// Leaf certificate subject common name.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub subject: Option<String>,
+    /// Issuing CA, e.g. `Let's Encrypt (E6)`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub issuer: Option<String>,
+    /// Subject alternative names (first 50).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub names: Vec<String>,
+    /// Total SANs, when more than are listed in `names`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub names_total: Option<usize>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub not_before: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub not_after: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub expires_in_days: Option<i64>,
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub self_signed: bool,
+    /// Public key, e.g. `EC 256`, `RSA 2048`, `Ed25519`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// SHA-256 of the leaf certificate (hex), for pivoting in CT logs and spotting rotation.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sha256: Option<String>,
+    /// Why no certificate could be read (refused, timeout, handshake failure).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
 }
 
 /// Reverse DNS for an IP (`--dns`).
@@ -217,7 +275,7 @@ pub struct Dmarc {
     pub rua: Vec<String>,
 }
 
-/// Mail setup for a domain (`--dns`).
+/// Mail setup for a domain (`--mail`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema, PartialEq)]
 pub struct Mail {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -314,12 +372,15 @@ pub struct Record {
     /// Live DNS (`--dns`, domains). Not cached with the registration data.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dns: Option<Dns>,
-    /// Mail DNS: MX, SPF, DMARC, DKIM (`--dns`, domains).
+    /// Mail DNS: MX, SPF, DMARC, DKIM (`--mail`, domains).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub mail: Option<Mail>,
     /// Reverse DNS (`--dns`, IPs).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub rdns: Option<Rdns>,
+    /// Certificate presented by the host (`--tls`). Not cached.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub tls: Option<Tls>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub signals: Option<Signals>,
     /// Free-text remarks from the registry (sanitized, truncated, UNTRUSTED).
@@ -359,6 +420,7 @@ impl Record {
             dns: None,
             mail: None,
             rdns: None,
+            tls: None,
             signals: None,
             remarks: vec![],
             source: None,
