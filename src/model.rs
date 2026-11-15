@@ -115,6 +115,133 @@ pub struct Signals {
     /// A hold / pending-delete / redemption status is set (domain likely not resolving).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub on_hold: Option<bool>,
+    /// (`--dns`) The domain has A or AAAA records.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resolves: Option<bool>,
+    /// (`--dns`) Nameservers belong to a domain-parking service.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub parked: Option<bool>,
+    /// (`--dns`) Has MX records that accept mail (no MX or a null MX means false).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub accepts_mail: Option<bool>,
+    /// (`--dns`) No DMARC record, or DMARC `p=none`: mail forging this domain in `From:` is not rejected.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub spoofable: Option<bool>,
+}
+
+/// Reverse DNS for an IP (`--dns`).
+#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema, PartialEq)]
+pub struct Rdns {
+    /// PTR names.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub ptr: Vec<String>,
+    /// Forward-confirmed: a PTR name resolves back to this IP (FCrDNS). This is how
+    /// crawlers such as Googlebot are verified; an unverified PTR can say anything.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub verified: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
+}
+
+/// Who announces a set of the domain's addresses (Team Cymru).
+#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema, PartialEq)]
+pub struct Hosting {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub asn: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub country: Option<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub ips: Vec<String>,
+}
+
+/// Live DNS for a domain (`--dns`).
+#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema, PartialEq)]
+pub struct Dns {
+    /// The name the addresses belong to: the domain itself, or `www.` when the apex has none.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub host: Option<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub a: Vec<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub aaaa: Vec<String>,
+    /// Networks announcing the addresses, e.g. Cloudflare, Hetzner.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub hosting: Vec<Hosting>,
+    /// NS records served by the zone (may differ from the registry's delegation).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub ns: Vec<String>,
+    /// DNS hosting provider recognized from the nameservers.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub provider: Option<String>,
+    /// CAA records, e.g. `issue letsencrypt.org`.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub caa: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema, PartialEq)]
+pub struct Mx {
+    pub preference: u16,
+    pub host: String,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema, PartialEq)]
+pub struct Spf {
+    pub record: String,
+    /// The `all` qualifier: `-all` (fail), `~all` (softfail), `?all` (neutral), `+all` (anyone may send).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub all: Option<String>,
+    /// `include:` targets, which name the sending services.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub includes: Vec<String>,
+    /// e.g. more than one SPF record (a permanent error for receivers).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema, PartialEq)]
+pub struct Dmarc {
+    pub record: String,
+    /// `none`, `quarantine` or `reject`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub subdomain_policy: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub pct: Option<u8>,
+    /// Aggregate report destinations.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub rua: Vec<String>,
+}
+
+/// Mail setup for a domain (`--dns`).
+#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema, PartialEq)]
+pub struct Mail {
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub mx: Vec<Mx>,
+    /// Mail provider recognized from MX hosts, e.g. `Google Workspace`, `Microsoft 365`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub provider: Option<String>,
+    /// RFC 7505 null MX: the domain explicitly accepts no mail.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub null_mx: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub spf: Option<Spf>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dmarc: Option<Dmarc>,
+    /// DKIM selectors found by probing common names. Best effort: selectors can't be listed,
+    /// so an empty list does not mean the domain has no DKIM.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub dkim_selectors: Vec<String>,
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub mta_sts: bool,
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub tls_rpt: bool,
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub bimi: bool,
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema, PartialEq)]
@@ -181,6 +308,15 @@ pub struct Record {
     pub network: Option<Network>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub asn: Option<AsnInfo>,
+    /// Live DNS (`--dns`, domains). Not cached with the registration data.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dns: Option<Dns>,
+    /// Mail DNS: MX, SPF, DMARC, DKIM (`--dns`, domains).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub mail: Option<Mail>,
+    /// Reverse DNS (`--dns`, IPs).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub rdns: Option<Rdns>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub signals: Option<Signals>,
     /// Free-text remarks from the registry (sanitized, truncated, UNTRUSTED).
@@ -217,6 +353,9 @@ impl Record {
             abuse_email: None,
             network: None,
             asn: None,
+            dns: None,
+            mail: None,
+            rdns: None,
             signals: None,
             remarks: vec![],
             source: None,

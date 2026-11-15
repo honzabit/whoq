@@ -192,6 +192,12 @@ pub struct Owner {
     pub cidr: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub abuse_email: Option<String>,
+    /// Reverse DNS name (`--rdns`)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ptr: Option<String>,
+    /// The PTR name resolves back to this IP (`--rdns`)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ptr_verified: Option<bool>,
     #[serde(skip_serializing_if = "std::ops::Not::not")]
     pub private: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -293,6 +299,35 @@ fn range_to_nets(start: &str, end: &str) -> Vec<IpNet> {
     }
 }
 
+/// Parse a Team Cymru verbose bulk answer into (ip, info) pairs.
+pub fn parse_cymru(text: &str) -> Vec<(IpAddr, CymruInfo)> {
+    text.lines()
+        .filter_map(|line| {
+            let parts: Vec<&str> = line.split('|').map(str::trim).collect();
+            if parts.len() < 7 {
+                return None;
+            }
+            let ip = normalize(parts[1].parse::<IpAddr>().ok()?);
+            Some((
+                ip,
+                CymruInfo {
+                    asn: parts[0].parse().ok(),
+                    prefix: parts[2].parse::<IpNet>().ok().map(|n| n.to_string()),
+                    country: opt_clean(parts[3]),
+                    registry: opt_clean(parts[4]),
+                    as_name: opt_clean(&parts[6..].join("|")),
+                },
+            ))
+        })
+        .collect()
+}
+
+/// Ask Team Cymru about a handful of IPs (no caching; for `--dns` hosting).
+pub async fn cymru_lookup(ctx: &Ctx, ips: &[IpAddr]) -> Result<Vec<(IpAddr, CymruInfo)>, crate::ctx::LookupError> {
+    let body = format!("begin\nverbose\n{}\nend", ips.iter().map(|i| i.to_string()).collect::<Vec<_>>().join("\n"));
+    Ok(parse_cymru(&crate::whois43::query(ctx, CYMRU, &body).await?))
+}
+
 fn opt_clean(s: &str) -> Option<String> {
     let c = clean(s, 200);
     (!c.is_empty() && c != "NA").then_some(c)
@@ -387,20 +422,7 @@ impl Engine {
         let t = now_secs();
         let mut cache = self.cymru.lock().unwrap();
         let mut pbuf = self.persist_buf.lock().unwrap();
-        for line in text.lines() {
-            let parts: Vec<&str> = line.split('|').map(str::trim).collect();
-            if parts.len() < 7 {
-                continue;
-            }
-            let Ok(ip) = parts[1].parse::<IpAddr>() else { continue };
-            let ip = normalize(ip);
-            let info = CymruInfo {
-                asn: parts[0].parse().ok(),
-                prefix: parts[2].parse::<IpNet>().ok().map(|n| n.to_string()),
-                country: opt_clean(parts[3]),
-                registry: opt_clean(parts[4]),
-                as_name: opt_clean(&parts[6..].join("|")),
-            };
+        for (ip, info) in parse_cymru(&text) {
             let net = info.prefix.as_deref().and_then(|p| p.parse::<IpNet>().ok()).unwrap_or_else(|| IpNet::from(ip));
             cache.insert(net, info.clone());
             pbuf.push(Persisted { k: "cymru".into(), net: net.to_string(), t, c: Some(info), r: None });
@@ -533,6 +555,28 @@ impl Engine {
                 (*ip, o)
             })
             .collect()
+    }
+}
+
+/// Attach reverse DNS to owners, resolving IPs not yet in `cache` (kept across calls).
+pub async fn attach_rdns(
+    ctx: &Ctx,
+    owners: &mut HashMap<IpAddr, Owner>,
+    cache: &mut HashMap<IpAddr, crate::model::Rdns>,
+    concurrency: usize,
+) {
+    let todo: Vec<IpAddr> = owners.keys().filter(|ip| !is_private(ip) && !cache.contains_key(ip)).copied().collect();
+    let found: Vec<(IpAddr, crate::model::Rdns)> = futures::stream::iter(todo)
+        .map(|ip| async move { (ip, crate::dns::rdns(ctx, ip).await) })
+        .buffer_unordered(concurrency.max(1))
+        .collect()
+        .await;
+    cache.extend(found);
+    for (ip, o) in owners.iter_mut() {
+        if let Some(r) = cache.get(ip) {
+            o.ptr = r.ptr.first().cloned();
+            o.ptr_verified = r.verified;
+        }
     }
 }
 

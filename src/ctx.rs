@@ -46,6 +46,8 @@ pub struct Options {
     pub use_cache: bool,
     pub raw: bool,
     pub force_whois: bool,
+    /// Add live DNS: rdns for IPs, addresses/hosting/NS/CAA/mail for domains.
+    pub dns: bool,
 }
 
 pub struct Ctx {
@@ -57,6 +59,7 @@ pub struct Ctx {
     hosts: Mutex<HashMap<String, Arc<Semaphore>>>,
     pub(crate) bootstrap: tokio::sync::Mutex<HashMap<&'static str, Arc<crate::bootstrap::Registry>>>,
     pub(crate) whois_servers: Mutex<HashMap<String, Option<String>>>,
+    pub(crate) resolver: tokio::sync::OnceCell<Result<crate::dns::Resolvers, String>>,
 }
 
 impl Ctx {
@@ -77,6 +80,7 @@ impl Ctx {
             hosts: Mutex::new(HashMap::new()),
             bootstrap: tokio::sync::Mutex::new(HashMap::new()),
             whois_servers: Mutex::new(HashMap::new()),
+            resolver: tokio::sync::OnceCell::new(),
         }))
     }
 

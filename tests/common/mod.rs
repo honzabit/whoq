@@ -1,12 +1,12 @@
-//! Offline test harness: a fake RDAP HTTP server and a fake port-43 server
-//! (IANA referrals, a legacy registry, Team Cymru bulk), plus a sandboxed
-//! cache/state dir with a seeded IANA bootstrap pointing at the fake server.
+//! Offline test harness: a fake RDAP HTTP server, a fake port-43 server
+//! (IANA referrals, a legacy registry, Team Cymru bulk) and a fake DNS server, plus a
+//! sandboxed cache/state dir with a seeded IANA bootstrap pointing at the fake server.
 
 #![allow(dead_code)]
 
 use std::collections::HashMap;
 use std::io::{BufRead, BufReader, Read, Write};
-use std::net::{TcpListener, TcpStream};
+use std::net::{IpAddr, TcpListener, TcpStream, UdpSocket};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output, Stdio};
 use std::sync::{Arc, Mutex};
@@ -126,6 +126,123 @@ impl Whois {
     }
 }
 
+// ---------------- fake DNS (UDP, authoritative-style answers) ----------------
+
+#[derive(Clone, Debug)]
+pub enum Rr {
+    A(&'static str),
+    Aaaa(&'static str),
+    Ns(&'static str),
+    Ptr(&'static str),
+    Mx(u16, &'static str),
+    Txt(&'static str),
+    Caa(&'static str, &'static str),
+}
+
+impl Rr {
+    fn rtype(&self) -> u16 {
+        match self {
+            Rr::A(_) => 1,
+            Rr::Ns(_) => 2,
+            Rr::Ptr(_) => 12,
+            Rr::Mx(..) => 15,
+            Rr::Txt(_) => 16,
+            Rr::Aaaa(_) => 28,
+            Rr::Caa(..) => 257,
+        }
+    }
+    fn rdata(&self) -> Vec<u8> {
+        match self {
+            Rr::A(ip) | Rr::Aaaa(ip) => match ip.parse::<IpAddr>().unwrap() {
+                IpAddr::V4(v) => v.octets().to_vec(),
+                IpAddr::V6(v) => v.octets().to_vec(),
+            },
+            Rr::Ns(n) | Rr::Ptr(n) => encode_name(n),
+            Rr::Mx(p, n) => [p.to_be_bytes().to_vec(), encode_name(n)].concat(),
+            Rr::Txt(t) => t.as_bytes().chunks(255).flat_map(|c| [vec![c.len() as u8], c.to_vec()].concat()).collect(),
+            Rr::Caa(tag, v) => [vec![0, tag.len() as u8], tag.as_bytes().to_vec(), v.as_bytes().to_vec()].concat(),
+        }
+    }
+}
+
+fn encode_name(n: &str) -> Vec<u8> {
+    let mut out = vec![];
+    for l in n.trim_end_matches('.').split('.').filter(|l| !l.is_empty()) {
+        out.push(l.len() as u8);
+        out.extend(l.as_bytes());
+    }
+    out.push(0);
+    out
+}
+
+#[derive(Clone)]
+pub struct Dns {
+    pub addr: String,
+    zone: Arc<Mutex<HashMap<String, Vec<Rr>>>>,
+    pub queries: Arc<Mutex<Vec<(String, u16)>>>,
+}
+
+impl Dns {
+    fn start() -> Dns {
+        let sock = UdpSocket::bind("127.0.0.1:0").unwrap();
+        let addr = sock.local_addr().unwrap().to_string();
+        let dns = Dns { addr, zone: Default::default(), queries: Default::default() };
+        let d = dns.clone();
+        thread::spawn(move || {
+            let mut buf = [0u8; 1500];
+            while let Ok((n, peer)) = sock.recv_from(&mut buf) {
+                if let Some(resp) = d.answer(&buf[..n]) {
+                    let _ = sock.send_to(&resp, peer);
+                }
+            }
+        });
+        dns
+    }
+
+    /// Add records for `name` (lowercase, no trailing dot).
+    pub fn add(&self, name: &str, rrs: Vec<Rr>) {
+        self.zone.lock().unwrap().entry(name.to_ascii_lowercase()).or_default().extend(rrs);
+    }
+
+    pub fn asked(&self, name: &str) -> bool {
+        self.queries.lock().unwrap().iter().any(|(n, _)| n == name)
+    }
+
+    fn answer(&self, q: &[u8]) -> Option<Vec<u8>> {
+        // header(12) + qname labels + qtype + qclass
+        let mut i = 12;
+        let mut labels = vec![];
+        while i < q.len() && q[i] != 0 {
+            let l = q[i] as usize;
+            labels.push(String::from_utf8_lossy(q.get(i + 1..i + 1 + l)?).to_ascii_lowercase());
+            i += 1 + l;
+        }
+        let qtype = u16::from_be_bytes([*q.get(i + 1)?, *q.get(i + 2)?]);
+        let qend = i + 5;
+        let name = labels.join(".");
+        self.queries.lock().unwrap().push((name.clone(), qtype));
+
+        let zone = self.zone.lock().unwrap();
+        let exists = zone.contains_key(&name);
+        let answers: Vec<Rr> =
+            zone.get(&name).map(|v| v.iter().filter(|r| r.rtype() == qtype).cloned().collect()).unwrap_or_default();
+        let rcode = if exists { 0 } else { 3 }; // NXDOMAIN for names with no records at all
+        let mut out = vec![q[0], q[1], 0x81 | (q[2] & 0x01), 0x80 | rcode, 0, 1];
+        out.extend((answers.len() as u16).to_be_bytes());
+        out.extend([0, 0, 0, 0]); // no authority / additional
+        out.extend(&q[12..qend]);
+        for rr in answers {
+            out.extend([0xc0, 0x0c]); // pointer to the question name
+            out.extend(rr.rtype().to_be_bytes());
+            out.extend([0, 1, 0, 0, 0, 60]); // class IN, TTL 60
+            let rd = rr.rdata();
+            out.extend((rd.len() as u16).to_be_bytes());
+            out.extend(rd);
+        }
+        Some(out)
+    }
+}
+
 pub fn fixture_raw(name: &str) -> String {
     let p = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures").join(name);
     std::fs::read_to_string(&p).unwrap_or_else(|e| panic!("{}: {e}", p.display()))
@@ -169,6 +286,7 @@ pub struct Env {
     pub dir: PathBuf,
     pub http: Http,
     pub whois: Whois,
+    pub dns: Dns,
 }
 
 impl Env {
@@ -190,7 +308,7 @@ impl Env {
         boot("ipv4.json", format!(r#"[[["198.51.100.0/24"],["{b}/rir/"]]]"#));
         boot("ipv6.json", "[]".into());
         boot("asn.json", format!(r#"[[["64496-64511"],["{b}/rir/"]]]"#));
-        Env { dir, http, whois }
+        Env { dir, http, whois, dns: Dns::start() }
     }
 
     /// Fixture with `{{BASE}}` replaced by the fake server's URL.
@@ -204,6 +322,7 @@ impl Env {
             .env("WHOQ_CACHE_DIR", self.dir.join("cache"))
             .env("WHOQ_STATE_DIR", self.dir.join("state"))
             .env("WHOQ_WHOIS_ADDR", &self.whois.addr)
+            .env("WHOQ_DNS_SERVER", &self.dns.addr)
             .env("NO_COLOR", "1")
             .env_remove("WHOQ_WEBHOOK")
             .stdin(Stdio::piped())

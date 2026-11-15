@@ -2,7 +2,7 @@
 
 mod common;
 
-use common::{Env, code, json, ndjson, stdout};
+use common::{Env, Rr, code, json, ndjson, stdout};
 use serde_json::{Value, json};
 
 const REG: &str = "/registry/domain/example.test";
@@ -359,4 +359,160 @@ fn mcp_lookup_honors_max_age() {
     call(json!({"queries":["example.test"],"max_age":"3h"}));
     assert_eq!(env.http.hits_for(REG), 2, "per-call max_age overrides the server default");
     assert_eq!(call(json!({"queries":["example.test"],"max_age":"later"}))["isError"], true);
+}
+
+// ---------------- --dns ----------------
+
+fn example_zone(env: &Env) {
+    env.dns.add(
+        "example.test",
+        vec![
+            Rr::A("1.1.1.1"),
+            Rr::Ns("ada.ns.cloudflare.com"),
+            Rr::Ns("bob.ns.cloudflare.com"),
+            Rr::Caa("issue", "letsencrypt.org"),
+            Rr::Mx(10, "aspmx.l.google.com"),
+            Rr::Mx(20, "alt1.aspmx.l.google.com"),
+            Rr::Txt("google-site-verification=abc"),
+            Rr::Txt("v=spf1 include:_spf.google.com -all"),
+        ],
+    );
+    env.dns.add("_dmarc.example.test", vec![Rr::Txt("v=DMARC1; p=reject; rua=mailto:d@example.test")]);
+    env.dns.add("google._domainkey.example.test", vec![Rr::Txt("v=DKIM1; k=rsa; p=MIIBIjANBg")]);
+    env.dns.add("_mta-sts.example.test", vec![Rr::Txt("v=STSv1; id=20260101")]);
+}
+
+#[test]
+fn dns_adds_hosting_provider_and_mail_posture() {
+    let env = Env::new("dns");
+    with_example(&env);
+    example_zone(&env);
+    let out = env.run(&["--json", "--dns", "example.test"], None);
+    assert_eq!(code(&out), 0, "stderr: {}", String::from_utf8_lossy(&out.stderr));
+    let v = json(&out);
+    let d = &v["dns"];
+    assert_eq!(d["a"], json!(["1.1.1.1"]));
+    assert_eq!(d["hosting"][0]["asn"], 13335);
+    assert_eq!(d["hosting"][0]["name"], "CLOUDFLARENET - Cloudflare, Inc.", "trailing ', CC' stripped");
+    assert_eq!(d["provider"], "Cloudflare");
+    assert_eq!(d["caa"], json!(["issue letsencrypt.org"]));
+    let m = &v["mail"];
+    assert_eq!(m["mx"][0], json!({ "preference": 10, "host": "aspmx.l.google.com" }));
+    assert_eq!(m["provider"], "Google Workspace");
+    assert_eq!(m["spf"]["all"], "-all");
+    assert_eq!(m["spf"]["includes"], json!(["_spf.google.com"]));
+    assert_eq!(m["dmarc"]["policy"], "reject");
+    assert_eq!(m["dmarc"]["rua"], json!(["mailto:d@example.test"]));
+    assert_eq!(m["dkim_selectors"], json!(["google"]));
+    assert_eq!(m["mta_sts"], true);
+    let s = &v["signals"];
+    assert_eq!((s["resolves"].clone(), s["parked"].clone()), (json!(true), json!(false)));
+    assert_eq!((s["accepts_mail"].clone(), s["spoofable"].clone()), (json!(true), json!(false)));
+    assert_eq!(s["young"], false, "registration signals survive the DNS pass");
+
+    // DNS is live data: it is not written into the registration cache.
+    let cached = json(&env.run(&["--json", "example.test"], None));
+    assert_eq!(cached["source"]["cached"], true);
+    assert!(cached.get("dns").is_none() && cached.get("mail").is_none());
+    assert!(cached["signals"].get("resolves").is_none());
+
+    let pretty = stdout(&env.run(&["-o", "pretty", "--dns", "example.test"], None));
+    for want in ["Cloudflare", "Google Workspace", "only letsencrypt.org", "DMARC", "reject"] {
+        assert!(pretty.contains(want), "missing {want:?} in:\n{pretty}");
+    }
+    let brief = json(&env.run(&["--json", "-b", "--dns", "example.test"], None));
+    assert_eq!(brief["dns.provider"], "Cloudflare");
+    assert_eq!(brief["mail.dmarc.policy"], "reject");
+}
+
+#[test]
+fn dns_flags_parked_unresolving_spoofable_domains() {
+    let env = Env::new("dnsparked");
+    with_example(&env);
+    env.dns.add("example.test", vec![Rr::Ns("ns1.sedoparking.com"), Rr::Mx(0, ".")]);
+    env.dns.add("_dmarc.example.test", vec![Rr::Txt("v=DMARC1; p=none")]);
+    let v = json(&env.run(&["--json", "--dns", "example.test"], None));
+    assert_eq!(v["dns"]["provider"], "Sedo (parking)");
+    assert!(v["dns"].get("a").is_none());
+    assert!(env.dns.asked("www.example.test"), "falls back to www when the apex has no address");
+    assert_eq!(v["mail"]["null_mx"], true);
+    let s = &v["signals"];
+    assert_eq!(s["resolves"], false);
+    assert_eq!(s["parked"], true);
+    assert_eq!(s["accepts_mail"], false);
+    assert_eq!(s["spoofable"], true, "p=none does not stop spoofing");
+
+    // A registered name with no DNS at all.
+    let env = Env::new("dnsnx");
+    with_example(&env);
+    let v = json(&env.run(&["--json", "--dns", "example.test"], None));
+    assert!(v["dns"]["error"].as_str().unwrap().starts_with("NXDOMAIN"));
+    assert!(v.get("mail").is_none());
+    assert!(v["signals"].get("resolves").is_none(), "no DNS signals from a failed DNS pass");
+}
+
+#[test]
+fn ip_rdns_is_forward_confirmed() {
+    let env = Env::new("rdns");
+    for ip in ["198.51.100.7", "198.51.100.8", "198.51.100.9"] {
+        env.http.route(&format!("/rir/ip/{ip}"), 200, &env.fixture("ip_network.json"));
+    }
+    env.dns.add("7.100.51.198.in-addr.arpa", vec![Rr::Ptr("crawl-7.bot.test")]);
+    env.dns.add("crawl-7.bot.test", vec![Rr::A("198.51.100.7")]);
+    env.dns.add("8.100.51.198.in-addr.arpa", vec![Rr::Ptr("crawl-8.googlebot.test")]);
+    env.dns.add("crawl-8.googlebot.test", vec![Rr::A("203.0.113.1")]); // a liar's PTR
+
+    let out = env.run(&["-o", "ndjson", "--dns", "198.51.100.7", "198.51.100.8", "198.51.100.9"], None);
+    let v = ndjson(&out);
+    assert_eq!(v[0]["rdns"], json!({ "ptr": ["crawl-7.bot.test"], "verified": true }));
+    assert_eq!(v[1]["rdns"], json!({ "ptr": ["crawl-8.googlebot.test"], "verified": false }));
+    assert_eq!(v[2]["rdns"], json!({}), "no PTR record");
+    assert_eq!(v[0]["network"]["org"], "Fixture Networks BV");
+
+    let pretty = stdout(&env.run(&["-o", "pretty", "--dns", "198.51.100.7"], None));
+    assert!(pretty.contains("crawl-7.bot.test  ✓ forward-confirmed"), "{pretty}");
+}
+
+#[test]
+fn bulk_rdns_adds_ptr_columns() {
+    let env = Env::new("bulkrdns");
+    env.dns.add("8.8.8.8.in-addr.arpa", vec![Rr::Ptr("dns.google")]);
+    env.dns.add("dns.google", vec![Rr::A("8.8.8.8")]);
+    let input = "a 8.8.8.8\nb 8.8.4.4\nc 10.0.0.1\n";
+    let out = env.run(&["bulk", "-o", "tsv", "-q", "--no-cache", "--rdns"], Some(input));
+    assert_eq!(code(&out), 0, "stderr: {}", String::from_utf8_lossy(&out.stderr));
+    let rows: Vec<Vec<String>> = stdout(&out).lines().map(|l| l.split('\t').map(String::from).collect()).collect();
+    assert_eq!(rows[0][7..], ["dns.google".to_string(), "true".into()]);
+    assert_eq!(rows[1][7..], ["".to_string(), "".into()], "no PTR");
+    assert_eq!(rows[2].len(), 9);
+    assert!(!env.dns.asked("1.0.0.10.in-addr.arpa"), "private IPs never leave the machine");
+
+    let csv = stdout(&env.run(&["bulk", "-m", "unique", "-o", "csv", "-q", "--no-cache", "--rdns"], Some(input)));
+    assert!(csv.lines().next().unwrap().ends_with(",ptr,ptr_verified"));
+    assert!(csv.contains(",dns.google,true"));
+
+    let bad = env.run(&["bulk", "-m", "summary", "--rdns"], Some(input));
+    assert_eq!(code(&bad), 2);
+}
+
+#[test]
+fn mcp_lookup_and_enrich_accept_dns_flags() {
+    let env = Env::new("mcpdns");
+    with_example(&env);
+    example_zone(&env);
+    env.dns.add("8.8.8.8.in-addr.arpa", vec![Rr::Ptr("dns.google")]);
+    env.dns.add("dns.google", vec![Rr::A("8.8.8.8")]);
+    let reqs = [
+        json!({"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"t","version":"0"}}}),
+        json!({"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"lookup","arguments":{"queries":["example.test"],"dns":true}}}),
+        json!({"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"enrich_ips","arguments":{"ips":["8.8.8.8"],"rdns":true}}}),
+    ];
+    let input: String = reqs.iter().map(|r| format!("{r}\n")).collect();
+    let by_id: std::collections::HashMap<i64, Value> =
+        ndjson(&env.run(&["mcp"], Some(&input))).into_iter().map(|v| (v["id"].as_i64().unwrap(), v)).collect();
+    let l = &by_id[&2]["result"]["structuredContent"]["results"][0];
+    assert_eq!(l["dns.provider"], "Cloudflare");
+    assert_eq!(l["signals"]["spoofable"], false);
+    let e = &by_id[&3]["result"]["structuredContent"]["results"][0];
+    assert_eq!((e["ptr"].clone(), e["ptr_verified"].clone()), (json!("dns.google"), json!(true)));
 }

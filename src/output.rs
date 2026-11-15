@@ -36,9 +36,20 @@ pub fn project(rec: &Record, fields: &[String]) -> Value {
     Value::Object(out)
 }
 
+/// Extra brief fields when live DNS was requested.
+const BRIEF_DNS: &[&str] =
+    &["dns.provider", "dns.hosting", "dns.error", "mail.provider", "mail.null_mx", "mail.spf.all", "mail.dmarc.policy"];
+
 pub fn brief_fields(rec: &Record) -> Vec<String> {
     let list = if rec.kind == Kind::Domain { BRIEF_DOMAIN } else { BRIEF_NET };
-    list.iter().map(|s| s.to_string()).collect()
+    let mut v: Vec<String> = list.iter().map(|s| s.to_string()).collect();
+    if rec.dns.is_some() || rec.mail.is_some() {
+        v.extend(BRIEF_DNS.iter().map(|s| s.to_string()));
+    }
+    if rec.rdns.is_some() {
+        v.push("rdns".into());
+    }
+    v
 }
 
 // ---------- human output ----------
@@ -167,6 +178,105 @@ pub fn pretty(rec: &Record, st: &Style) -> String {
     }
     if let Some(a) = &rec.abuse_email {
         row("Abuse", a.clone());
+    }
+    if let Some(r) = &rec.rdns {
+        let v = match (r.ptr.first(), r.verified, &r.error) {
+            (_, _, Some(e)) => st.dim(&format!("lookup failed: {e}")),
+            (Some(p), Some(true), _) => format!("{p}  {}", st.paint("32", "✓ forward-confirmed")),
+            (Some(p), _, _) => format!("{p}  {}", st.paint("33", "? does not resolve back (unverified)")),
+            (None, _, _) => st.dim("no PTR record"),
+        };
+        row("rDNS", v);
+    }
+    if let Some(d) = &rec.dns {
+        if let Some(e) = &d.error {
+            row("DNS", st.paint("31", e));
+        } else {
+            let hosting: Vec<String> = d
+                .hosting
+                .iter()
+                .map(|h| {
+                    let tag =
+                        [h.asn.map(|a| format!("AS{a}")), h.country.clone()].into_iter().flatten().collect::<Vec<_>>();
+                    format!("{} {}", h.name.clone().unwrap_or_default(), st.dim(&format!("({})", tag.join(", "))))
+                })
+                .collect();
+            let addrs: Vec<&String> = d.a.iter().chain(&d.aaaa).collect();
+            if addrs.is_empty() {
+                row("Hosting", st.paint("33", "no A/AAAA records (does not resolve)"));
+            } else {
+                let more = if addrs.len() > 2 { format!(" +{}", addrs.len() - 2) } else { String::new() };
+                let ips = addrs.iter().take(2).map(|s| s.as_str()).collect::<Vec<_>>().join(", ");
+                let host = match &d.host {
+                    Some(h) if Some(h) != rec.name.as_ref() => format!("{h}: "),
+                    _ => String::new(),
+                };
+                let who = if hosting.is_empty() { String::new() } else { format!("{}  ", hosting.join(" + ")) };
+                row("Hosting", format!("{who}{}", st.dim(&format!("{host}{ips}{more}"))));
+            }
+            if let Some(p) = &d.provider {
+                let p = if p.contains("parking") { st.paint("1;33", &format!("⚠ {p}")) } else { p.clone() };
+                row("DNS", p);
+            }
+            if !d.caa.is_empty() {
+                // Show which CAs may issue; the full records (with parameters) are in JSON.
+                let mut cas: Vec<&str> = d
+                    .caa
+                    .iter()
+                    .filter_map(|c| c.strip_prefix("issue ").or_else(|| c.strip_prefix("issuewild ")))
+                    .map(|v| v.split(';').next().unwrap_or("").trim())
+                    .filter(|v| !v.is_empty())
+                    .collect();
+                cas.sort();
+                cas.dedup();
+                let v = if cas.is_empty() { d.caa.join(", ") } else { format!("only {}", cas.join(", ")) };
+                row("CAA", v);
+            }
+        }
+    }
+    if let Some(m) = &rec.mail {
+        let mx = if m.null_mx {
+            st.dim("null MX: accepts no mail")
+        } else if m.mx.is_empty() {
+            st.dim("no MX records")
+        } else {
+            let first = &m.mx[0].host;
+            let more = if m.mx.len() > 1 { format!(" +{}", m.mx.len() - 1) } else { String::new() };
+            match &m.provider {
+                Some(p) => format!("{p}  {}", st.dim(&format!("{first}{more}"))),
+                None => format!("{first}{more}"),
+            }
+        };
+        row("Mail", mx);
+        if let Some(spf) = &m.spf {
+            let all = spf.all.clone().unwrap_or_else(|| "no all".into());
+            let all = if all == "+all" { st.paint("1;31", "+all (anyone may send)") } else { all };
+            let inc = if spf.includes.is_empty() {
+                String::new()
+            } else {
+                st.dim(&format!("  include {}", spf.includes.join(", ")))
+            };
+            let err = spf.error.as_ref().map(|e| st.paint("31", &format!("  ⚠ {e}"))).unwrap_or_default();
+            row("SPF", format!("{all}{inc}{err}"));
+        } else {
+            row("SPF", st.dim("none"));
+        }
+        let dmarc = match m.dmarc.as_ref().and_then(|d| d.policy.clone()) {
+            Some(p) if p != "none" => st.paint("32", &p),
+            Some(p) => st.paint("33", &format!("{p}  (monitoring only: spoofed mail is delivered)")),
+            None => st.paint("33", "none  (spoofed mail is not rejected)"),
+        };
+        row("DMARC", dmarc);
+        if !m.dkim_selectors.is_empty() {
+            row("DKIM", format!("{}  {}", m.dkim_selectors.join(", "), st.dim("(common selectors probed)")));
+        }
+        let extras: Vec<&str> = [(m.mta_sts, "MTA-STS"), (m.tls_rpt, "TLS-RPT"), (m.bimi, "BIMI")]
+            .into_iter()
+            .filter_map(|(on, n)| on.then_some(n))
+            .collect();
+        if !extras.is_empty() {
+            row("Mail extras", extras.join(", "));
+        }
     }
     if let Some(s) = &rec.source {
         let srv = s.servers.first().cloned().unwrap_or_default();

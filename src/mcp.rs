@@ -36,7 +36,11 @@ fn tools() -> Value {
                     "brief": { "type": "boolean", "description": "Return a compact summary (default true)." },
                     "max_age": { "type": ["string", "integer"],
                                  "description": "Serve a cached result only if younger than this, otherwise fetch fresh: \
-    seconds, or a string like \"30m\", \"6h\", \"2d\". 0 forces a fresh lookup. Default: the server's --max-age (1h)." }
+    seconds, or a string like \"30m\", \"6h\", \"2d\". 0 forces a fresh lookup. Default: the server's --max-age (1h)." },
+                    "dns": { "type": "boolean", "description": "Add live DNS (default false): for IPs, reverse DNS with forward \
+    confirmation (rdns.verified is how real crawlers are told from fakes); for domains, addresses and hosting network, DNS provider, \
+    CAA, and mail setup (MX provider, SPF, DMARC policy, DKIM selectors) plus signals resolves, parked, accepts_mail, spoofable. \
+    Slower: dozens of DNS queries per domain. Never contacts the target's servers directly." }
                 },
                 "required": ["queries"]
             },
@@ -53,7 +57,9 @@ fn tools() -> Value {
                 "properties": {
                     "ips": { "type": "array", "items": { "type": "string" }, "minItems": 1, "maxItems": 1000 },
                     "rdap": { "type": "boolean", "description": "Also fetch org / network / abuse via RDAP (default false)." },
-                    "summary": { "type": "boolean", "description": "Return counts grouped by ASN instead of per-IP rows (default false)." }
+                    "summary": { "type": "boolean", "description": "Return counts grouped by ASN instead of per-IP rows (default false)." },
+                    "rdns": { "type": "boolean", "description": "Add reverse DNS: `ptr` and `ptr_verified` (the name resolves back to the IP). \
+    Use this to tell real crawlers (e.g. *.googlebot.com, verified) from impostors (default false; per-IP rows only)." }
                 },
                 "required": ["ips"]
             },
@@ -80,11 +86,11 @@ fn strings(v: &Value) -> Vec<String> {
     v.as_array().map(|a| a.iter().filter_map(|x| x.as_str().map(str::to_string)).collect()).unwrap_or_default()
 }
 
-async fn run_batch(ctx: &Arc<Ctx>, qs: Vec<String>, max_age: Duration) -> Vec<crate::model::Record> {
+async fn run_batch(ctx: &Arc<Ctx>, qs: Vec<String>, max_age: Duration, dns: bool) -> Vec<crate::model::Record> {
     futures::stream::iter(qs)
         .map(|q| {
             let ctx = ctx.clone();
-            async move { lookup_with(&ctx, &q, max_age).await }
+            async move { lookup_with(&ctx, &q, max_age, dns).await }
         })
         .buffered(8)
         .collect()
@@ -131,7 +137,8 @@ async fn call(ctx: &Arc<Ctx>, name: &str, args: &Value) -> Result<Value, String>
                 Value::String(s) => crate::normalize::parse_duration(s)?,
                 _ => return Err("`max_age` must be seconds or a string like \"30m\"".into()),
             };
-            let recs = run_batch(ctx, qs, max_age).await;
+            let dns = args["dns"].as_bool().unwrap_or(false);
+            let recs = run_batch(ctx, qs, max_age, dns).await;
             let results: Vec<Value> = recs
                 .iter()
                 .map(|r| {
@@ -151,7 +158,7 @@ async fn call(ctx: &Arc<Ctx>, name: &str, args: &Value) -> Result<Value, String>
             if ds.is_empty() || ds.len() > MAX_BATCH {
                 return Err(format!("`domains` must contain 1..={MAX_BATCH} items"));
             }
-            let recs = run_batch(ctx, ds, ctx.opts.cache_ttl).await;
+            let recs = run_batch(ctx, ds, ctx.opts.cache_ttl, false).await;
             let results: Vec<Value> = recs
                 .iter()
                 .map(|r| {
@@ -190,8 +197,12 @@ async fn call(ctx: &Arc<Ctx>, name: &str, args: &Value) -> Result<Value, String>
             let rdap = args["rdap"].as_bool().unwrap_or(false);
             let engine = engine(ctx, rdap);
             let set = counts.keys().copied().collect();
-            let owners = engine.resolve(&set).await;
+            let mut owners = engine.resolve(&set).await;
             engine.flush();
+            if args["rdns"].as_bool().unwrap_or(false) {
+                let mut cache = Default::default();
+                crate::bulk::attach_rdns(ctx, &mut owners, &mut cache, 32).await;
+            }
             if args["summary"].as_bool().unwrap_or(false) {
                 let seen = owners.into_iter().map(|(ip, o)| (ip, (o, counts[&ip]))).collect();
                 return Ok(json!({ "groups": crate::bulk::summarize(&seen, 0) }));

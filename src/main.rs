@@ -1,6 +1,7 @@
 mod bootstrap;
 mod bulk;
 mod ctx;
+mod dns;
 mod lookup;
 mod mcp;
 mod model;
@@ -111,6 +112,10 @@ struct BulkArgs {
     /// Don't reuse RDAP networks broader than /24 (v4) or /48 (v6)
     #[arg(long)]
     precise: bool,
+    /// Add reverse DNS (PTR) and whether it forward-confirms (how real crawlers are verified).
+    /// One or two DNS queries per unique IP; not cached between runs.
+    #[arg(long)]
+    rdns: bool,
     /// Rows to show in summary mode (0 = all)
     #[arg(long, default_value_t = 25)]
     top: usize,
@@ -216,6 +221,11 @@ struct LookupArgs {
     /// Force legacy port-43 WHOIS for domains
     #[arg(long)]
     whois: bool,
+    /// Add live DNS: reverse DNS (forward-confirmed) for IPs; addresses, hosting network, DNS
+    /// provider, CAA and mail setup (MX, SPF, DMARC, DKIM) for domains. Queries your resolver
+    /// (or WHOQ_DNS_SERVER) and Team Cymru; never connects to the target itself.
+    #[arg(long)]
+    dns: bool,
     /// Parallel lookups
     #[arg(short = 'j', long, default_value_t = 8)]
     concurrency: usize,
@@ -226,13 +236,14 @@ struct LookupArgs {
     common: CommonArgs,
 }
 
-fn options(c: &CommonArgs, raw: bool, force_whois: bool) -> Options {
+fn options(c: &CommonArgs, raw: bool, force_whois: bool, dns: bool) -> Options {
     Options {
         timeout: Duration::from_secs(c.timeout.max(1)),
         cache_ttl: c.max_age,
         use_cache: !c.no_cache,
         raw,
         force_whois,
+        dns,
     }
 }
 
@@ -254,7 +265,8 @@ async fn main() {
             println!("{}", serde_json::to_string_pretty(&schema).unwrap());
         }
         Some(Cmd::Mcp(c)) => {
-            let ctx = Ctx::new(options(&c, false, false)).unwrap_or_else(|e| fatal(true, "init", &e.to_string()));
+            let ctx =
+                Ctx::new(options(&c, false, false, false)).unwrap_or_else(|e| fatal(true, "init", &e.to_string()));
             if let Err(e) = mcp::serve(ctx).await {
                 eprintln!("whoq mcp: {e}");
                 std::process::exit(exit::FAILED);
@@ -299,6 +311,7 @@ async fn run_watch(w: WatchArgs) -> i32 {
         use_cache: false,
         raw: false,
         force_whois: false,
+        dns: false,
     };
     let ctx = Ctx::new(opts).unwrap_or_else(|e| fatal(!pretty, "init", &e.to_string()));
     let style = output::Style { color: tty && !w.no_color && std::env::var_os("NO_COLOR").is_none() };
@@ -386,10 +399,10 @@ fn bulk_input(inputs: &[String]) -> Box<dyn Iterator<Item = String>> {
     Box::new(its.into_iter().flatten())
 }
 
-fn tsv_cols(o: Option<&bulk::Owner>) -> String {
-    let Some(o) = o else { return "\t\t\t\t\t".into() };
+fn tsv_cols(o: Option<&bulk::Owner>, rdns: bool) -> String {
+    let Some(o) = o else { return if rdns { "\t".repeat(7) } else { "\t".repeat(5) } };
     let c = |s: &Option<String>| s.as_deref().unwrap_or("").replace('\t', " ");
-    format!(
+    let mut row = format!(
         "{}\t{}\t{}\t{}\t{}\t{}",
         o.ip,
         o.asn.map(|a| format!("AS{a}")).unwrap_or_else(|| if o.private { "private".into() } else { String::new() }),
@@ -397,12 +410,28 @@ fn tsv_cols(o: Option<&bulk::Owner>) -> String {
         c(&o.country),
         c(&o.prefix),
         c(&o.org)
-    )
+    );
+    if rdns {
+        row.push_str(&format!("\t{}\t{}", c(&o.ptr), o.ptr_verified.map(|v| v.to_string()).unwrap_or_default()));
+    }
+    row
+}
+
+/// `name ✓` (forward-confirmed) or `name ?` (unconfirmed: the PTR may lie).
+fn ptr_label(o: &bulk::Owner) -> String {
+    match (&o.ptr, o.ptr_verified) {
+        (Some(p), Some(true)) => format!("{p} ✓"),
+        (Some(p), _) => format!("{p} ?"),
+        _ => String::new(),
+    }
 }
 
 async fn run_bulk(b: BulkArgs) -> i32 {
     if b.field == Some(0) || b.weight == Some(0) {
         fatal(false, "usage", "--field and --weight are 1-based");
+    }
+    if b.rdns && b.mode == BulkMode::Summary {
+        fatal(false, "usage", "--rdns adds per-IP columns; use -m annotate or -m unique");
     }
     if b.weight.is_some() && b.field.is_none() {
         fatal(false, "usage", "--weight needs --field, so the count column isn't scanned for IPs");
@@ -426,10 +455,12 @@ async fn run_bulk(b: BulkArgs) -> i32 {
         use_cache: false, // per-IP record files would explode; the engine has its own network cache
         raw: false,
         force_whois: false,
+        dns: false,
     };
     let ctx = Ctx::new(opts).unwrap_or_else(|e| fatal(true, "init", &e.to_string()));
+    let mut rdns_cache = std::collections::HashMap::new();
     let engine = bulk::Engine::new(
-        ctx,
+        ctx.clone(),
         bulk::EngineOpts {
             cymru: !b.no_cymru,
             rdap: b.rdap || b.no_cymru,
@@ -462,8 +493,11 @@ async fn run_bulk(b: BulkArgs) -> i32 {
             })
             .collect();
         let uniq: std::collections::HashSet<_> = per_line.iter().flatten().copied().collect();
-        let owners = engine.resolve(&uniq).await;
+        let mut owners = engine.resolve(&uniq).await;
         engine.flush();
+        if b.rdns {
+            bulk::attach_rdns(&ctx, &mut owners, &mut rdns_cache, 32).await;
+        }
         failed |= owners.values().any(|o| o.error.is_some());
 
         for (line, ips) in chunk.iter().zip(&per_line) {
@@ -485,7 +519,7 @@ async fn run_bulk(b: BulkArgs) -> i32 {
             }
             if b.mode == BulkMode::Annotate {
                 let r = if format == BulkFormat::Tsv {
-                    writeln!(out, "{line}\t{}", tsv_cols(ips.first().map(|i| &owners[i])))
+                    writeln!(out, "{line}\t{}", tsv_cols(ips.first().map(|i| &owners[i]), b.rdns))
                 } else {
                     let enriched: Vec<&bulk::Owner> = ips.iter().map(|i| &owners[i]).collect();
                     writeln!(out, "{}", serde_json::json!({ "line": line, "ips": enriched }))
@@ -511,13 +545,19 @@ async fn run_bulk(b: BulkArgs) -> i32 {
                 BulkFormat::Csv => {
                     let _ = writeln!(
                         out,
-                        "ip,hits,asn,as_name,country,prefix,registry,org,network,cidr,abuse_email,private,error"
+                        "ip,hits,asn,as_name,country,prefix,registry,org,network,cidr,abuse_email,private,error{}",
+                        if b.rdns { ",ptr,ptr_verified" } else { "" }
                     );
                     for (o, h) in rows {
                         let c = |s: &Option<String>| bulk::csv_escape(s.as_deref().unwrap_or(""));
+                        let extra = if b.rdns {
+                            format!(",{},{}", c(&o.ptr), o.ptr_verified.map(|v| v.to_string()).unwrap_or_default())
+                        } else {
+                            String::new()
+                        };
                         let _ = writeln!(
                             out,
-                            "{},{h},{},{},{},{},{},{},{},{},{},{},{}",
+                            "{},{h},{},{},{},{},{},{},{},{},{},{},{}{extra}",
                             o.ip,
                             o.asn.map(|a| a.to_string()).unwrap_or_default(),
                             c(&o.as_name),
@@ -540,11 +580,15 @@ async fn run_bulk(b: BulkArgs) -> i32 {
                         "HITS", "IP", "ASN", "CC", "PREFIX"
                     );
                     for (o, h) in rows {
-                        let owner = if o.private {
+                        let mut owner = if o.private {
                             "private / reserved".to_string()
                         } else {
                             o.org.clone().or(o.as_name.clone()).or(o.error.clone()).unwrap_or_default()
                         };
+                        let ptr = ptr_label(o);
+                        if !ptr.is_empty() {
+                            owner = format!("{owner}  ·  {ptr}");
+                        }
                         let _ = writeln!(
                             out,
                             "{h:>7}  {:<39}  {:>9}  {:<3}  {:<20}  {owner}",
@@ -647,7 +691,7 @@ async fn run(a: LookupArgs) -> i32 {
         fatal(machine, "usage", "no queries given (try `whoq example.com` or `whoq --help`)");
     }
 
-    let ctx = match Ctx::new(options(&a.common, a.raw, a.whois)) {
+    let ctx = match Ctx::new(options(&a.common, a.raw, a.whois, a.dns)) {
         Ok(c) => c,
         Err(e) => fatal(machine, "init", &e.to_string()),
     };
