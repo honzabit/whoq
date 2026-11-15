@@ -204,6 +204,11 @@ impl Dns {
         self.zone.lock().unwrap().entry(name.to_ascii_lowercase()).or_default().extend(rrs);
     }
 
+    /// Replace every record at `name`.
+    pub fn set(&self, name: &str, rrs: Vec<Rr>) {
+        self.zone.lock().unwrap().insert(name.to_ascii_lowercase(), rrs);
+    }
+
     pub fn asked(&self, name: &str) -> bool {
         self.queries.lock().unwrap().iter().any(|(n, _)| n == name)
     }
@@ -262,6 +267,9 @@ fn cymru_line(ip: &str) -> Option<&'static str> {
         }
         "1.1.1.1" => {
             "13335   | 1.1.1.1          | 1.1.1.0/24          | AU | apnic    | 2011-08-11 | CLOUDFLARENET - Cloudflare, Inc., US"
+        }
+        "1.0.0.1" => {
+            "13335   | 1.0.0.1          | 1.0.0.0/24          | AU | apnic    | 2011-08-11 | CLOUDFLARENET - Cloudflare, Inc., US"
         }
         _ => return None,
     })

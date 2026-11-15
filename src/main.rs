@@ -156,6 +156,20 @@ struct WatchArgs {
     /// Alert when a domain expires within this many days
     #[arg(long, default_value_t = 30)]
     expiry_warn: i64,
+    /// Also watch live DNS: nameservers and DNS provider, hosting networks, CAA; reverse DNS for IPs.
+    /// Addresses aren't compared (CDNs rotate them).
+    #[arg(long)]
+    dns: bool,
+    /// Also watch mail routing and policy: MX and provider, SPF, DMARC.
+    #[arg(long)]
+    mail: bool,
+    /// Also watch the TLS certificate: alerts when it is invalid or about to expire, and reports a
+    /// change of issuer or names. Connects to each host.
+    #[arg(long)]
+    tls: bool,
+    /// With --tls, alert when a certificate expires within this many days
+    #[arg(long, default_value_t = 14)]
+    cert_warn: i64,
     /// POST actionable events as JSON ({text, events}) to this URL — Slack/Discord-style webhooks work
     #[arg(long, env = "WHOQ_WEBHOOK")]
     webhook: Option<String>,
@@ -328,12 +342,17 @@ async fn run_watch(w: WatchArgs) -> i32 {
         use_cache: false,
         raw: false,
         force_whois: false,
-        live: Live::default(),
+        live: Live { dns: w.dns, mail: w.mail, tls: w.tls },
     };
     let ctx = Ctx::new(opts).unwrap_or_else(|e| fatal(!pretty, "init", &e.to_string()));
     let style = output::Style { color: tty && !w.no_color && std::env::var_os("NO_COLOR").is_none() };
-    let ropts =
-        watch::RoundOpts { dir: &dir, ignore: &w.ignore, expiry_warn_days: w.expiry_warn, show_unchanged: w.all };
+    let ropts = watch::RoundOpts {
+        dir: &dir,
+        ignore: &w.ignore,
+        expiry_warn_days: w.expiry_warn,
+        cert_warn_days: w.cert_warn,
+        show_unchanged: w.all,
+    };
 
     loop {
         let mut stream = futures::stream::iter(queries.clone())

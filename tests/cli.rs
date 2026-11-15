@@ -655,3 +655,95 @@ fn mcp_lookup_accepts_tls() {
     assert_eq!(r["tls.valid"], true, "{r}");
     assert_eq!(r["signals"]["cert_valid"], true);
 }
+
+// ---------------- watch + live checks ----------------
+
+#[test]
+fn watch_dns_and_mail_report_delegation_and_mx_changes_not_address_churn() {
+    let env = Env::new("watchdns");
+    with_example(&env);
+    example_zone(&env);
+    let watch = || env.run(&["watch", "-o", "ndjson", "--dns", "--mail", "example.test"], None);
+    assert_eq!(ndjson(&watch())[0]["event"], "baseline");
+
+    // CDN address rotation within the same network: not a change.
+    let zone = |a: &'static str, ns: [&'static str; 2], mx: [&'static str; 2]| {
+        env.dns.set(
+            "example.test",
+            vec![
+                Rr::A(a),
+                Rr::Ns(ns[0]),
+                Rr::Ns(ns[1]),
+                Rr::Caa("issue", "letsencrypt.org"),
+                Rr::Mx(10, mx[0]),
+                Rr::Mx(20, mx[1]),
+                Rr::Txt("v=spf1 include:_spf.google.com -all"),
+            ],
+        )
+    };
+    let (cf, google) =
+        (["ada.ns.cloudflare.com", "bob.ns.cloudflare.com"], ["aspmx.l.google.com", "alt1.aspmx.l.google.com"]);
+    zone("1.0.0.1", cf, google);
+    let quiet = watch();
+    assert_eq!(code(&quiet), 0, "{}", stdout(&quiet));
+    assert!(ndjson(&quiet).is_empty());
+
+    // Delegation and mail moved elsewhere: high.
+    zone("1.0.0.1", ["ns1.evil.test", "ns2.evil.test"], ["mx1.evil.test", "mx2.evil.test"]);
+    let out = watch();
+    assert_eq!(code(&out), 20);
+    let ev = &ndjson(&out)[0];
+    assert_eq!(ev["severity"], "high");
+    let changes = ev["changes"].as_array().unwrap();
+    let find = |f: &str| changes.iter().find(|c| c["field"] == f).unwrap_or_else(|| panic!("no {f} in {changes:?}"));
+    assert_eq!(find("dns.ns")["added"], json!(["ns1.evil.test", "ns2.evil.test"]));
+    assert_eq!(find("dns.ns")["severity"], "high");
+    assert_eq!(find("dns.provider")["old"], "Cloudflare");
+    assert_eq!(find("mail.mx")["severity"], "high");
+    assert_eq!(find("mail.provider")["old"], "Google Workspace");
+
+    // Dropping the flags is not a change either.
+    let plain = env.run(&["watch", "-o", "ndjson", "example.test"], None);
+    assert_eq!(code(&plain), 0, "{}", stdout(&plain));
+}
+
+#[test]
+fn watch_tls_alerts_once_per_certificate() {
+    let env = Env::new("watchtls");
+    with_example(&env);
+    env.serve_tls(Cert::Expired);
+    let watch = || env.run(&["watch", "-o", "ndjson", "--tls", "example.test"], None);
+
+    let first = ndjson(&watch());
+    assert_eq!(first[0]["event"], "baseline");
+    assert_eq!(first[1]["alert"], "cert_expired");
+    assert!(first.iter().all(|e| e["alert"] != "cert_invalid"), "expiry isn't reported twice");
+    assert!(ndjson(&watch()).is_empty(), "an alert fires once per certificate");
+
+    // A transient failure keeps the last good certificate: no change, no alert.
+    env.tls_unreachable();
+    let down = watch();
+    assert_eq!(code(&down), 0, "{}", stdout(&down));
+    assert!(ndjson(&down).is_empty());
+
+    // Renewed: the trust change shows up, the stale alert is gone.
+    env.serve_tls(Cert::Valid);
+    let out = watch();
+    let ev = ndjson(&out);
+    assert_eq!(ev.len(), 1, "{ev:?}");
+    let find = |f: &str| ev[0]["changes"].as_array().unwrap().iter().find(|c| c["field"] == f).cloned();
+    assert_eq!(find("tls.valid").unwrap()["new"], true);
+    assert!(find("tls.not_after").is_none() && find("tls.sha256").is_none(), "renewal churn isn't diffed");
+
+    // Replaced by a self-signed certificate: invalid alert.
+    env.serve_tls(Cert::SelfSigned);
+    let ev = ndjson(&watch());
+    let alert = ev.iter().find(|e| e["event"] == "alert").expect("alert");
+    assert_eq!((alert["alert"].clone(), alert["problem"].clone()), (json!("cert_invalid"), json!("self-signed")));
+    let pretty = stdout(&env.run(&["watch", "-o", "pretty", "--tls", "--all", "example.test"], None));
+    assert!(pretty.contains("unchanged"), "{pretty}");
+
+    // Subdomains are watched under their own name, not folded into example.test.
+    let sub = ndjson(&env.run(&["watch", "-o", "ndjson", "--tls", "https://www.example.test/login"], None));
+    assert_eq!((sub[0]["event"].clone(), sub[0]["name"].clone()), (json!("baseline"), json!("www.example.test")));
+}

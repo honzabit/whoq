@@ -11,6 +11,48 @@ use std::path::{Path, PathBuf};
 /// Fields that change on every fetch or are derived; never diffed.
 const VOLATILE: &[&str] = &["schema", "query", "source", "signals", "raw", "error", "remarks"];
 
+/// Live fields that churn on their own (CDN addresses, every certificate renewal); never diffed.
+/// Renewals are tracked by the certificate alerts instead.
+const VOLATILE_LIVE: &[&str] = &[
+    "dns.host",
+    "dns.a",
+    "dns.aaaa",
+    "tls.ip",
+    "tls.sha256",
+    "tls.not_before",
+    "tls.not_after",
+    "tls.expires_in_days",
+    "tls.names_total",
+];
+
+/// Live sections, and whether `r` has a copy worth comparing. A transient failure (timeout,
+/// resolver error) is not; NXDOMAIN is, because the name really has gone from DNS.
+fn live_sections(r: &Record) -> [(&'static str, bool); 4] {
+    let real = |e: &Option<String>| e.as_deref().is_none_or(|e| e.starts_with("NXDOMAIN"));
+    [
+        ("dns", r.dns.as_ref().is_some_and(|d| real(&d.error))),
+        ("mail", r.mail.as_ref().is_some_and(|m| real(&m.error))),
+        ("tls", r.tls.as_ref().is_some_and(|t| t.error.is_none())),
+        ("rdns", r.rdns.as_ref().is_some_and(|x| x.error.is_none())),
+    ]
+}
+
+/// Keep the last good copy of a live section that failed transiently this round, so the next
+/// round still compares against real data.
+fn carry_forward(old: &Record, new: &mut Record) {
+    for ((name, old_ok), (_, new_ok)) in live_sections(old).into_iter().zip(live_sections(new)) {
+        if old_ok && !new_ok {
+            match name {
+                "dns" if new.dns.is_some() => new.dns = old.dns.clone(),
+                "mail" if new.mail.is_some() => new.mail = old.mail.clone(),
+                "tls" if new.tls.is_some() => new.tls = old.tls.clone(),
+                "rdns" if new.rdns.is_some() => new.rdns = old.rdns.clone(),
+                _ => {}
+            }
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize)]
 pub struct Snapshot {
     pub record: Record,
@@ -42,24 +84,29 @@ pub fn state_dir(over: Option<PathBuf>) -> Option<PathBuf> {
         .or_else(|| dirs::data_dir().map(|d| d.join("whoq").join("watch")))
 }
 
-fn key(rec: &Record) -> String {
-    rec.name
-        .as_deref()
-        .unwrap_or(&rec.query)
-        .to_lowercase()
-        .chars()
-        .map(|c| if c.is_ascii_alphanumeric() || c == '.' || c == '-' { c } else { '_' })
-        .collect()
+/// What a snapshot is kept under and labelled as: for domains the host as given (so
+/// `shop.example.com` and `www.example.com` are watched separately, which matters for `--tls`),
+/// otherwise the normalized name.
+pub fn label(rec: &Record) -> String {
+    let host = match rec.kind {
+        crate::model::Kind::Domain => crate::query::endpoint(&rec.query).map(|(h, _)| h),
+        _ => None,
+    };
+    host.or_else(|| rec.name.clone()).unwrap_or_else(|| rec.query.clone()).to_lowercase()
 }
 
-pub fn load(dir: &Path, rec: &Record) -> Option<Snapshot> {
-    let bytes = std::fs::read(dir.join(format!("{}.json", key(rec)))).ok()?;
+fn key(label: &str) -> String {
+    label.chars().map(|c| if c.is_ascii_alphanumeric() || c == '.' || c == '-' { c } else { '_' }).collect()
+}
+
+pub fn load(dir: &Path, label: &str) -> Option<Snapshot> {
+    let bytes = std::fs::read(dir.join(format!("{}.json", key(label)))).ok()?;
     serde_json::from_slice(&bytes).ok()
 }
 
-pub fn save(dir: &Path, snap: &Snapshot) -> std::io::Result<()> {
+pub fn save(dir: &Path, label: &str, snap: &Snapshot) -> std::io::Result<()> {
     std::fs::create_dir_all(dir)?;
-    let p = dir.join(format!("{}.json", key(&snap.record)));
+    let p = dir.join(format!("{}.json", key(label)));
     let tmp = p.with_extension("tmp");
     std::fs::write(&tmp, serde_json::to_vec_pretty(snap)?)?;
     std::fs::rename(tmp, p)
@@ -93,8 +140,26 @@ fn stable(rec: &Record) -> Map<String, Value> {
             m.remove(*k);
         }
     }
+    // Hosting: which networks serve the site matters, not which of their addresses answered.
+    if let Some(h) = v.pointer_mut("/dns/hosting") {
+        let mut nets: Vec<Value> = h
+            .as_array()
+            .into_iter()
+            .flatten()
+            .map(|n| match (n["asn"].as_u64(), n["name"].as_str()) {
+                (Some(a), Some(name)) => json!(format!("AS{a} {name}")),
+                (Some(a), None) => json!(format!("AS{a}")),
+                _ => json!(n["name"]),
+            })
+            .collect();
+        nets.dedup();
+        *h = Value::Array(nets);
+    }
     let mut out = Map::new();
     flatten(&v, "", &mut out);
+    for k in VOLATILE_LIVE {
+        out.remove(*k);
+    }
     out
 }
 
@@ -107,6 +172,19 @@ fn severity(field: &str, removed: &[Value]) -> (&'static str, Option<String>) {
         "result" | "nameservers" | "registrar.name" | "registrar.iana_id" | "transferred" | "created"
         | "network.org" | "asn.org" | "network.cidr" => ("high", None),
         "status" | "expires" | "dnssec" | "abuse_email" | "network.name" | "asn.name" => ("medium", None),
+        // live: delegation, mail routing and certificate trust are what hijacks change
+        "dns.ns" | "dns.provider" | "dns.error" | "mail.mx" | "mail.provider" | "mail.error" | "tls.valid"
+        | "tls.problem" => ("high", None),
+        "dns.hosting"
+        | "dns.caa"
+        | "mail.null_mx"
+        | "mail.dmarc.policy"
+        | "mail.dmarc.subdomain_policy"
+        | "mail.spf.all"
+        | "mail.spf.record"
+        | "tls.issuer"
+        | "rdns.ptr"
+        | "rdns.verified" => ("medium", None),
         f if f.starts_with("registrant.") || f.starts_with("registrar.") => ("medium", None),
         _ => ("low", None),
     }
@@ -115,9 +193,18 @@ fn severity(field: &str, removed: &[Value]) -> (&'static str, Option<String>) {
 pub fn diff(old: &Record, new: &Record, ignore: &[String]) -> Vec<Change> {
     let (a, b) = (stable(old), stable(new));
     let keys: BTreeSet<&String> = a.keys().chain(b.keys()).collect();
+    // A live section is compared only when both runs have a usable copy: turning --dns/--mail/
+    // --tls on or off, or a transient failure, is not a change.
+    let skip: Vec<&str> = live_sections(old)
+        .into_iter()
+        .zip(live_sections(new))
+        .filter(|((_, o), (_, n))| !(*o && *n))
+        .map(|((name, _), _)| name)
+        .collect();
+    let under = |k: &str, p: &str| k == p || k.starts_with(&format!("{p}."));
     let mut out = vec![];
     for k in keys {
-        if ignore.iter().any(|i| k == i || k.starts_with(&format!("{i}."))) {
+        if ignore.iter().any(|i| under(k, i)) || skip.iter().any(|p| under(k, p)) {
             continue;
         }
         let (o, n) = (a.get(k), b.get(k));
@@ -172,14 +259,16 @@ pub struct RoundOpts<'a> {
     pub dir: &'a Path,
     pub ignore: &'a [String],
     pub expiry_warn_days: i64,
+    pub cert_warn_days: i64,
     pub show_unchanged: bool,
 }
 
 /// Process one fresh record: compare with its snapshot, update state, return events.
-pub fn process(rec: Record, o: &RoundOpts) -> Vec<Value> {
+pub fn process(mut rec: Record, o: &RoundOpts) -> Vec<Value> {
     let now = Utc::now().to_rfc3339_opts(chrono::SecondsFormat::Secs, true);
-    let name = rec.name.clone().unwrap_or(rec.query.clone());
-    let base = |event: &str| json!({ "event": event, "at": now, "query": rec.query, "name": name });
+    let name = label(&rec);
+    let query = rec.query.clone();
+    let base = |event: &str| json!({ "event": event, "at": now, "query": query, "name": name });
 
     if rec.result == Outcome::Error {
         // Never overwrite a good snapshot with a failed lookup.
@@ -188,8 +277,21 @@ pub fn process(rec: Record, o: &RoundOpts) -> Vec<Value> {
         return vec![e];
     }
 
-    let prev = load(o.dir, &rec);
+    let prev = load(o.dir, &name);
+    if let Some(p) = &prev {
+        carry_forward(&p.record, &mut rec);
+    }
     let mut alerts_sent = prev.as_ref().map(|p| p.alerts.clone()).unwrap_or_default();
+    // Ids of every alert condition true right now; delivered ids not in here are forgotten,
+    // so a condition that clears and comes back alerts again.
+    let mut active: Vec<String> = vec![];
+    let mut fire = |id: String, e: Value, events: &mut Vec<Value>| {
+        if !alerts_sent.contains(&id) {
+            events.push(e);
+            alerts_sent.push(id.clone());
+        }
+        active.push(id);
+    };
     let mut events = vec![];
 
     match &prev {
@@ -224,34 +326,54 @@ pub fn process(rec: Record, o: &RoundOpts) -> Vec<Value> {
             None
         };
         if let Some(kind) = kind {
-            let id = format!("{kind}:{exp}");
-            if !alerts_sent.contains(&id) {
-                let mut e = base("alert");
-                e["alert"] = json!(kind);
-                e["severity"] = json!("high");
-                e["expires"] = json!(exp);
-                e["expires_in_days"] = json!(days);
-                events.push(e);
-                alerts_sent.push(id);
-            }
+            let mut e = base("alert");
+            e["alert"] = json!(kind);
+            e["severity"] = json!("high");
+            e["expires"] = json!(exp);
+            e["expires_in_days"] = json!(days);
+            fire(format!("{kind}:{exp}"), e, &mut events);
         }
     }
     if rec.signals.as_ref().and_then(|s| s.on_hold) == Some(true) {
-        let id = format!("on_hold:{}", rec.status.join(","));
-        if !alerts_sent.contains(&id) {
+        let mut e = base("alert");
+        e["alert"] = json!("on_hold");
+        e["severity"] = json!("high");
+        e["status"] = json!(rec.status);
+        fire(format!("on_hold:{}", rec.status.join(",")), e, &mut events);
+    }
+    // Certificate alerts fire once per certificate (a renewal brings a new one and re-arms them).
+    if let Some(t) = rec.tls.as_ref().filter(|t| t.error.is_none()) {
+        let cert = t.sha256.clone().unwrap_or_default();
+        let tls_alert = |kind: &str| {
             let mut e = base("alert");
-            e["alert"] = json!("on_hold");
+            e["alert"] = json!(kind);
             e["severity"] = json!("high");
-            e["status"] = json!(rec.status);
-            events.push(e);
-            alerts_sent.push(id);
+            e["host"] = json!(t.host);
+            e["not_after"] = json!(t.not_after);
+            e["expires_in_days"] = json!(t.expires_in_days);
+            e
+        };
+        match t.expires_in_days {
+            Some(d) if d < 0 => fire(format!("cert_expired:{cert}"), tls_alert("cert_expired"), &mut events),
+            Some(d) if d <= o.cert_warn_days => {
+                fire(format!("cert_expiring:{cert}"), tls_alert("cert_expiring"), &mut events)
+            }
+            _ => {}
+        }
+        // Expiry has its own alert above; flag every other way a certificate can be untrusted.
+        if t.valid == Some(false) && t.problem.as_deref() != Some("expired") {
+            let mut e = tls_alert("cert_invalid");
+            e["problem"] = json!(t.problem);
+            fire(format!("cert_invalid:{cert}"), e, &mut events);
         }
     }
-    alerts_sent.retain(|a| a.ends_with(rec.expires.as_deref().unwrap_or("\0")) || a.starts_with("on_hold:"));
+    // Certificate state from a run whose TLS check failed is unknown, not cleared.
+    let tls_unknown = rec.tls.as_ref().is_some_and(|t| t.error.is_some());
+    alerts_sent.retain(|a| active.contains(a) || (tls_unknown && a.starts_with("cert_")));
 
     let save_err = base("error");
     let snap = Snapshot { record: rec, seen_at: now, alerts: alerts_sent };
-    if let Err(e) = save(o.dir, &snap) {
+    if let Err(e) = save(o.dir, &name, &snap) {
         let mut ev = save_err;
         ev["error"] = json!({ "code": "state", "message": format!("could not save snapshot: {e}") });
         events.push(ev);
@@ -339,6 +461,45 @@ mod tests {
         assert!(
             diff(&a, &b, &["nameservers".into(), "status".into(), "registrar".into(), "expires".into()]).is_empty()
         );
+    }
+
+    #[test]
+    fn live_sections_ignore_churn_and_toggles() {
+        use crate::model::{Dns, Hosting, Tls};
+        let with_live = |ip: &str, sha: &str| {
+            let mut r = rec();
+            r.dns = Some(Dns {
+                a: vec![ip.into()],
+                ns: vec!["a.ns.net".into()],
+                hosting: vec![Hosting {
+                    asn: Some(13335),
+                    name: Some("CF".into()),
+                    ips: vec![ip.into()],
+                    ..Default::default()
+                }],
+                ..Default::default()
+            });
+            r.tls = Some(Tls {
+                issuer: Some("CA".into()),
+                sha256: Some(sha.into()),
+                valid: Some(true),
+                ..Default::default()
+            });
+            r
+        };
+        let (a, b) = (with_live("1.1.1.1", "aa"), with_live("1.0.0.1", "bb"));
+        assert!(diff(&a, &b, &[]).is_empty(), "{:?}", diff(&a, &b, &[]));
+        assert!(diff(&rec(), &a, &[]).is_empty(), "turning --dns/--tls on is not a change");
+        let mut flaky = with_live("1.1.1.1", "aa");
+        flaky.dns.as_mut().unwrap().error = Some("request timed out".into());
+        flaky.dns.as_mut().unwrap().ns.clear();
+        assert!(diff(&a, &flaky, &[]).is_empty(), "transient failure is not a change");
+        let mut gone = flaky.clone();
+        gone.dns.as_mut().unwrap().error = Some("NXDOMAIN: the domain does not exist in DNS".into());
+        assert_eq!(diff(&a, &gone, &[]).iter().find(|c| c.field == "dns.error").unwrap().severity, "high");
+        let mut moved = with_live("1.1.1.1", "aa");
+        moved.dns.as_mut().unwrap().hosting[0].asn = Some(16509);
+        assert_eq!(diff(&a, &moved, &[])[0].field, "dns.hosting");
     }
 
     #[test]

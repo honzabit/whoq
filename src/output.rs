@@ -377,6 +377,20 @@ pub fn pretty_event(e: &Value, st: &Style) -> String {
                 Some("expiring") => format!("⏰ expires in {} days ({})", e["expires_in_days"], show(&e["expires"])),
                 Some("expired") => format!("⏰ EXPIRED {} days ago", -e["expires_in_days"].as_i64().unwrap_or(0)),
                 Some("on_hold") => format!("⛔ on hold: {}", show(&e["status"])),
+                Some("cert_expiring") => format!(
+                    "🔒 certificate for {} expires in {} days ({})",
+                    show(&e["host"]),
+                    e["expires_in_days"],
+                    show(&e["not_after"])
+                ),
+                Some("cert_expired") => format!(
+                    "🔒 certificate for {} EXPIRED {} days ago",
+                    show(&e["host"]),
+                    -e["expires_in_days"].as_i64().unwrap_or(0)
+                ),
+                Some("cert_invalid") => {
+                    format!("🔒 certificate for {} is invalid: {}", show(&e["host"]), show(&e["problem"]))
+                }
                 other => other.unwrap_or("alert").to_string(),
             };
             out.push_str(&format!("{}  {}\n", st.bold(name), st.paint("1;31", &what)));

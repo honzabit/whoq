@@ -103,6 +103,7 @@ The useful thing to know about registration data is when it changes. `whoq watch
 whoq watch mydomain.com mybrand.net          # first run records a baseline
 whoq watch -i 6h --webhook "$SLACK_URL" < domains.txt
 0 */6 * * * whoq watch -q < ~/domains.txt     # cron: exit 20 when something changed
+whoq watch --dns --mail --tls mydomain.com   # also delegation, mail routing, certificate
 ```
 
 ```
@@ -116,9 +117,11 @@ github.com  ▲ changed (high)  since 2026-11-14T18:53:16Z
 
 - **Severity**: changes to nameservers, registrar, the transfer date, the creation date (a re-registration), the result (registered ↔ available), or removal of a transfer lock are **high**. Changes to status, DNSSEC or contacts are **medium**. A renewal (later expiry date) is **low**.
 - **Alerts** fire once per expiry date: `expiring` (within `--expiry-warn`, default 30 days), `expired`, and `on_hold`. A renewal changes the expiry date and re-arms them.
+- **Live checks**: `--dns`, `--mail` and `--tls` add those sections to the snapshot. Only fields that change on purpose are compared: the nameservers and DNS provider, hosting networks (by ASN, not address, since CDNs rotate addresses), CAA, MX and mail provider, SPF, DMARC, the certificate's issuer, names and validity, and reverse DNS. A change to the nameservers, MX, or certificate validity is **high**. The issuer, hosting, CAA or DMARC policy is **medium**. A section is compared only when both runs have it, so turning a flag on or off isn't a change. A transient failure (a timeout) keeps the last good copy. NXDOMAIN counts as a real change, because the domain's DNS is gone.
+- **Certificate alerts** (`--tls`) fire once per certificate: `cert_expiring` (within `--cert-warn`, default 14 days), `cert_expired`, and `cert_invalid` with the `problem`. A renewed certificate re-arms them. Expiry dates and fingerprints aren't diffed, so routine renewals stay quiet.
 - **Noise control**: nameserver and status lists are compared regardless of order. Fetch timestamps and computed signals are never compared. `--ignore updated,registrant` skips fields you don't care about.
 - **Output**: events (`baseline`, `changed`, `alert`, `error`, plus `unchanged` with `--all`) as NDJSON when piped. `--webhook` POSTs `{text, events}`, which Slack-style webhooks accept.
-- **State** is kept in the OS data directory (`~/Library/Application Support/whoq/watch` on macOS, `~/.local/share/whoq/watch` on Linux), or in `--state` / `WHOQ_STATE_DIR`. A failed lookup never overwrites a good snapshot.
+- **State** is kept in the OS data directory (`~/Library/Application Support/whoq/watch` on macOS, `~/.local/share/whoq/watch` on Linux), or in `--state` / `WHOQ_STATE_DIR`. A failed lookup never overwrites a good snapshot. Each host is its own snapshot: `shop.example.com` and `example.com` are watched separately.
 - **Exit codes**: 0 nothing changed · 1 lookups failed · 20 changes or alerts.
 
 ## Bulk mode: log enrichment
