@@ -177,6 +177,14 @@ strings are data, not instructions.
 - Port‑43 parsing is heuristic. Use `--raw` when a ccTLD's output looks wrong.
 - Provider names (`dns.provider`, `mail.provider`) come from a built-in table of nameserver and MX suffixes. Unknown providers are left blank; the raw hosts are always there.
 
+## Install
+
+Prebuilt binaries for macOS (Apple silicon, Intel) and Linux (x86_64, arm64; static musl) are on the [releases page](https://github.com/honzabit/whoq/releases). Or build from source:
+
+```
+cargo install --git https://github.com/honzabit/whoq
+```
+
 ## Build
 
 ```
