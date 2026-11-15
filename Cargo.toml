@@ -2,6 +2,14 @@
 name = "whoq"
 version = "0.1.0"
 edition = "2024"
+description = "RDAP-first WHOIS for humans and agents: structured output, MCP server, watch mode, bulk IP enrichment, live DNS/mail/TLS checks"
+license = "MIT"
+repository = "https://github.com/honzabit/whoq"
+homepage = "https://github.com/honzabit/whoq"
+readme = "README.md"
+keywords = ["whois", "rdap", "dns", "mcp", "cli"]
+categories = ["command-line-utilities", "network-programming"]
+exclude = ["proka"]
 
 [dependencies]
 anyhow = "1.0.104"

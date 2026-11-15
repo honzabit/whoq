@@ -186,3 +186,7 @@ cargo clippy --all-targets && cargo fmt --check
 ```
 
 The end-to-end tests in `tests/cli.rs` run the real binary against local fake RDAP and port-43 servers, using synthetic fixtures in `tests/fixtures/`. They need no network access.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
