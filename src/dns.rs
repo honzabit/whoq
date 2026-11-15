@@ -172,8 +172,9 @@ pub fn mail_provider(mx: &[Mx]) -> Option<String> {
 
 // ---------------- resolver ----------------
 
-/// The system resolver, plus a public fallback for queries it fails. Home routers often
-/// can't answer large TXT sets (they need EDNS0 or TCP), which would silently hide SPF.
+/// The system resolver, plus a public fallback for queries it fails or answers slowly. Home
+/// routers often can't answer large TXT sets (they need EDNS0 or TCP), which would silently
+/// hide SPF, and some take seconds over names their upstream is slow to resolve.
 pub struct Resolvers {
     primary: TokioResolver,
     fallback: Option<TokioResolver>,
@@ -268,12 +269,41 @@ async fn query(r: &Resolvers, name: &str, rt: RecordType) -> Result<Vec<RData>, 
 }
 
 async fn query_name(r: &Resolvers, n: Name, rt: RecordType) -> Result<Vec<RData>, Fail> {
-    match lookup_one(&r.primary, n.clone(), rt).await {
-        Err(Fail::Other(e)) => match &r.fallback {
-            Some(f) => lookup_one(f, n, rt).await,
-            None => Err(Fail::Other(e)),
+    let primary = lookup_one(&r.primary, n.clone(), rt);
+    match &r.fallback {
+        None => primary.await,
+        Some(f) => hedge(primary, || lookup_one(f, n, rt), HEDGE_AFTER).await,
+    }
+}
+
+/// How long the system resolver gets before the fallback is asked too. Home routers can take
+/// seconds to answer a name their upstream finds slow (e.g. a DKIM CNAME into another provider).
+const HEDGE_AFTER: Duration = Duration::from_millis(800);
+
+/// Run `primary`; if it fails, ask `fallback`. If it is still running after `after`, start
+/// `fallback` as well and return the first definite answer (records, empty, or NXDOMAIN).
+async fn hedge<T, P, F>(primary: P, fallback: impl FnOnce() -> F, after: Duration) -> Result<T, Fail>
+where
+    P: std::future::Future<Output = Result<T, Fail>>,
+    F: std::future::Future<Output = Result<T, Fail>>,
+{
+    tokio::pin!(primary);
+    match tokio::time::timeout(after, &mut primary).await {
+        Ok(Err(Fail::Other(_))) => return fallback().await,
+        Ok(done) => return done,
+        Err(_) => {}
+    }
+    let fallback = fallback();
+    tokio::pin!(fallback);
+    tokio::select! {
+        p = &mut primary => match p {
+            Err(Fail::Other(_)) => fallback.await,
+            done => done,
         },
-        other => other,
+        f = &mut fallback => match f {
+            Err(Fail::Other(_)) => primary.await,
+            done => done,
+        },
     }
 }
 
@@ -555,6 +585,26 @@ async fn dns_part(ctx: &Ctx, r: &Resolvers, domain: &str) -> Dns {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    async fn after(ms: u64, r: Result<&'static str, Fail>) -> Result<&'static str, Fail> {
+        tokio::time::sleep(Duration::from_millis(ms)).await;
+        r
+    }
+
+    #[tokio::test(start_paused = true)]
+    async fn hedge_races_a_slow_primary() {
+        let hedged = Duration::from_millis(800);
+        let other = || Err(Fail::Other("timeout".into()));
+        let fast = hedge(after(100, Ok("primary")), || after(10, Ok("fallback")), hedged).await;
+        assert_eq!(fast, Ok("primary"), "a quick primary never touches the fallback");
+        let slow = hedge(after(6000, Err(Fail::NxDomain)), || after(50, Ok("fallback")), hedged).await;
+        assert_eq!(slow, Ok("fallback"), "a slow primary is overtaken");
+        let t0 = tokio::time::Instant::now();
+        let failed = hedge(after(100, other()), || after(50, Ok("fallback")), hedged).await;
+        assert_eq!((failed, t0.elapsed()), (Ok("fallback"), Duration::from_millis(150)), "failure: fallback at once");
+        let slow_bad = hedge(after(2000, Ok("primary")), || after(50, other()), hedged).await;
+        assert_eq!(slow_bad, Ok("primary"), "a failing fallback waits for the primary");
+    }
 
     #[test]
     fn providers() {

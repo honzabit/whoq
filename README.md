@@ -71,7 +71,7 @@ $ whoq --dns 66.249.66.1
 - **New signals**: `resolves` and `parked` (nameservers of a parking service) from `--dns`; `accepts_mail` and `spoofable` (no DMARC, or `p=none`, so mail forging the domain is not rejected) from `--mail`.
 - **DKIM is best effort**: selectors can't be listed, so whoq probes about 20 common ones. An empty list doesn't mean no DKIM.
 - **It never connects to the target's own servers.** Queries go to your resolver (and Team Cymru for hosting), so investigating a phishing domain doesn't tip it off.
-- **Resolver**: the system's, over UDP. Many home routers can't return large TXT sets, which would silently hide SPF, so failed queries are retried through 1.1.1.1. `WHOQ_DNS_SERVER=ip[:port]` pins one resolver with no fallback.
+- **Resolver**: the system's, over UDP. Many home routers can't return large TXT sets, which would silently hide SPF, so failed queries are retried through 1.1.1.1. Queries the system resolver hasn't answered within 0.8s are also sent to 1.1.1.1, and the first definite answer wins (some routers take seconds over DKIM names). `WHOQ_DNS_SERVER=ip[:port]` pins one resolver with no fallback.
 - **Not cached**: DNS is fetched live on every run; `--max-age` applies only to the registration data.
 - **Speed**: queries run in parallel; either flag typically adds under a second.
 
