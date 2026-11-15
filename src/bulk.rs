@@ -322,10 +322,17 @@ pub fn parse_cymru(text: &str) -> Vec<(IpAddr, CymruInfo)> {
         .collect()
 }
 
+/// One Cymru bulk request. `--timeout` is per request, and a 1000-IP batch is a lot of work for
+/// one request, so it gets 20ms extra per IP (+20s for a full batch).
+async fn cymru_query(ctx: &Ctx, ips: &[IpAddr]) -> Result<String, crate::ctx::LookupError> {
+    let body = format!("begin\nverbose\n{}\nend", ips.iter().map(|i| i.to_string()).collect::<Vec<_>>().join("\n"));
+    let deadline = ctx.opts.timeout + std::time::Duration::from_millis(20 * ips.len() as u64);
+    crate::whois43::query_within(ctx, CYMRU, &body, deadline).await
+}
+
 /// Ask Team Cymru about a handful of IPs (no caching; for `--dns` hosting).
 pub async fn cymru_lookup(ctx: &Ctx, ips: &[IpAddr]) -> Result<Vec<(IpAddr, CymruInfo)>, crate::ctx::LookupError> {
-    let body = format!("begin\nverbose\n{}\nend", ips.iter().map(|i| i.to_string()).collect::<Vec<_>>().join("\n"));
-    Ok(parse_cymru(&crate::whois43::query(ctx, CYMRU, &body).await?))
+    Ok(parse_cymru(&cymru_query(ctx, ips).await?))
 }
 
 fn opt_clean(s: &str) -> Option<String> {
@@ -356,6 +363,10 @@ impl Engine {
     }
 
     fn load(&self) {
+        // max-age 0: fetch everything fresh (timestamps are whole seconds, so a cutoff can't say that).
+        if self.opts.cache_ttl.is_zero() {
+            return;
+        }
         let Some(p) = self.cache_file() else { return };
         let Ok(text) = std::fs::read_to_string(&p) else { return };
         let cutoff = now_secs().saturating_sub(self.opts.cache_ttl.as_secs());
@@ -405,8 +416,7 @@ impl Engine {
 
     async fn cymru_batch(&self, ips: Vec<IpAddr>) {
         self.stats.cymru_queries.fetch_add(1, Ordering::Relaxed);
-        let body = format!("begin\nverbose\n{}\nend", ips.iter().map(|i| i.to_string()).collect::<Vec<_>>().join("\n"));
-        let resp = crate::whois43::query(&self.ctx, CYMRU, &body).await;
+        let resp = cymru_query(&self.ctx, &ips).await;
         let text = match resp {
             Ok(t) => t,
             Err(e) => {

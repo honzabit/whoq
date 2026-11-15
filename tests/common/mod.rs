@@ -208,6 +208,10 @@ impl Dns {
         self.queries.lock().unwrap().iter().any(|(n, _)| n == name)
     }
 
+    pub fn asked_type(&self, name: &str, qtype: u16) -> bool {
+        self.queries.lock().unwrap().iter().any(|(n, t)| n == name && *t == qtype)
+    }
+
     fn answer(&self, q: &[u8]) -> Option<Vec<u8>> {
         // header(12) + qname labels + qtype + qclass
         let mut i = 12;

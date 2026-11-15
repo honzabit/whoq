@@ -194,7 +194,7 @@ fn field_projection_and_brief() {
 fn bulk_weighted_summary_never_sends_private_ips() {
     let env = Env::new("bulk");
     let input = "8.8.8.8\t100\n1.1.1.1\t50\n8.8.4.4\t25\n10.1.2.3\t999\n192.168.0.1\t1\n";
-    let out = env.run(&["bulk", "-f", "1", "-w", "2", "-m", "summary", "-o", "ndjson", "--no-cache"], Some(input));
+    let out = env.run(&["bulk", "-c", "1", "-w", "2", "-m", "summary", "-o", "ndjson", "--no-cache"], Some(input));
     assert_eq!(code(&out), 0, "stderr: {}", String::from_utf8_lossy(&out.stderr));
     let groups = ndjson(&out);
     let row = |i: usize| {
@@ -235,6 +235,15 @@ fn bulk_network_cache_persists_between_runs() {
     assert_eq!(ndjson(&run())[0]["asn"], 15169);
     assert_eq!(ndjson(&run())[0]["asn"], 15169);
     assert_eq!(env.whois.all().len(), 1, "second run served from the network cache");
+
+    let run_aged =
+        |age: &str| env.run(&["bulk", "-m", "unique", "-o", "ndjson", "-q", "--max-age", age], Some("8.8.8.8\n"));
+    assert_eq!(ndjson(&run_aged("1h"))[0]["asn"], 15169);
+    assert_eq!(env.whois.all().len(), 1, "--max-age 1h still accepts the cached network");
+    assert_eq!(ndjson(&run_aged("0"))[0]["asn"], 15169);
+    assert_eq!(env.whois.all().len(), 2, "--max-age 0 refetches");
+    let legacy = env.run(&["bulk", "-q", "--cache-days", "7", "--max-age", "1d"], Some("8.8.8.8\n"));
+    assert_eq!(code(&legacy), 2, "--cache-days and --max-age conflict");
 }
 
 #[test]
@@ -383,11 +392,38 @@ fn example_zone(env: &Env) {
 }
 
 #[test]
+fn dns_and_mail_are_separate_passes() {
+    let env = Env::new("dnsonly");
+    with_example(&env);
+    example_zone(&env);
+    let v = json(&env.run(&["--json", "--dns", "example.test"], None));
+    assert_eq!(v["dns"]["provider"], "Cloudflare");
+    assert!(v.get("mail").is_none());
+    assert!(!env.dns.asked("_dmarc.example.test"), "--dns alone sends no mail queries");
+    assert!(!env.dns.asked("google._domainkey.example.test"));
+    assert_eq!(v["signals"]["resolves"], true);
+    assert!(v["signals"].get("spoofable").is_none());
+
+    let env = Env::new("mailonly");
+    with_example(&env);
+    example_zone(&env);
+    let v = json(&env.run(&["--json", "--mail", "example.test"], None));
+    assert!(v.get("dns").is_none());
+    assert_eq!(v["mail"]["dmarc"]["policy"], "reject");
+    assert!(!env.dns.asked_type("example.test", 257), "--mail alone sends no CAA query");
+    assert!(v["signals"].get("resolves").is_none());
+    assert_eq!(v["signals"]["spoofable"], false);
+    let brief = json(&env.run(&["--json", "-b", "--mail", "example.test"], None));
+    assert_eq!(brief["mail.provider"], "Google Workspace");
+    assert!(brief.get("dns.provider").is_none());
+}
+
+#[test]
 fn dns_adds_hosting_provider_and_mail_posture() {
     let env = Env::new("dns");
     with_example(&env);
     example_zone(&env);
-    let out = env.run(&["--json", "--dns", "example.test"], None);
+    let out = env.run(&["--json", "--dns", "--mail", "example.test"], None);
     assert_eq!(code(&out), 0, "stderr: {}", String::from_utf8_lossy(&out.stderr));
     let v = json(&out);
     let d = &v["dns"];
@@ -416,11 +452,11 @@ fn dns_adds_hosting_provider_and_mail_posture() {
     assert!(cached.get("dns").is_none() && cached.get("mail").is_none());
     assert!(cached["signals"].get("resolves").is_none());
 
-    let pretty = stdout(&env.run(&["-o", "pretty", "--dns", "example.test"], None));
+    let pretty = stdout(&env.run(&["-o", "pretty", "--dns", "--mail", "example.test"], None));
     for want in ["Cloudflare", "Google Workspace", "only letsencrypt.org", "DMARC", "reject"] {
         assert!(pretty.contains(want), "missing {want:?} in:\n{pretty}");
     }
-    let brief = json(&env.run(&["--json", "-b", "--dns", "example.test"], None));
+    let brief = json(&env.run(&["--json", "-b", "--dns", "--mail", "example.test"], None));
     assert_eq!(brief["dns.provider"], "Cloudflare");
     assert_eq!(brief["mail.dmarc.policy"], "reject");
 }
@@ -431,7 +467,7 @@ fn dns_flags_parked_unresolving_spoofable_domains() {
     with_example(&env);
     env.dns.add("example.test", vec![Rr::Ns("ns1.sedoparking.com"), Rr::Mx(0, ".")]);
     env.dns.add("_dmarc.example.test", vec![Rr::Txt("v=DMARC1; p=none")]);
-    let v = json(&env.run(&["--json", "--dns", "example.test"], None));
+    let v = json(&env.run(&["--json", "--dns", "--mail", "example.test"], None));
     assert_eq!(v["dns"]["provider"], "Sedo (parking)");
     assert!(v["dns"].get("a").is_none());
     assert!(env.dns.asked("www.example.test"), "falls back to www when the apex has no address");
@@ -445,10 +481,12 @@ fn dns_flags_parked_unresolving_spoofable_domains() {
     // A registered name with no DNS at all.
     let env = Env::new("dnsnx");
     with_example(&env);
-    let v = json(&env.run(&["--json", "--dns", "example.test"], None));
+    let v = json(&env.run(&["--json", "--dns", "--mail", "example.test"], None));
     assert!(v["dns"]["error"].as_str().unwrap().starts_with("NXDOMAIN"));
-    assert!(v.get("mail").is_none());
+    assert!(v["mail"]["error"].as_str().unwrap().starts_with("NXDOMAIN"));
+    assert!(v["mail"].get("mx").is_none());
     assert!(v["signals"].get("resolves").is_none(), "no DNS signals from a failed DNS pass");
+    assert!(v["signals"].get("spoofable").is_none(), "no mail signals from a failed mail pass");
 }
 
 #[test]
@@ -474,12 +512,12 @@ fn ip_rdns_is_forward_confirmed() {
 }
 
 #[test]
-fn bulk_rdns_adds_ptr_columns() {
+fn bulk_dns_adds_ptr_columns() {
     let env = Env::new("bulkrdns");
     env.dns.add("8.8.8.8.in-addr.arpa", vec![Rr::Ptr("dns.google")]);
     env.dns.add("dns.google", vec![Rr::A("8.8.8.8")]);
     let input = "a 8.8.8.8\nb 8.8.4.4\nc 10.0.0.1\n";
-    let out = env.run(&["bulk", "-o", "tsv", "-q", "--no-cache", "--rdns"], Some(input));
+    let out = env.run(&["bulk", "-o", "tsv", "-q", "--no-cache", "--dns"], Some(input));
     assert_eq!(code(&out), 0, "stderr: {}", String::from_utf8_lossy(&out.stderr));
     let rows: Vec<Vec<String>> = stdout(&out).lines().map(|l| l.split('\t').map(String::from).collect()).collect();
     assert_eq!(rows[0][7..], ["dns.google".to_string(), "true".into()]);
@@ -491,7 +529,7 @@ fn bulk_rdns_adds_ptr_columns() {
     assert!(csv.lines().next().unwrap().ends_with(",ptr,ptr_verified"));
     assert!(csv.contains(",dns.google,true"));
 
-    let bad = env.run(&["bulk", "-m", "summary", "--rdns"], Some(input));
+    let bad = env.run(&["bulk", "-m", "summary", "--dns"], Some(input));
     assert_eq!(code(&bad), 2);
 }
 
@@ -504,8 +542,9 @@ fn mcp_lookup_and_enrich_accept_dns_flags() {
     env.dns.add("dns.google", vec![Rr::A("8.8.8.8")]);
     let reqs = [
         json!({"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"t","version":"0"}}}),
-        json!({"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"lookup","arguments":{"queries":["example.test"],"dns":true}}}),
-        json!({"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"enrich_ips","arguments":{"ips":["8.8.8.8"],"rdns":true}}}),
+        json!({"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"lookup","arguments":{"queries":["example.test"],"dns":true,"mail":true}}}),
+        json!({"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"enrich_ips","arguments":{"ips":["8.8.8.8"],"dns":true}}}),
+        json!({"jsonrpc":"2.0","id":4,"method":"tools/call","params":{"name":"enrich_ips","arguments":{"ips":["8.8.8.8"],"rdns":true}}}),
     ];
     let input: String = reqs.iter().map(|r| format!("{r}\n")).collect();
     let by_id: std::collections::HashMap<i64, Value> =
@@ -515,4 +554,8 @@ fn mcp_lookup_and_enrich_accept_dns_flags() {
     assert_eq!(l["signals"]["spoofable"], false);
     let e = &by_id[&3]["result"]["structuredContent"]["results"][0];
     assert_eq!((e["ptr"].clone(), e["ptr_verified"].clone()), (json!("dns.google"), json!(true)));
+    assert_eq!(
+        by_id[&4]["result"]["structuredContent"]["results"][0]["ptr"], "dns.google",
+        "old `rdns` name still works"
+    );
 }

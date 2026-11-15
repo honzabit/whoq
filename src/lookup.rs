@@ -1,7 +1,7 @@
 //! Orchestration: query -> cache -> RDAP (registry, then registrar) -> port-43 fallback -> Record.
 
 use crate::bootstrap;
-use crate::ctx::{Ctx, LookupError};
+use crate::ctx::{Ctx, Live, LookupError};
 use crate::model::{Kind, Outcome, Record, Source};
 use crate::normalize::signals;
 use crate::query::{self, Query};
@@ -36,22 +36,22 @@ fn cache_key(q: &Query, ctx: &Ctx) -> String {
 }
 
 pub async fn lookup(ctx: &Ctx, input: &str) -> Record {
-    lookup_with(ctx, input, ctx.opts.cache_ttl, ctx.opts.dns).await
+    lookup_with(ctx, input, ctx.opts.cache_ttl, ctx.opts.live).await
 }
 
 /// Like [`lookup`], but serve registration data from cache only if it is younger than `max_age`
-/// (zero = always fetch fresh; a fresh result still refreshes the cache), and add live DNS
-/// when `dns` is set. DNS is never cached with the record: it changes on its own schedule.
-pub async fn lookup_with(ctx: &Ctx, input: &str, max_age: std::time::Duration, dns: bool) -> Record {
+/// (zero = always fetch fresh; a fresh result still refreshes the cache), and add the live
+/// checks `live` asks for. Live data is never cached with the record: it changes on its own schedule.
+pub async fn lookup_with(ctx: &Ctx, input: &str, max_age: std::time::Duration, live: Live) -> Record {
     let mut rec = registration(ctx, input, max_age).await;
-    if dns {
+    if live.any() {
         let touched = match query::parse(input) {
-            Ok(Query::Ip(ip)) => {
+            Ok(Query::Ip(ip)) if live.dns => {
                 rec.rdns = Some(crate::dns::rdns(ctx, ip).await);
                 true
             }
             Ok(Query::Domain { ascii, .. }) if rec.result != Outcome::Available => {
-                crate::dns::domain(ctx, &mut rec, &ascii).await;
+                crate::dns::domain(ctx, &mut rec, &ascii, live).await;
                 true
             }
             _ => false,

@@ -10,6 +10,16 @@ use tokio::net::TcpStream;
 const MAX_RESPONSE: usize = 512 * 1024;
 
 pub async fn query(ctx: &Ctx, server: &str, q: &str) -> Result<String, LookupError> {
+    query_within(ctx, server, q, ctx.opts.timeout).await
+}
+
+/// [`query`] with an explicit deadline, for requests that carry a lot of work (bulk Cymru).
+pub async fn query_within(
+    ctx: &Ctx,
+    server: &str,
+    q: &str,
+    timeout: std::time::Duration,
+) -> Result<String, LookupError> {
     let sem = ctx.host_limit(server);
     let _permit = sem.acquire().await.expect("semaphore closed");
     let fut = async {
@@ -27,9 +37,7 @@ pub async fn query(ctx: &Ctx, server: &str, q: &str) -> Result<String, LookupErr
             .map_err(|e| LookupError::Network(e.to_string()))?;
         Ok::<_, LookupError>(String::from_utf8_lossy(&buf).into_owned())
     };
-    tokio::time::timeout(ctx.opts.timeout, fut)
-        .await
-        .map_err(|_| LookupError::Timeout(format!("{server}:43 timed out")))?
+    tokio::time::timeout(timeout, fut).await.map_err(|_| LookupError::Timeout(format!("{server}:43 timed out")))?
 }
 
 /// Ask IANA which WHOIS server handles a TLD.

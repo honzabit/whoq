@@ -17,7 +17,7 @@ $ whoq google.com 8.8.8.8 AS13335 https://www.bbc.co.uk/news
 | exit 0 no matter what           | **meaningful exit codes**: 0 found · 1 failed · 2 usage · 10 available/not found |
 | raw text gets echoed to your terminal | **sanitized**: ANSI escapes, control chars and bidi overrides stripped, lengths capped |
 | `www.foo.co.uk` → "no match"    | takes URLs and emails and reduces them to the registrable domain (Public Suffix List, ICANN section) |
-| —                               | **`--dns`**: hosting network, DNS and mail provider, SPF/DMARC/DKIM, and forward-confirmed reverse DNS for IPs |
+| —                               | **`--dns`**: hosting network, DNS provider, CAA and forward-confirmed reverse DNS for IPs; **`--mail`**: MX provider, SPF/DMARC/DKIM |
 | —                               | **MCP server** built in: `whoq mcp`                                |
 | —                               | disk cache (1h results, 24h bootstrap), works off stale bootstrap data when IANA is unreachable |
 
@@ -34,20 +34,23 @@ whoq --raw example.com                # include upstream responses
 whoq --whois example.de               # force port 43
 whoq --max-age 1d example.com         # cached if under a day old, else fetch fresh
 whoq --max-age 0 example.com          # always fetch fresh (still refreshes the cache)
-whoq --dns example.com 8.8.8.8        # + hosting, DNS/mail provider, SPF/DMARC/DKIM, reverse DNS
+whoq --dns example.com 8.8.8.8        # + hosting, DNS provider, CAA, reverse DNS
+whoq --mail example.com               # + MX provider, SPF, DMARC, DKIM
 whoq schema                           # JSON Schema of the output
 ```
 
 `--max-age` takes `90s`, `30m`, `6h`, `2d`, `1w` or plain seconds; the default is `1h`. Whether a result came from cache shows up in `source.cached`, and `source.fetched_at` gives its time. `--no-cache` skips both reading and writing. Cache location: `~/Library/Caches/whoq` (macOS) or `~/.cache/whoq` (Linux).
 
+The same flags mean the same thing everywhere: `--max-age` (how old cached data may be), `--dns` (live DNS; reverse DNS in `bulk`), `--timeout` (seconds per request, default 15) and `--no-cache` work in lookup, `bulk` and `mcp` alike.
+
 Environment: `WHOQ_CACHE_DIR`, `WHOQ_STATE_DIR`, `WHOQ_TIMEOUT`, `WHOQ_MAX_AGE`, `WHOQ_DNS_SERVER=ip[:port]`, `WHOQ_WEBHOOK`, `NO_COLOR`, and `WHOQ_WHOIS_ADDR=host:port` (send every port-43 connection through one address, for proxies and tests).
 
-## Live DNS: `--dns`
+## Live DNS: `--dns` and `--mail`
 
-Registration data tells you who registered a name. `--dns` adds who runs it, from live DNS:
+Registration data tells you who registered a name. `--dns` adds who runs it, and `--mail` adds whether mail claiming to be from it can be trusted. Both come from live DNS and can be combined:
 
 ```
-$ whoq --dns github.com
+$ whoq --dns --mail github.com
   …
   Hosting       GITHUB - GitHub, Inc. (AS36459, US)  140.82.121.3
   DNS           NS1 + AWS Route 53
@@ -62,14 +65,15 @@ $ whoq --dns 66.249.66.1
   rDNS          crawl-66-249-66-1.googlebot.com  ✓ forward-confirmed
 ```
 
-- **Domains** get `dns` (A/AAAA, the networks announcing them via Team Cymru, NS and a recognized DNS provider, CAA) and `mail` (MX and a recognized provider, null MX, SPF, DMARC, DKIM selectors found among common names, MTA-STS, TLS-RPT, BIMI).
-- **IPs** get `rdns`: PTR names plus `verified`, meaning a PTR name resolves back to the IP. That is how real crawlers are told from fakes: anyone can set a PTR that says `googlebot.com`, only Google can make it resolve back.
-- **New signals**: `resolves`, `parked` (nameservers of a parking service), `accepts_mail`, and `spoofable` (no DMARC, or `p=none`, so mail forging the domain is not rejected).
+- **`--dns` on domains** adds `dns`: A/AAAA, the networks announcing them via Team Cymru, NS and a recognized DNS provider, CAA. About 5 queries.
+- **`--mail` on domains** adds `mail`: MX and a recognized provider, null MX, SPF, DMARC, DKIM selectors found among common names, MTA-STS, TLS-RPT, BIMI. About 25 queries, most of them DKIM probes. If the name doesn't exist in DNS, `mail.error` says so.
+- **`--dns` on IPs** adds `rdns`: PTR names plus `verified`, meaning a PTR name resolves back to the IP. That is how real crawlers are told from fakes: anyone can set a PTR that says `googlebot.com`, only Google can make it resolve back.
+- **New signals**: `resolves` and `parked` (nameservers of a parking service) from `--dns`; `accepts_mail` and `spoofable` (no DMARC, or `p=none`, so mail forging the domain is not rejected) from `--mail`.
 - **DKIM is best effort**: selectors can't be listed, so whoq probes about 20 common ones. An empty list doesn't mean no DKIM.
 - **It never connects to the target's own servers.** Queries go to your resolver (and Team Cymru for hosting), so investigating a phishing domain doesn't tip it off.
 - **Resolver**: the system's, over UDP. Many home routers can't return large TXT sets, which would silently hide SPF, so failed queries are retried through 1.1.1.1. `WHOQ_DNS_SERVER=ip[:port]` pins one resolver with no fallback.
 - **Not cached**: DNS is fetched live on every run; `--max-age` applies only to the registration data.
-- **Cost**: about 30 DNS queries per domain (most are DKIM probes), run in parallel; typically under a second.
+- **Speed**: queries run in parallel; either flag typically adds under a second.
 
 ## Watch mode
 
@@ -99,7 +103,7 @@ github.com  ▲ changed (high)  since 2026-11-14T18:53:16Z
 
 ## Bulk mode: log enrichment
 
-`whoq bulk` labels every IP in a log with who owns it. It finds IPs anywhere in each line, including IPv6, `ip:port`, `[v6]:port`, IPv4-mapped addresses and `X-Forwarded-For` lists, or only in one column with `--field`.
+`whoq bulk` labels every IP in a log with who owns it. It finds IPs anywhere in each line, including IPv6, `ip:port`, `[v6]:port`, IPv4-mapped addresses and `X-Forwarded-For` lists, or only in one column with `--column`.
 
 ```
 $ whoq bulk -m summary access.log
@@ -112,20 +116,20 @@ whoq bulk: 20000 lines · 12077 unique IPs · 7 cymru queries · 0 rdap lookups 
 ```
 
 ```
-whoq bulk -f 1 -o tsv access.log > enriched.tsv            # original line + ip, asn, as_name, cc, prefix, org
+whoq bulk -c 1 -o tsv access.log > enriched.tsv            # original line + ip, asn, as_name, cc, prefix, org
 whoq bulk -m unique --rdap -o csv fw.log > owners.csv      # one row per IP, with org + abuse contact
 zcat auth.log.gz | whoq bulk | jq -c 'select(any(.ips[]; .asn == 14061))'
-whoq bulk -f 1 -w 2 -m summary counts.tsv                  # pre-aggregated "ip<TAB>count": shares weighted by count
-whoq bulk -m unique --rdns -o csv access.log               # + ptr, ptr_verified (which "Googlebots" are real)
+whoq bulk -c 1 -w 2 -m summary counts.tsv                  # pre-aggregated "ip<TAB>count": shares weighted by count
+whoq bulk -m unique --dns -o csv access.log                # + ptr, ptr_verified (which "Googlebots" are real)
 ```
 
 It scales because it looks up networks, not individual IPs:
 
 - **Team Cymru IP-to-ASN bulk whois** (the default) answers up to 1,000 IPs per TCP connection with ASN, AS name, BGP prefix, country and RIR.
 - **`--rdap`** adds the registry org, network name and abuse contact. Each RDAP answer is cached under its CIDR and reused for every other IP inside it; in testing, 2,269 IPs needed 71 RDAP requests. IPs in the same /24 (or /48) are looked up one after another so the first answer usually covers the rest. `--precise` limits reuse to /24 (/48) when sub-allocations matter.
-- **A persistent network cache** (7 days, `--cache-days`) makes repeat runs mostly offline. In testing the same 20k lines took 0.0s on the second run. Expired and superseded entries are compacted away automatically on load.
+- **A persistent network cache** (`--max-age`, default `7d`) makes repeat runs mostly offline. In testing the same 20k lines took 0.0s on the second run. Expired and superseded entries are compacted away automatically on load.
 - **Streaming in chunks of 5,000 lines** keeps memory flat. Annotate output preserves line order and stops cleanly when piped to `head`.
-- **`--rdns`** adds `ptr` and `ptr_verified` per IP (annotate and unique modes; TSV and CSV gain two columns). It costs one or two DNS queries per unique public IP, 32 at a time, and is not cached between runs.
+- **`--dns`** adds `ptr` and `ptr_verified` per IP (annotate and unique modes; TSV and CSV gain two columns). It costs one or two DNS queries per unique public IP, 32 at a time, and is not cached between runs.
 - **Private and reserved addresses** (RFC 1918, CGNAT, loopback, link-local, ULA, documentation ranges) are labelled locally and never sent upstream.
 
 Privacy note: public IPs from your logs are sent to Team Cymru (default) and/or the RIRs' RDAP servers. Use `--no-cymru` to only talk to RIRs.
@@ -140,7 +144,7 @@ Modes: `annotate` (default; NDJSON or `-o tsv`), `unique` (NDJSON, CSV or table)
 
 Claude Code: `claude mcp add whoq -- whoq mcp`
 
-Tools: `lookup` (queries, fields, brief, `max_age`: e.g. `"6h"`, or `0` to force fresh; `dns`: live DNS as above), `check_availability` (domains) and `enrich_ips` (up to 1,000 IPs or log fragments; `rdap`, `summary`, `rdns`). All are read-only. Output is
+Tools: `lookup` (queries, fields, brief, `max_age`: e.g. `"6h"`, or `0` to force fresh; `dns` and `mail`: live checks as above), `check_availability` (domains) and `enrich_ips` (up to 1,000 IPs or log fragments; `rdap`, `summary`, `dns` for reverse DNS). All are read-only. Output is
 wrapped in `<untrusted-registry-data>` and the tool descriptions warn the model that registrant-controlled
 strings are data, not instructions.
 

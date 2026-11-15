@@ -46,8 +46,22 @@ pub struct Options {
     pub use_cache: bool,
     pub raw: bool,
     pub force_whois: bool,
-    /// Add live DNS: rdns for IPs, addresses/hosting/NS/CAA/mail for domains.
+    pub live: Live,
+}
+
+/// Live (uncached) checks layered on top of registration data.
+#[derive(Debug, Clone, Copy, Default, PartialEq)]
+pub struct Live {
+    /// rdns for IPs; addresses, hosting network, NS provider and CAA for domains.
     pub dns: bool,
+    /// MX, SPF, DMARC, DKIM, MTA-STS, TLS-RPT, BIMI for domains.
+    pub mail: bool,
+}
+
+impl Live {
+    pub fn any(self) -> bool {
+        self.dns || self.mail
+    }
 }
 
 pub struct Ctx {

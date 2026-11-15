@@ -242,6 +242,9 @@ pub struct Mail {
     pub tls_rpt: bool,
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub bimi: bool,
+    /// Why mail posture couldn't be read (NXDOMAIN, resolver failure); other fields are then empty.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema, PartialEq)]

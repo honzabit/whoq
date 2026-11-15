@@ -36,15 +36,18 @@ pub fn project(rec: &Record, fields: &[String]) -> Value {
     Value::Object(out)
 }
 
-/// Extra brief fields when live DNS was requested.
-const BRIEF_DNS: &[&str] =
-    &["dns.provider", "dns.hosting", "dns.error", "mail.provider", "mail.null_mx", "mail.spf.all", "mail.dmarc.policy"];
+/// Extra brief fields when live DNS / mail was requested.
+const BRIEF_DNS: &[&str] = &["dns.provider", "dns.hosting", "dns.error"];
+const BRIEF_MAIL: &[&str] = &["mail.provider", "mail.null_mx", "mail.spf.all", "mail.dmarc.policy", "mail.error"];
 
 pub fn brief_fields(rec: &Record) -> Vec<String> {
     let list = if rec.kind == Kind::Domain { BRIEF_DOMAIN } else { BRIEF_NET };
     let mut v: Vec<String> = list.iter().map(|s| s.to_string()).collect();
-    if rec.dns.is_some() || rec.mail.is_some() {
+    if rec.dns.is_some() {
         v.extend(BRIEF_DNS.iter().map(|s| s.to_string()));
+    }
+    if rec.mail.is_some() {
+        v.extend(BRIEF_MAIL.iter().map(|s| s.to_string()));
     }
     if rec.rdns.is_some() {
         v.push("rdns".into());
@@ -234,7 +237,9 @@ pub fn pretty(rec: &Record, st: &Style) -> String {
             }
         }
     }
-    if let Some(m) = &rec.mail {
+    if let Some(e) = rec.mail.as_ref().and_then(|m| m.error.as_ref()) {
+        row("Mail", st.paint("31", e));
+    } else if let Some(m) = &rec.mail {
         let mx = if m.null_mx {
             st.dim("null MX: accepts no mail")
         } else if m.mx.is_empty() {

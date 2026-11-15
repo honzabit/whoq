@@ -14,7 +14,7 @@ mod watch;
 mod whois43;
 
 use clap::{Args, Parser, Subcommand, ValueEnum};
-use ctx::{Ctx, Options};
+use ctx::{Ctx, Live, Options};
 use futures::StreamExt;
 use model::Outcome;
 use std::io::{BufRead, IsTerminal, Write};
@@ -59,6 +59,8 @@ enum Cmd {
     Schema,
 }
 
+const DEFAULT_TIMEOUT: u64 = 15;
+
 #[derive(Copy, Clone, PartialEq, ValueEnum)]
 enum BulkMode {
     /// One output row per input line, with its IPs enriched
@@ -84,19 +86,19 @@ enum BulkFormat {
 #[derive(Args)]
 #[command(
     after_help = "SOURCES:\n  Default: Team Cymru IP-to-ASN bulk whois (whois.cymru.com) — ASN, AS name, BGP prefix, country.\n  --rdap adds registry org, network name and abuse contact (one request per network, not per IP).\n  Private/reserved IPs are never sent anywhere.\n\n\
-EXAMPLES:\n  tail -n 100000 access.log | whoq bulk -m summary\n  whoq bulk -f 1 -o tsv access.log > enriched.tsv\n  whoq bulk -m unique --rdap -o csv fw.log > owners.csv\n  zcat auth.log.gz | whoq bulk --rdap | jq -c 'select(.ips[].asn == 14061)'"
+EXAMPLES:\n  tail -n 100000 access.log | whoq bulk -m summary\n  whoq bulk -c 1 -o tsv access.log > enriched.tsv\n  whoq bulk -m unique --rdap -o csv fw.log > owners.csv\n  zcat auth.log.gz | whoq bulk --rdap | jq -c 'select(.ips[].asn == 14061)'"
 )]
 struct BulkArgs {
     /// Log files to read (default: stdin). Literal IPs are accepted too.
     inputs: Vec<String>,
-    /// Take IPs only from this 1-based field (default: scan the whole line)
-    #[arg(short, long)]
-    field: Option<usize>,
-    /// Field delimiter for --field (default: whitespace)
+    /// Take IPs only from this 1-based column (default: scan the whole line)
+    #[arg(short, long, alias = "field", short_alias = 'f')]
+    column: Option<usize>,
+    /// Column delimiter for --column (default: whitespace)
     #[arg(short, long)]
     delim: Option<char>,
-    /// Count each line as the number in this 1-based field (for pre-aggregated `ip<TAB>count` files).
-    /// Fields are split on --delim literally; quoted CSV values containing the delimiter are not supported.
+    /// Count each line as the number in this 1-based column (for pre-aggregated `ip<TAB>count` files).
+    /// Columns are split on --delim literally; quoted CSV values containing the delimiter are not supported.
     #[arg(short, long)]
     weight: Option<usize>,
     #[arg(short, long, value_enum, default_value_t = BulkMode::Annotate)]
@@ -114,21 +116,25 @@ struct BulkArgs {
     precise: bool,
     /// Add reverse DNS (PTR) and whether it forward-confirms (how real crawlers are verified).
     /// One or two DNS queries per unique IP; not cached between runs.
-    #[arg(long)]
-    rdns: bool,
+    #[arg(long, alias = "rdns")]
+    dns: bool,
     /// Rows to show in summary mode (0 = all)
     #[arg(long, default_value_t = 25)]
     top: usize,
     /// Parallel RDAP lookups
     #[arg(short = 'j', long, default_value_t = 8)]
     concurrency: usize,
-    /// Network cache lifetime in days
-    #[arg(long, default_value_t = 7)]
-    cache_days: u64,
+    /// Reuse cached network owners younger than AGE (e.g. 12h, 7d, 2w; 0 = always fetch fresh)
+    #[arg(long, value_name = "AGE", default_value = "7d", value_parser = normalize::parse_duration)]
+    max_age: Duration,
+    /// Old spelling of --max-age, in days
+    #[arg(long, hide = true, conflicts_with = "max_age")]
+    cache_days: Option<u64>,
     /// Don't read or write the network cache
     #[arg(long)]
     no_cache: bool,
-    #[arg(long, default_value_t = 30, env = "WHOQ_TIMEOUT")]
+    /// Per-request timeout in seconds (Cymru batches get 20ms more per IP)
+    #[arg(long, default_value_t = DEFAULT_TIMEOUT, env = "WHOQ_TIMEOUT")]
     timeout: u64,
     /// Suppress the stats line on stderr
     #[arg(short, long)]
@@ -172,14 +178,15 @@ struct WatchArgs {
     concurrency: usize,
     #[arg(long)]
     no_color: bool,
-    #[arg(long, default_value_t = 15, env = "WHOQ_TIMEOUT")]
+    /// Per-request timeout in seconds
+    #[arg(long, default_value_t = DEFAULT_TIMEOUT, env = "WHOQ_TIMEOUT")]
     timeout: u64,
 }
 
 #[derive(Args, Clone)]
 struct CommonArgs {
     /// Per-request timeout in seconds
-    #[arg(long, default_value_t = 15, env = "WHOQ_TIMEOUT")]
+    #[arg(long, default_value_t = DEFAULT_TIMEOUT, env = "WHOQ_TIMEOUT")]
     timeout: u64,
     /// Use a cached result only if it is younger than AGE, otherwise fetch fresh and refresh the
     /// cache (e.g. 90s, 30m, 6h, 2d, 1w; bare number = seconds; 0 = always fetch fresh)
@@ -222,10 +229,14 @@ struct LookupArgs {
     #[arg(long)]
     whois: bool,
     /// Add live DNS: reverse DNS (forward-confirmed) for IPs; addresses, hosting network, DNS
-    /// provider, CAA and mail setup (MX, SPF, DMARC, DKIM) for domains. Queries your resolver
-    /// (or WHOQ_DNS_SERVER) and Team Cymru; never connects to the target itself.
+    /// provider and CAA for domains. Queries your resolver (or WHOQ_DNS_SERVER) and Team Cymru;
+    /// never connects to the target itself.
     #[arg(long)]
     dns: bool,
+    /// Add mail posture for domains: MX and provider, SPF, DMARC, DKIM (common selectors),
+    /// MTA-STS, TLS-RPT, BIMI. About 25 DNS queries per domain.
+    #[arg(long)]
+    mail: bool,
     /// Parallel lookups
     #[arg(short = 'j', long, default_value_t = 8)]
     concurrency: usize,
@@ -236,14 +247,14 @@ struct LookupArgs {
     common: CommonArgs,
 }
 
-fn options(c: &CommonArgs, raw: bool, force_whois: bool, dns: bool) -> Options {
+fn options(c: &CommonArgs, raw: bool, force_whois: bool, live: Live) -> Options {
     Options {
         timeout: Duration::from_secs(c.timeout.max(1)),
         cache_ttl: c.max_age,
         use_cache: !c.no_cache,
         raw,
         force_whois,
-        dns,
+        live,
     }
 }
 
@@ -265,8 +276,8 @@ async fn main() {
             println!("{}", serde_json::to_string_pretty(&schema).unwrap());
         }
         Some(Cmd::Mcp(c)) => {
-            let ctx =
-                Ctx::new(options(&c, false, false, false)).unwrap_or_else(|e| fatal(true, "init", &e.to_string()));
+            let ctx = Ctx::new(options(&c, false, false, Live::default()))
+                .unwrap_or_else(|e| fatal(true, "init", &e.to_string()));
             if let Err(e) = mcp::serve(ctx).await {
                 eprintln!("whoq mcp: {e}");
                 std::process::exit(exit::FAILED);
@@ -311,7 +322,7 @@ async fn run_watch(w: WatchArgs) -> i32 {
         use_cache: false,
         raw: false,
         force_whois: false,
-        dns: false,
+        live: Live::default(),
     };
     let ctx = Ctx::new(opts).unwrap_or_else(|e| fatal(!pretty, "init", &e.to_string()));
     let style = output::Style { color: tty && !w.no_color && std::env::var_os("NO_COLOR").is_none() };
@@ -427,14 +438,14 @@ fn ptr_label(o: &bulk::Owner) -> String {
 }
 
 async fn run_bulk(b: BulkArgs) -> i32 {
-    if b.field == Some(0) || b.weight == Some(0) {
-        fatal(false, "usage", "--field and --weight are 1-based");
+    if b.column == Some(0) || b.weight == Some(0) {
+        fatal(false, "usage", "--column and --weight are 1-based");
     }
-    if b.rdns && b.mode == BulkMode::Summary {
-        fatal(false, "usage", "--rdns adds per-IP columns; use -m annotate or -m unique");
+    if b.dns && b.mode == BulkMode::Summary {
+        fatal(false, "usage", "--dns adds per-IP columns; use -m annotate or -m unique");
     }
-    if b.weight.is_some() && b.field.is_none() {
-        fatal(false, "usage", "--weight needs --field, so the count column isn't scanned for IPs");
+    if b.weight.is_some() && b.column.is_none() {
+        fatal(false, "usage", "--weight needs --column, so the count column isn't scanned for IPs");
     }
     let tty = std::io::stdout().is_terminal();
     let format = match (b.output, b.mode) {
@@ -455,7 +466,7 @@ async fn run_bulk(b: BulkArgs) -> i32 {
         use_cache: false, // per-IP record files would explode; the engine has its own network cache
         raw: false,
         force_whois: false,
-        dns: false,
+        live: Live::default(),
     };
     let ctx = Ctx::new(opts).unwrap_or_else(|e| fatal(true, "init", &e.to_string()));
     let mut rdns_cache = std::collections::HashMap::new();
@@ -466,7 +477,7 @@ async fn run_bulk(b: BulkArgs) -> i32 {
             rdap: b.rdap || b.no_cymru,
             precise: b.precise,
             persist: !b.no_cache,
-            cache_ttl: Duration::from_secs(b.cache_days * 86400),
+            cache_ttl: b.cache_days.map_or(b.max_age, |d| Duration::from_secs(d.saturating_mul(86400))),
             concurrency: b.concurrency,
         },
     );
@@ -487,7 +498,7 @@ async fn run_bulk(b: BulkArgs) -> i32 {
         total_lines += chunk.len();
         let per_line: Vec<Vec<std::net::IpAddr>> = chunk
             .iter()
-            .map(|l| match b.field {
+            .map(|l| match b.column {
                 Some(f) => bulk::extract_field(l, f, b.delim),
                 None => bulk::extract(l),
             })
@@ -495,7 +506,7 @@ async fn run_bulk(b: BulkArgs) -> i32 {
         let uniq: std::collections::HashSet<_> = per_line.iter().flatten().copied().collect();
         let mut owners = engine.resolve(&uniq).await;
         engine.flush();
-        if b.rdns {
+        if b.dns {
             bulk::attach_rdns(&ctx, &mut owners, &mut rdns_cache, 32).await;
         }
         failed |= owners.values().any(|o| o.error.is_some());
@@ -519,7 +530,7 @@ async fn run_bulk(b: BulkArgs) -> i32 {
             }
             if b.mode == BulkMode::Annotate {
                 let r = if format == BulkFormat::Tsv {
-                    writeln!(out, "{line}\t{}", tsv_cols(ips.first().map(|i| &owners[i]), b.rdns))
+                    writeln!(out, "{line}\t{}", tsv_cols(ips.first().map(|i| &owners[i]), b.dns))
                 } else {
                     let enriched: Vec<&bulk::Owner> = ips.iter().map(|i| &owners[i]).collect();
                     writeln!(out, "{}", serde_json::json!({ "line": line, "ips": enriched }))
@@ -546,11 +557,11 @@ async fn run_bulk(b: BulkArgs) -> i32 {
                     let _ = writeln!(
                         out,
                         "ip,hits,asn,as_name,country,prefix,registry,org,network,cidr,abuse_email,private,error{}",
-                        if b.rdns { ",ptr,ptr_verified" } else { "" }
+                        if b.dns { ",ptr,ptr_verified" } else { "" }
                     );
                     for (o, h) in rows {
                         let c = |s: &Option<String>| bulk::csv_escape(s.as_deref().unwrap_or(""));
-                        let extra = if b.rdns {
+                        let extra = if b.dns {
                             format!(",{},{}", c(&o.ptr), o.ptr_verified.map(|v| v.to_string()).unwrap_or_default())
                         } else {
                             String::new()
@@ -668,7 +679,7 @@ async fn run_bulk(b: BulkArgs) -> i32 {
         );
         if bad_weights > 0 {
             eprintln!(
-                "whoq bulk: warning: {bad_weights} lines had no numeric value in field {}; counted as 1",
+                "whoq bulk: warning: {bad_weights} lines had no numeric value in column {}; counted as 1",
                 b.weight.unwrap_or(0)
             );
         }
@@ -691,7 +702,7 @@ async fn run(a: LookupArgs) -> i32 {
         fatal(machine, "usage", "no queries given (try `whoq example.com` or `whoq --help`)");
     }
 
-    let ctx = match Ctx::new(options(&a.common, a.raw, a.whois, a.dns)) {
+    let ctx = match Ctx::new(options(&a.common, a.raw, a.whois, Live { dns: a.dns, mail: a.mail })) {
         Ok(c) => c,
         Err(e) => fatal(machine, "init", &e.to_string()),
     };

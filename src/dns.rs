@@ -1,10 +1,11 @@
-//! Live DNS (`--dns`): reverse DNS with forward confirmation for IPs; addresses, hosting
-//! network, nameserver provider, CAA and mail posture (MX, SPF, DMARC, DKIM) for domains.
+//! Live DNS. `--dns`: reverse DNS with forward confirmation for IPs; addresses, hosting
+//! network, nameserver provider and CAA for domains. `--mail`: mail posture (MX, SPF, DMARC,
+//! DKIM, MTA-STS, TLS-RPT, BIMI) for domains.
 //!
 //! Everything here comes from DNS data the domain or IP owner controls: it is sanitized
 //! like registry data and must be treated as untrusted.
 
-use crate::ctx::Ctx;
+use crate::ctx::{Ctx, Live};
 use crate::model::{Dmarc, Dns, Hosting, Mail, Mx, Rdns, Record, Spf};
 use crate::sanitize::clean;
 use futures::future::join_all;
@@ -451,7 +452,12 @@ async fn mail(r: &Resolvers, domain: &str) -> Mail {
         join_all(dkim_names.iter().map(|n| txt(r, n))),
     );
     let mut m = Mail::default();
-    for d in mx.unwrap_or_default() {
+    let mx = match mx {
+        Ok(mx) => mx,
+        Err(Fail::NxDomain) => return Mail { error: Some(NXDOMAIN.into()), ..Default::default() },
+        Err(Fail::Other(e)) => return Mail { error: Some(clean(&e, 200)), ..Default::default() },
+    };
+    for d in mx {
         if let RData::MX(x) = d {
             if x.exchange.is_root() {
                 m.null_mx = true;
@@ -477,32 +483,36 @@ async fn mail(r: &Resolvers, domain: &str) -> Mail {
     m
 }
 
-/// Fill `rec.dns` and `rec.mail` for a domain.
-pub async fn domain(ctx: &Ctx, rec: &mut Record, domain: &str) {
+const NXDOMAIN: &str = "NXDOMAIN: the domain does not exist in DNS";
+
+/// Fill `rec.dns` and/or `rec.mail` for a domain, as `live` asks.
+pub async fn domain(ctx: &Ctx, rec: &mut Record, domain: &str, live: Live) {
     let r = match resolver(ctx).await {
         Ok(r) => r,
         Err(e) => {
-            rec.dns = Some(Dns { error: Some(e), ..Default::default() });
+            rec.dns = live.dns.then(|| Dns { error: Some(e.clone()), ..Default::default() });
+            rec.mail = live.mail.then(|| Mail { error: Some(e), ..Default::default() });
             return;
         }
     };
+    let (d, m) = tokio::join!(async { if live.dns { Some(dns_part(ctx, r, domain).await) } else { None } }, async {
+        if live.mail { Some(mail(r, domain).await) } else { None }
+    },);
+    (rec.dns, rec.mail) = (d, m);
+}
+
+async fn dns_part(ctx: &Ctx, r: &Resolvers, domain: &str) -> Dns {
     let mut d = Dns { host: Some(domain.to_string()), ..Default::default() };
-    let (addrs, ns, caa, mail_info) = tokio::join!(
-        addresses(r, domain),
-        query(r, domain, RecordType::NS),
-        query(r, domain, RecordType::CAA),
-        mail(r, domain),
-    );
+    let (addrs, ns, caa) =
+        tokio::join!(addresses(r, domain), query(r, domain, RecordType::NS), query(r, domain, RecordType::CAA),);
     match addrs {
         Err(Fail::NxDomain) => {
-            d.error = Some("NXDOMAIN: the domain does not exist in DNS".into());
-            rec.dns = Some(d);
-            return;
+            d.error = Some(NXDOMAIN.into());
+            return d;
         }
         Err(Fail::Other(e)) => {
             d.error = Some(clean(&e, 200));
-            rec.dns = Some(d);
-            return;
+            return d;
         }
         Ok((a, aaaa)) => (d.a, d.aaaa) = (a, aaaa),
     }
@@ -539,8 +549,7 @@ pub async fn domain(ctx: &Ctx, rec: &mut Record, domain: &str) {
         })
         .collect();
     d.caa.truncate(10);
-    rec.dns = Some(d);
-    rec.mail = Some(mail_info);
+    d
 }
 
 #[cfg(test)]
