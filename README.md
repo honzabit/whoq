@@ -182,8 +182,11 @@ strings are data, not instructions.
 With Homebrew (macOS, Linux):
 
 ```
+brew trust honzabit/tap
 brew install honzabit/tap/whoq
 ```
+
+Homebrew 7 and later only load formulae from taps you have trusted, so the first line is needed once per machine.
 
 Prebuilt binaries for macOS (Apple silicon, Intel) and Linux (x86_64, arm64; static musl) are on the [releases page](https://github.com/honzabit/whoq/releases). Or build from source with Cargo:
 
