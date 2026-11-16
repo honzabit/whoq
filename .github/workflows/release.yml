@@ -58,3 +58,13 @@ jobs:
           cat whoq-*.sha256 > SHA256SUMS
           gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --title "$GITHUB_REF_NAME" \
             --generate-notes whoq-*.tar.gz SHA256SUMS
+
+  homebrew:
+    needs: release
+    # Pre-releases (v1.2.0-rc1) stay off Homebrew.
+    if: ${{ !contains(github.ref_name, '-') }}
+    uses: ./.github/workflows/homebrew.yml
+    with:
+      tag: ${{ github.ref_name }}
+    secrets:
+      TAP_DEPLOY_KEY: ${{ secrets.TAP_DEPLOY_KEY }}

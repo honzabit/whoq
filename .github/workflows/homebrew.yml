@@ -1,0 +1,49 @@
+name: Homebrew
+
+# Regenerates Formula/whoq.rb in honzabit/homebrew-tap for a published release.
+# Called by the release workflow; can also be run by hand for an existing tag.
+on:
+  workflow_call:
+    inputs:
+      tag:
+        type: string
+        required: true
+    secrets:
+      TAP_DEPLOY_KEY:
+        required: true
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag, e.g. v0.1.0
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  tap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch checksums
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download "${{ inputs.tag }}" --repo "$GITHUB_REPOSITORY" --pattern SHA256SUMS
+      - name: Update the tap
+        env:
+          TAP_DEPLOY_KEY: ${{ secrets.TAP_DEPLOY_KEY }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$TAP_DEPLOY_KEY" > ~/.ssh/tap && chmod 600 ~/.ssh/tap
+          # GitHub's published host key, pinned rather than trusted on first use.
+          echo "github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl" > ~/.ssh/known_hosts
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/tap -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes"
+          git clone --depth 1 git@github.com:honzabit/homebrew-tap.git tap
+          scripts/homebrew-formula.sh "$TAG" SHA256SUMS > tap/Formula/whoq.rb
+          cd tap
+          git add Formula/whoq.rb
+          if git diff --cached --quiet; then echo "Formula already up to date for $TAG"; exit 0; fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -m "whoq ${TAG#v}"
+          git push
