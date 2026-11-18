@@ -157,12 +157,46 @@ Of whoq's 13 misses, 7 were timeouts: `.sa` (the connect bug above, fixed after 
 
 GNU whois scores higher because the scorer only checks whether the answer appears somewhere in its raw text; it needs no parsing to "pass". As a tool that returns named fields, whoq is ahead of python-whois and whoisit on every set.
 
+### whoq 0.1.2 on every set
+
+Re-run of whoq alone on 2026-11-18, with the word classifier and the speed fixes below ([tables](results/2026-11-18-cache/correctness.md)). The other tools' numbers are from their 2026-11-17 runs. "Base" includes the IPs, as in the first table.
+
+| | base | fresh | holdout | fresh2 |
+|---|---|---|---|---|
+| **whoq 0.1.2** | **91%** (524/576) | 94% (97/103) | **97%** (145/149) | **97%** (118/122) |
+| whoq 0.1.1 (first runs) | 87% | 89% | 96% | 89% |
+| GNU whois (in output) | 83% | **97%** | 93% | 93% |
+| macOS whois | 82% | 94% | 90% | – |
+| python-whois | 83% | 81% | 83% | 70% |
+| OpenRDAP | 69% | 21% | 1% | – |
+| whoisit | 65% | 18% | 1% | 0% |
+
+Base domains alone are at 98% (415/424). What whoq still misses: origin ASN on IPs (see below), `gov.sg`, `.sk`'s registrar handle, the four fresh2 layouts above, and `.pt`, whose WHOIS server refused connections during the run (`sapo.pt`, `publico.pt`, `rtp.pt` and the unregistered `.pt` name). `.ws` was back up, so both `.ws` names are now correct.
+
+### Speed
+
+Seconds per domain lookup, every query uncached (`--no-cache`), 1 s apart:
+
+| | median | p90 | slowest | over 5 s |
+|---|---|---|---|---|
+| **whoq 0.1.2** | 0.41 | 1.17 | **3.4** | **0 / 229** |
+| whoq 0.1.1 | 0.57 | 1.22 | 22.3 | 12 / 328 |
+| GNU whois | 0.24 | 0.83 | 60.0 | 8 / 229 |
+| python-whois | 0.67 | 1.30 | 11.5 | 11 / 229 |
+
+Two fixes made the difference:
+
+- **A long `Retry-After` now fails at once.** Tucows' registrar RDAP answers rate-limited requests with `Retry-After: 60`. whoq waited 10 s, retried, was refused again, and waited another 10 s, so `php.net` and `archive.org` took about 21 s for a step that is best-effort anyway. When a server asks for more than 3 s, whoq now reports the rate limit without retrying; both lookups take about 1 s.
+- **IANA's WHOIS-server answers are cached on disk for a week.** Before each port-43 lookup whoq asked `whois.iana.org` which server handles the TLD, a ~285 ms round trip GNU whois skips with its built-in table. On domains answered by one port-43 server, whoq's median went from 0.64 s to 0.24 s; side by side on 30 of them, whoq and GNU whois both took 0.18 s.
+
+GNU whois is still faster where whoq asks the registrar too (`.com`, `.net` and most gTLDs): whoq makes two HTTPS requests in a row, each with its own TLS handshake, and some registrar RDAP servers are slow to connect (MarkMonitor takes about 0.9 s from here).
+
 ### Where whoq still loses
 
 - **Origin ASN for IPs: 0%.** `whoq <ip>` does not report the announcing AS; ipwhois gets 96% and GNU whois prints it 63% of the time. (`whoq bulk` and `--dns` look ASNs up from Team Cymru; plain lookups don't.) This accounts for nearly all of whoq's remaining misses.
 - **`gov.sg`** is rejected as a public suffix, although the registry has it registered.
 - **IPs overall:** ipwhois is the most complete IP tool here; whoq ties the others on organization, country and CIDR.
-- **Speed:** whoq's median lookup takes about 0.5 s, against 0.33 s for GNU whois, which does less work per query (no registrar step, no normalization). Its worst cases are slow RDAP servers (`php.net`, `archive.org` at about 21 s).
+- **Speed on a typical lookup:** GNU whois's median is 0.24 s against whoq's 0.41 s, mostly from whoq's second request to the registrar (see [Speed](#speed)).
 
 ### Agent cost
 
