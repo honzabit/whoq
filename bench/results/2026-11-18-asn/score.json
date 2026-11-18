@@ -1,0 +1,583 @@
+{
+ "overall": {
+  "whoq": {
+   "in output": [
+    152,
+    152
+   ],
+   "as field": [
+    152,
+    152
+   ]
+  },
+  "whoq-brief": {
+   "in output": [
+    152,
+    152
+   ],
+   "as field": [
+    152,
+    152
+   ]
+  }
+ },
+ "by_category": {
+  "whoq": {
+   "in output": {
+    "ipv4-arin": [
+     30,
+     30
+    ],
+    "ipv4-ripe": [
+     38,
+     38
+    ],
+    "ipv4-apnic": [
+     29,
+     29
+    ],
+    "ipv4-lacnic": [
+     18,
+     18
+    ],
+    "ipv4-afrinic": [
+     16,
+     16
+    ],
+    "ipv6-arin": [
+     6,
+     6
+    ],
+    "ipv6-ripe": [
+     4,
+     4
+    ],
+    "ipv6-apnic": [
+     3,
+     3
+    ],
+    "ipv6-lacnic": [
+     4,
+     4
+    ],
+    "ipv6-afrinic": [
+     4,
+     4
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "fresh-rdap": [
+     0,
+     0
+    ],
+    "fresh-unregistered": [
+     0,
+     0
+    ],
+    "fresh-whois-only": [
+     0,
+     0
+    ],
+    "fresh2-unregistered": [
+     0,
+     0
+    ],
+    "fresh2-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "holdout-unregistered": [
+     0,
+     0
+    ],
+    "holdout-whois-only": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "ipv4-arin": [
+     30,
+     30
+    ],
+    "ipv4-ripe": [
+     38,
+     38
+    ],
+    "ipv4-apnic": [
+     29,
+     29
+    ],
+    "ipv4-lacnic": [
+     18,
+     18
+    ],
+    "ipv4-afrinic": [
+     16,
+     16
+    ],
+    "ipv6-arin": [
+     6,
+     6
+    ],
+    "ipv6-ripe": [
+     4,
+     4
+    ],
+    "ipv6-apnic": [
+     3,
+     3
+    ],
+    "ipv6-lacnic": [
+     4,
+     4
+    ],
+    "ipv6-afrinic": [
+     4,
+     4
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "fresh-rdap": [
+     0,
+     0
+    ],
+    "fresh-unregistered": [
+     0,
+     0
+    ],
+    "fresh-whois-only": [
+     0,
+     0
+    ],
+    "fresh2-unregistered": [
+     0,
+     0
+    ],
+    "fresh2-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "holdout-unregistered": [
+     0,
+     0
+    ],
+    "holdout-whois-only": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ]
+   }
+  },
+  "whoq-brief": {
+   "in output": {
+    "ipv4-arin": [
+     30,
+     30
+    ],
+    "ipv4-ripe": [
+     38,
+     38
+    ],
+    "ipv4-apnic": [
+     29,
+     29
+    ],
+    "ipv4-lacnic": [
+     18,
+     18
+    ],
+    "ipv4-afrinic": [
+     16,
+     16
+    ],
+    "ipv6-arin": [
+     6,
+     6
+    ],
+    "ipv6-ripe": [
+     4,
+     4
+    ],
+    "ipv6-apnic": [
+     3,
+     3
+    ],
+    "ipv6-lacnic": [
+     4,
+     4
+    ],
+    "ipv6-afrinic": [
+     4,
+     4
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "fresh-rdap": [
+     0,
+     0
+    ],
+    "fresh-unregistered": [
+     0,
+     0
+    ],
+    "fresh-whois-only": [
+     0,
+     0
+    ],
+    "fresh2-unregistered": [
+     0,
+     0
+    ],
+    "fresh2-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "holdout-unregistered": [
+     0,
+     0
+    ],
+    "holdout-whois-only": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "ipv4-arin": [
+     30,
+     30
+    ],
+    "ipv4-ripe": [
+     38,
+     38
+    ],
+    "ipv4-apnic": [
+     29,
+     29
+    ],
+    "ipv4-lacnic": [
+     18,
+     18
+    ],
+    "ipv4-afrinic": [
+     16,
+     16
+    ],
+    "ipv6-arin": [
+     6,
+     6
+    ],
+    "ipv6-ripe": [
+     4,
+     4
+    ],
+    "ipv6-apnic": [
+     3,
+     3
+    ],
+    "ipv6-lacnic": [
+     4,
+     4
+    ],
+    "ipv6-afrinic": [
+     4,
+     4
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "fresh-rdap": [
+     0,
+     0
+    ],
+    "fresh-unregistered": [
+     0,
+     0
+    ],
+    "fresh-whois-only": [
+     0,
+     0
+    ],
+    "fresh2-unregistered": [
+     0,
+     0
+    ],
+    "fresh2-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "holdout-unregistered": [
+     0,
+     0
+    ],
+    "holdout-whois-only": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ]
+   }
+  }
+ },
+ "by_field": {
+  "whoq": {
+   "in output": {
+    "org": [
+     28,
+     28
+    ],
+    "cidr": [
+     46,
+     46
+    ],
+    "asn": [
+     46,
+     46
+    ],
+    "country": [
+     32,
+     32
+    ],
+    "status": [
+     0,
+     0
+    ],
+    "registrar": [
+     0,
+     0
+    ],
+    "created": [
+     0,
+     0
+    ],
+    "expires": [
+     0,
+     0
+    ],
+    "nameservers": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "org": [
+     28,
+     28
+    ],
+    "cidr": [
+     46,
+     46
+    ],
+    "asn": [
+     46,
+     46
+    ],
+    "country": [
+     32,
+     32
+    ],
+    "status": [
+     0,
+     0
+    ],
+    "registrar": [
+     0,
+     0
+    ],
+    "created": [
+     0,
+     0
+    ],
+    "expires": [
+     0,
+     0
+    ],
+    "nameservers": [
+     0,
+     0
+    ]
+   }
+  },
+  "whoq-brief": {
+   "in output": {
+    "org": [
+     28,
+     28
+    ],
+    "cidr": [
+     46,
+     46
+    ],
+    "asn": [
+     46,
+     46
+    ],
+    "country": [
+     32,
+     32
+    ],
+    "status": [
+     0,
+     0
+    ],
+    "registrar": [
+     0,
+     0
+    ],
+    "created": [
+     0,
+     0
+    ],
+    "expires": [
+     0,
+     0
+    ],
+    "nameservers": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "org": [
+     28,
+     28
+    ],
+    "cidr": [
+     46,
+     46
+    ],
+    "asn": [
+     46,
+     46
+    ],
+    "country": [
+     32,
+     32
+    ],
+    "status": [
+     0,
+     0
+    ],
+    "registrar": [
+     0,
+     0
+    ],
+    "created": [
+     0,
+     0
+    ],
+    "expires": [
+     0,
+     0
+    ],
+    "nameservers": [
+     0,
+     0
+    ]
+   }
+  }
+ },
+ "misses": {
+  "whoq": []
+ }
+}

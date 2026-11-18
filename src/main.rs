@@ -257,6 +257,10 @@ struct LookupArgs {
     /// Unlike --dns and --mail, this CONNECTS TO THE TARGET, which can see it.
     #[arg(long)]
     tls: bool,
+    /// Add the origin AS for IPs: the network announcing the address in BGP, its name and
+    /// prefix (Team Cymru). Routing data, not registration data. Never contacts the target.
+    #[arg(long)]
+    asn: bool,
     /// Parallel lookups
     #[arg(short = 'j', long, default_value_t = 8)]
     concurrency: usize,
@@ -342,7 +346,7 @@ async fn run_watch(w: WatchArgs) -> i32 {
         use_cache: false,
         raw: false,
         force_whois: false,
-        live: Live { dns: w.dns, mail: w.mail, tls: w.tls },
+        live: Live { dns: w.dns, mail: w.mail, tls: w.tls, origin: false },
     };
     let ctx = Ctx::new(opts).unwrap_or_else(|e| fatal(!pretty, "init", &e.to_string()));
     let style = output::Style { color: tty && !w.no_color && std::env::var_os("NO_COLOR").is_none() };
@@ -727,7 +731,12 @@ async fn run(a: LookupArgs) -> i32 {
         fatal(machine, "usage", "no queries given (try `whoq example.com` or `whoq --help`)");
     }
 
-    let ctx = match Ctx::new(options(&a.common, a.raw, a.whois, Live { dns: a.dns, mail: a.mail, tls: a.tls })) {
+    let ctx = match Ctx::new(options(
+        &a.common,
+        a.raw,
+        a.whois,
+        Live { dns: a.dns, mail: a.mail, tls: a.tls, origin: a.asn },
+    )) {
         Ok(c) => c,
         Err(e) => fatal(machine, "init", &e.to_string()),
     };

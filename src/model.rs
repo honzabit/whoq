@@ -214,6 +214,24 @@ pub struct Hosting {
     pub ips: Vec<String>,
 }
 
+/// The AS announcing an IP in BGP, from Team Cymru (`--asn`). This is routing data: it says whose
+/// network carries the address today, which can differ from who holds the registration.
+#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema, PartialEq)]
+pub struct Origin {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub asn: Option<u32>,
+    /// AS name as Cymru reports it, without the trailing country code.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The announced BGP prefix covering the IP.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub prefix: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub country: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
+}
+
 /// Live DNS for a domain (`--dns`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema, PartialEq)]
 pub struct Dns {
@@ -378,6 +396,9 @@ pub struct Record {
     /// Reverse DNS (`--dns`, IPs).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub rdns: Option<Rdns>,
+    /// Origin AS announcing the IP in BGP (`--asn`, IPs). Not cached.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub origin: Option<Origin>,
     /// Certificate presented by the host (`--tls`). Not cached.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub tls: Option<Tls>,
@@ -420,6 +441,7 @@ impl Record {
             dns: None,
             mail: None,
             rdns: None,
+            origin: None,
             tls: None,
             signals: None,
             remarks: vec![],

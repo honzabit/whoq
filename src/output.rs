@@ -57,6 +57,9 @@ pub fn brief_fields(rec: &Record) -> Vec<String> {
     if rec.rdns.is_some() {
         v.push("rdns".into());
     }
+    if rec.origin.is_some() {
+        v.extend(["origin.asn", "origin.name", "origin.prefix", "origin.error"].iter().map(|s| s.to_string()));
+    }
     v
 }
 
@@ -186,6 +189,17 @@ pub fn pretty(rec: &Record, st: &Style) -> String {
     }
     if let Some(a) = &rec.abuse_email {
         row("Abuse", a.clone());
+    }
+    if let Some(o) = &rec.origin {
+        let v = match (&o.error, o.asn) {
+            (Some(e), _) => st.dim(e),
+            (None, Some(n)) => {
+                let tag = [o.prefix.clone(), o.country.clone()].into_iter().flatten().collect::<Vec<_>>().join(", ");
+                format!("AS{n} {} {}", o.name.clone().unwrap_or_default(), st.dim(&format!("({tag})")))
+            }
+            _ => String::new(),
+        };
+        row("Origin AS", v);
     }
     if let Some(r) = &rec.rdns {
         let v = match (r.ptr.first(), r.verified, &r.error) {

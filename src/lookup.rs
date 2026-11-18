@@ -43,9 +43,17 @@ pub async fn lookup(ctx: &Ctx, input: &str) -> Record {
 /// (zero = always fetch fresh; a fresh result still refreshes the cache), and add the live
 /// checks `live` asks for. Live data is never cached with the record: it changes on its own schedule.
 pub async fn lookup_with(ctx: &Ctx, input: &str, max_age: std::time::Duration, live: Live) -> Record {
-    let mut rec = registration(ctx, input, max_age).await;
+    let q = query::parse(input).ok();
+    // The origin AS doesn't depend on the registration data, so ask Cymru while RDAP answers.
+    let origin_pass = async {
+        match &q {
+            Some(Query::Ip(ip)) if live.origin => Some(crate::dns::origin(ctx, *ip).await),
+            _ => None,
+        }
+    };
+    let (mut rec, origin) = tokio::join!(registration(ctx, input, max_age), origin_pass);
+    rec.origin = origin;
     if live.any() {
-        let q = query::parse(input).ok();
         let checkable = match &q {
             Some(Query::Domain { .. }) => rec.result != Outcome::Available,
             Some(Query::Ip(_)) => true,

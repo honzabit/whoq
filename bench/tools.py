@@ -60,7 +60,7 @@ def whoq_fields(out: str) -> dict | None:
             "cidr": net.get("cidr") or None,
             "country": net.get("country"),
             "net_name": net.get("name"),
-            "asn": (r.get("asn") or {}).get("start"),
+            "asn": (r.get("origin") or {}).get("asn") or (r.get("asn") or {}).get("start"),
         }
     return {
         "status": result,
@@ -85,7 +85,7 @@ def whoq_brief_fields(out: str) -> dict | None:
         "cidr": r.get("network.cidr"),
         "country": r.get("network.country"),
         "net_name": r.get("network.name"),
-        "asn": None,
+        "asn": r.get("origin.asn"),
     }
 
 
@@ -97,10 +97,10 @@ def py_fields(out: str) -> dict | None:
 
 
 TOOLS = [
-    Tool("whoq", f"whoq --json ({WHOQ})", ("domain", "ip"),
-         lambda q: [WHOQ, "--json", "--no-cache", q], [WHOQ, "--version"], whoq_fields, WHOQ),
-    Tool("whoq-brief", "whoq --brief", ("domain", "ip"),
-         lambda q: [WHOQ, "--brief", "--no-cache", q], [WHOQ, "--version"], whoq_brief_fields, WHOQ),
+    Tool("whoq", f"whoq --json --asn ({WHOQ})", ("domain", "ip"),
+         lambda q: [WHOQ, "--json", "--no-cache", "--asn", q], [WHOQ, "--version"], whoq_fields, WHOQ),
+    Tool("whoq-brief", "whoq --brief --asn", ("domain", "ip"),
+         lambda q: [WHOQ, "--brief", "--no-cache", "--asn", q], [WHOQ, "--version"], whoq_brief_fields, WHOQ),
     Tool("whois-gnu", "GNU whois (Debian/Linux default)", ("domain", "ip"),
          lambda q: [WHOIS_GNU, q], [WHOIS_GNU, "--version"], None, WHOIS_GNU),
     Tool("whois-macos", "macOS /usr/bin/whois", ("domain", "ip"),

@@ -17,7 +17,7 @@ $ whoq google.com 8.8.8.8 AS13335 https://www.bbc.co.uk/news
 | exit 0 no matter what           | **meaningful exit codes**: 0 found · 1 failed · 2 usage · 10 available/not found |
 | raw text gets echoed to your terminal | **sanitized**: ANSI escapes, control chars and bidi overrides stripped, lengths capped |
 | `www.foo.co.uk` → "no match"    | takes URLs and emails and reduces them to the registrable domain (Public Suffix List, ICANN section) |
-| —                               | **`--dns`**: hosting network, DNS provider, CAA and forward-confirmed reverse DNS for IPs; **`--mail`**: MX provider, SPF/DMARC/DKIM; **`--tls`**: certificate issuer, expiry, validity |
+| —                               | **`--dns`**: hosting network, DNS provider, CAA and forward-confirmed reverse DNS for IPs; **`--mail`**: MX provider, SPF/DMARC/DKIM; **`--tls`**: certificate issuer, expiry, validity; **`--asn`**: the AS announcing an IP in BGP |
 | —                               | **MCP server** built in: `whoq mcp`                                |
 | —                               | disk cache (1h results, 24h bootstrap), works off stale bootstrap data when IANA is unreachable |
 
@@ -37,6 +37,7 @@ whoq --max-age 0 example.com          # always fetch fresh (still refreshes the 
 whoq --dns example.com 8.8.8.8        # + hosting, DNS provider, CAA, reverse DNS
 whoq --mail example.com               # + MX provider, SPF, DMARC, DKIM
 whoq --tls https://shop.example.com   # + certificate: issuer, names, expiry, valid? (connects to the host)
+whoq --asn 8.8.8.8                    # + origin AS: who announces the IP in BGP, and the prefix
 whoq schema                           # JSON Schema of the output
 ```
 
@@ -69,6 +70,7 @@ $ whoq --dns 66.249.66.1
 - **`--dns` on domains** adds `dns`: A/AAAA, the networks announcing them via Team Cymru, NS and a recognized DNS provider, CAA. About 5 queries.
 - **`--mail` on domains** adds `mail`: MX and a recognized provider, null MX, SPF, DMARC, DKIM selectors found among common names, MTA-STS, TLS-RPT, BIMI. About 25 queries, most of them DKIM probes. If the name doesn't exist in DNS, `mail.error` says so.
 - **`--dns` on IPs** adds `rdns`: PTR names plus `verified`, meaning a PTR name resolves back to the IP. That is how real crawlers are told from fakes: anyone can set a PTR that says `googlebot.com`, only Google can make it resolve back.
+- **`--asn` on IPs** adds `origin`: the AS announcing the address in BGP, its name, the announced prefix and country, from Team Cymru (one query). This is routing data: it says whose network carries the address today, which can differ from the registered holder in `network`. Private and reserved addresses are skipped. Also available as `asn` in the MCP `lookup` tool.
 - **New signals**: `resolves` and `parked` (nameservers of a parking service) from `--dns`; `accepts_mail` and `spoofable` (no DMARC, or `p=none`, so mail forging the domain is not rejected) from `--mail`.
 - **DKIM is best effort**: selectors can't be listed, so whoq probes about 20 common ones. An empty list doesn't mean no DKIM.
 - **It never connects to the target's own servers.** Queries go to your resolver (and Team Cymru for hosting), so investigating a phishing domain doesn't tip it off.

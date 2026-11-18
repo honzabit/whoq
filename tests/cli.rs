@@ -142,6 +142,38 @@ fn falls_back_to_port_43_for_tlds_without_rdap() {
 }
 
 #[test]
+fn asn_flag_adds_the_origin_as() {
+    let env = Env::new("origin");
+    env.http.route("/rir/ip/8.8.8.8", 200, &env.fixture("ip_network.json"));
+
+    let plain = json(&env.run(&["--json", "--no-cache", "8.8.8.8"], None));
+    assert!(plain.get("origin").is_none(), "no origin without --asn");
+    assert!(env.whois.all().is_empty(), "Cymru not asked without --asn");
+
+    let out = env.run(&["--json", "--no-cache", "--asn", "8.8.8.8"], None);
+    assert_eq!(code(&out), 0, "stderr: {}", String::from_utf8_lossy(&out.stderr));
+    let v = json(&out);
+    assert_eq!(v["result"], "found");
+    assert_eq!(
+        v["origin"],
+        json!({"asn": 15169, "name": "GOOGLE - Google LLC", "prefix": "8.8.8.0/24", "country": "US"})
+    );
+
+    let brief = json(&env.run(&["--json", "--brief", "--asn", "8.8.8.8"], None));
+    assert_eq!(brief["origin.asn"], 15169);
+    assert_eq!(brief["origin.prefix"], "8.8.8.0/24");
+}
+
+#[test]
+fn asn_flag_skips_private_addresses() {
+    let env = Env::new("origin-private");
+    env.http.route("/rir/ip/10.1.2.3", 200, &env.fixture("ip_network.json"));
+    let v = json(&env.run(&["--json", "--asn", "10.1.2.3"], None));
+    assert!(v["origin"]["error"].as_str().unwrap().contains("private"), "{v}");
+    assert!(env.whois.all().is_empty(), "a private address is never sent to Cymru");
+}
+
+#[test]
 fn ip_lookup_uses_rir_rdap() {
     let env = Env::new("ip");
     env.http.route("/rir/ip/198.51.100.7", 200, &env.fixture("ip_network.json"));

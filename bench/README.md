@@ -171,7 +171,7 @@ Re-run of whoq alone on 2026-11-18, with the word classifier and the speed fixes
 | OpenRDAP | 69% | 21% | 1% | – |
 | whoisit | 65% | 18% | 1% | 0% |
 
-Base domains alone are at 98% (415/424). What whoq still misses: origin ASN on IPs (see below), `gov.sg`, `.sk`'s registrar handle, the four fresh2 layouts above, and `.pt`, whose WHOIS server refused connections during the run (`sapo.pt`, `publico.pt`, `rtp.pt` and the unregistered `.pt` name). `.ws` was back up, so both `.ws` names are now correct.
+Base domains alone are at 98% (415/424). What whoq still misses: origin ASN on IPs (fixed since with `--asn`, see below), `gov.sg`, `.sk`'s registrar handle, the four fresh2 layouts above, and `.pt`, whose WHOIS server refused connections during the run (`sapo.pt`, `publico.pt`, `rtp.pt` and the unregistered `.pt` name). `.ws` was back up, so both `.ws` names are now correct.
 
 ### Speed
 
@@ -193,9 +193,9 @@ GNU whois is still faster where whoq asks the registrar too (`.com`, `.net` and 
 
 ### Where whoq still loses
 
-- **Origin ASN for IPs: 0%.** `whoq <ip>` does not report the announcing AS; ipwhois gets 96% and GNU whois prints it 63% of the time. (`whoq bulk` and `--dns` look ASNs up from Team Cymru; plain lookups don't.) This accounts for nearly all of whoq's remaining misses.
+- **Origin ASN for IPs: 0% by default.** A plain `whoq <ip>` reports the registration, not the routing, so it has no announcing AS; ipwhois gets 96% and GNU whois prints it 63% of the time. **`whoq --asn <ip>`** adds it from Team Cymru, asked while RDAP answers: on the 46 IPs it scores **100% on every IP field, ASN included**, with the median lookup unchanged at 0.41 s ([tables](results/2026-11-18-asn/correctness.md)). The benchmark now runs whoq with `--asn`.
 - **`gov.sg`** is rejected as a public suffix, although the registry has it registered.
-- **IPs overall:** ipwhois is the most complete IP tool here; whoq ties the others on organization, country and CIDR.
+- **IPs overall:** without `--asn`, ipwhois is the most complete IP tool here; whoq ties the others on organization, country and CIDR.
 - **Speed on a typical lookup:** GNU whois's median is 0.24 s against whoq's 0.41 s, mostly from whoq's second request to the registrar (see [Speed](#speed)).
 
 ### Agent cost

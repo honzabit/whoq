@@ -58,11 +58,13 @@ pub struct Live {
     pub mail: bool,
     /// The certificate the host presents. Unlike the others, this connects to the target.
     pub tls: bool,
+    /// The AS announcing an IP in BGP (Team Cymru). Routing data, not registration data.
+    pub origin: bool,
 }
 
 impl Live {
     pub fn any(self) -> bool {
-        self.dns || self.mail || self.tls
+        self.dns || self.mail || self.tls || self.origin
     }
 }
 

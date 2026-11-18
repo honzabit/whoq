@@ -396,6 +396,30 @@ fn strip_cc(name: &str) -> String {
     }
 }
 
+/// The AS announcing `ip` in BGP (`--asn`). Private and reserved addresses are never announced.
+pub async fn origin(ctx: &Ctx, ip: IpAddr) -> crate::model::Origin {
+    use crate::model::Origin;
+    if crate::bulk::is_private(&ip) {
+        return Origin {
+            error: Some("private or reserved address; not announced in BGP".into()),
+            ..Default::default()
+        };
+    }
+    match crate::bulk::cymru_lookup(ctx, &[ip]).await {
+        Ok(answers) => match answers.into_iter().find(|(a, _)| *a == ip).map(|(_, i)| i) {
+            Some(i) if i.asn.is_some() => Origin {
+                asn: i.asn,
+                name: i.as_name.as_deref().map(strip_cc),
+                prefix: i.prefix,
+                country: i.country,
+                error: None,
+            },
+            _ => Origin { error: Some("not announced in BGP".into()), ..Default::default() },
+        },
+        Err(e) => Origin { error: Some(e.message().to_string()), ..Default::default() },
+    }
+}
+
 async fn hosting(ctx: &Ctx, ips: &[String]) -> Vec<Hosting> {
     let ips: Vec<IpAddr> =
         ips.iter().filter_map(|s| s.parse().ok()).filter(|ip| !crate::bulk::is_private(ip)).take(16).collect();
