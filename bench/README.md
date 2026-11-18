@@ -153,17 +153,18 @@ On every earlier set (replaying the saved registry replies offline, plus live lo
 | Unregistered names correct | 22/24 | 23/24 | 21/24 | 0/24 |
 | Unregistered names reported as **registered** | **0** | | | |
 
-Of whoq's 13 misses, 7 were timeouts: `.sa` (the connect bug above, fixed after the run; both `.sa` names are now correct) and `.ws`, whose server was down for GNU whois too. The other 6 are layouts the word rules don't cover yet: nameservers under a `DNS servers:` heading (`.am`), `Name Server:ns1.google.com.` with no space after the colon (`.im`), and `Registered on 30th April 2003` as a sentence (`.gg`, `.je`).
+Of whoq's 13 misses, 7 were timeouts: `.sa` (the connect bug above, fixed after the run; both `.sa` names are now correct) and `.ws`, whose server was down for GNU whois too. The other 6 were layouts the word rules didn't cover yet, all read since: nameservers under a `DNS servers:` heading (`.am`), `Name Server:ns1.google.com.` with no space after the colon (`.im`), and `Registered on 30th April 2003` as a sentence (`.gg`, `.je`).
 
 GNU whois scores higher because the scorer only checks whether the answer appears somewhere in its raw text; it needs no parsing to "pass". As a tool that returns named fields, whoq is ahead of python-whois and whoisit on every set.
 
-### whoq 0.1.2 on every set
+### whoq on every set
 
-Re-run of whoq alone on 2026-11-18, with the word classifier and the speed fixes below ([tables](results/2026-11-18-cache/correctness.md)). The other tools' numbers are from their 2026-11-17 runs. "Base" includes the IPs, as in the first table.
+Re-runs of whoq alone. The latest, on 2026-11-19 ([tables](results/2026-11-19-layouts/correctness.md)), adds `--asn` and the layout fixes for `.am`, `.im`, `.gg`, `.je` and `.sk`, and looks up `gov.sg`; these are on master, after 0.1.4. The 0.1.2 run on 2026-11-18 ([tables](results/2026-11-18-cache/correctness.md)) has the word classifier and the speed fixes below. The other tools' numbers are from their 2026-11-17 runs. "Base" includes the IPs, as in the first table.
 
 | | base | fresh | holdout | fresh2 |
 |---|---|---|---|---|
-| **whoq 0.1.2** | **91%** (524/576) | 94% (97/103) | **97%** (145/149) | **97%** (118/122) |
+| **whoq (master, 2026-11-19)** | **99%** (572/576) | 95% (98/103) | **97%** (145/149) | 95% (116/122) |
+| whoq 0.1.2 | 91% (524/576) | 94% (97/103) | **97%** (145/149) | **97%** (118/122) |
 | whoq 0.1.1 (first runs) | 87% | 89% | 96% | 89% |
 | GNU whois (in output) | 83% | **97%** | 93% | 93% |
 | macOS whois | 82% | 94% | 90% | – |
@@ -171,7 +172,9 @@ Re-run of whoq alone on 2026-11-18, with the word classifier and the speed fixes
 | OpenRDAP | 69% | 21% | 1% | – |
 | whoisit | 65% | 18% | 1% | 0% |
 
-Base domains alone are at 98% (415/424). What whoq still misses: origin ASN on IPs (fixed since with `--asn`, see below), `gov.sg`, `.sk`'s registrar handle, the four fresh2 layouts above, and `.pt`, whose WHOIS server refused connections during the run (`sapo.pt`, `publico.pt`, `rtp.pt` and the unregistered `.pt` name). `.ws` was back up, so both `.ws` names are now correct.
+Every miss in the latest run is a registry that didn't answer, not a layout whoq can't read. `.pt` refused connections again: `sapo.pt` (all 4 base misses), `publico.pt` (all 4 holdout misses), and `rtp.pt` plus the unregistered `.pt` name (all 5 fresh misses). `.ws` timed out: `google.ws` and the unregistered `.ws` name (all 6 fresh2 misses). `.ws` was up for the 0.1.2 run, which is why fresh2 reads lower now. Over all four sets, whoq gets 931 of 950 fields (98%); the median lookup took 0.35 s.
+
+On 2026-11-18, 0.1.2 also missed origin ASN on IPs (now `--asn`, below), `gov.sg`, `.sk`'s registrar handle and the four fresh2 layouts above; all are fixed.
 
 ### Speed
 
@@ -194,7 +197,6 @@ GNU whois is still faster where whoq asks the registrar too (`.com`, `.net` and 
 ### Where whoq still loses
 
 - **Origin ASN for IPs: 0% by default.** A plain `whoq <ip>` reports the registration, not the routing, so it has no announcing AS; ipwhois gets 96% and GNU whois prints it 63% of the time. **`whoq --asn <ip>`** adds it from Team Cymru, asked while RDAP answers: on the 46 IPs it scores **100% on every IP field, ASN included**, with the median lookup unchanged at 0.41 s ([tables](results/2026-11-18-asn/correctness.md)). The benchmark now runs whoq with `--asn`.
-- **`gov.sg`** is rejected as a public suffix, although the registry has it registered.
 - **IPs overall:** without `--asn`, ipwhois is the most complete IP tool here; whoq ties the others on organization, country and CIDR.
 - **Speed on a typical lookup:** GNU whois's median is 0.24 s against whoq's 0.41 s, mostly from whoq's second request to the registrar (see [Speed](#speed)).
 

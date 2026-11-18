@@ -2,12 +2,12 @@
  "overall": {
   "whoq": {
    "in output": [
-    1856,
-    1900
+    931,
+    950
    ],
    "as field": [
-    1856,
-    1900
+    931,
+    950
    ]
   }
  },
@@ -15,198 +15,198 @@
   "whoq": {
    "in output": {
     "gtld": [
-     200,
-     200
+     100,
+     100
     ],
     "ngtld": [
-     148,
-     148
+     74,
+     74
     ],
     "cctld-rdap": [
-     204,
-     204
+     102,
+     102
     ],
     "cctld-whois-only": [
-     196,
-     214
+     103,
+     107
     ],
     "idn": [
+     9,
+     9
+    ],
+    "unregistered": [
+     10,
+     10
+    ],
+    "holdout-whois-only": [
+     135,
+     139
+    ],
+    "holdout-unregistered": [
+     10,
+     10
+    ],
+    "fresh-whois-only": [
+     62,
+     66
+    ],
+    "fresh-rdap": [
+     17,
+     17
+    ],
+    "fresh-unregistered": [
+     19,
+     20
+    ],
+    "fresh2-whois-only": [
+     93,
+     98
+    ],
+    "fresh2-unregistered": [
+     23,
+     24
+    ],
+    "subdomain": [
+     22,
+     22
+    ],
+    "ipv4-arin": [
+     30,
+     30
+    ],
+    "ipv4-ripe": [
+     38,
+     38
+    ],
+    "ipv4-apnic": [
+     29,
+     29
+    ],
+    "ipv4-lacnic": [
      18,
      18
     ],
-    "unregistered": [
-     20,
-     20
-    ],
-    "holdout-whois-only": [
-     270,
-     278
-    ],
-    "holdout-unregistered": [
-     20,
-     20
-    ],
-    "fresh-whois-only": [
-     124,
-     132
-    ],
-    "fresh-rdap": [
-     34,
-     34
-    ],
-    "fresh-unregistered": [
-     38,
-     40
-    ],
-    "fresh2-whois-only": [
-     190,
-     196
-    ],
-    "fresh2-unregistered": [
-     46,
-     48
-    ],
-    "subdomain": [
-     44,
-     44
-    ],
-    "ipv4-arin": [
-     60,
-     60
-    ],
-    "ipv4-ripe": [
-     76,
-     76
-    ],
-    "ipv4-apnic": [
-     58,
-     58
-    ],
-    "ipv4-lacnic": [
-     36,
-     36
-    ],
     "ipv4-afrinic": [
-     32,
-     32
+     16,
+     16
     ],
     "ipv6-arin": [
-     12,
-     12
-    ],
-    "ipv6-ripe": [
-     8,
-     8
-    ],
-    "ipv6-apnic": [
      6,
      6
     ],
+    "ipv6-ripe": [
+     4,
+     4
+    ],
+    "ipv6-apnic": [
+     3,
+     3
+    ],
     "ipv6-lacnic": [
-     8,
-     8
+     4,
+     4
     ],
     "ipv6-afrinic": [
-     8,
-     8
+     4,
+     4
     ]
    },
    "as field": {
     "gtld": [
-     200,
-     200
+     100,
+     100
     ],
     "ngtld": [
-     148,
-     148
+     74,
+     74
     ],
     "cctld-rdap": [
-     204,
-     204
+     102,
+     102
     ],
     "cctld-whois-only": [
-     196,
-     214
+     103,
+     107
     ],
     "idn": [
+     9,
+     9
+    ],
+    "unregistered": [
+     10,
+     10
+    ],
+    "holdout-whois-only": [
+     135,
+     139
+    ],
+    "holdout-unregistered": [
+     10,
+     10
+    ],
+    "fresh-whois-only": [
+     62,
+     66
+    ],
+    "fresh-rdap": [
+     17,
+     17
+    ],
+    "fresh-unregistered": [
+     19,
+     20
+    ],
+    "fresh2-whois-only": [
+     93,
+     98
+    ],
+    "fresh2-unregistered": [
+     23,
+     24
+    ],
+    "subdomain": [
+     22,
+     22
+    ],
+    "ipv4-arin": [
+     30,
+     30
+    ],
+    "ipv4-ripe": [
+     38,
+     38
+    ],
+    "ipv4-apnic": [
+     29,
+     29
+    ],
+    "ipv4-lacnic": [
      18,
      18
     ],
-    "unregistered": [
-     20,
-     20
-    ],
-    "holdout-whois-only": [
-     270,
-     278
-    ],
-    "holdout-unregistered": [
-     20,
-     20
-    ],
-    "fresh-whois-only": [
-     124,
-     132
-    ],
-    "fresh-rdap": [
-     34,
-     34
-    ],
-    "fresh-unregistered": [
-     38,
-     40
-    ],
-    "fresh2-whois-only": [
-     190,
-     196
-    ],
-    "fresh2-unregistered": [
-     46,
-     48
-    ],
-    "subdomain": [
-     44,
-     44
-    ],
-    "ipv4-arin": [
-     60,
-     60
-    ],
-    "ipv4-ripe": [
-     76,
-     76
-    ],
-    "ipv4-apnic": [
-     58,
-     58
-    ],
-    "ipv4-lacnic": [
-     36,
-     36
-    ],
     "ipv4-afrinic": [
-     32,
-     32
+     16,
+     16
     ],
     "ipv6-arin": [
-     12,
-     12
-    ],
-    "ipv6-ripe": [
-     8,
-     8
-    ],
-    "ipv6-apnic": [
      6,
      6
     ],
+    "ipv6-ripe": [
+     4,
+     4
+    ],
+    "ipv6-apnic": [
+     3,
+     3
+    ],
     "ipv6-lacnic": [
-     8,
-     8
+     4,
+     4
     ],
     "ipv6-afrinic": [
-     8,
-     8
+     4,
+     4
     ]
    }
   }
@@ -215,78 +215,78 @@
   "whoq": {
    "in output": {
     "status": [
-     444,
-     458
+     223,
+     229
     ],
     "registrar": [
-     258,
-     262
+     130,
+     131
     ],
     "created": [
-     288,
-     296
+     144,
+     148
     ],
     "expires": [
-     248,
-     256
+     124,
+     128
     ],
     "nameservers": [
-     314,
-     324
+     158,
+     162
     ],
     "org": [
-     56,
-     56
+     28,
+     28
     ],
     "cidr": [
-     92,
-     92
+     46,
+     46
     ],
     "asn": [
-     92,
-     92
+     46,
+     46
     ],
     "country": [
-     64,
-     64
+     32,
+     32
     ]
    },
    "as field": {
     "status": [
-     444,
-     458
+     223,
+     229
     ],
     "registrar": [
-     258,
-     262
+     130,
+     131
     ],
     "created": [
-     288,
-     296
+     144,
+     148
     ],
     "expires": [
-     248,
-     256
+     124,
+     128
     ],
     "nameservers": [
-     314,
-     324
+     158,
+     162
     ],
     "org": [
-     56,
-     56
+     28,
+     28
     ],
     "cidr": [
-     92,
-     92
+     46,
+     46
     ],
     "asn": [
-     92,
-     92
+     46,
+     46
     ],
     "country": [
-     64,
-     64
+     32,
+     32
     ]
    }
   }
@@ -294,49 +294,6 @@
  "misses": {
   "whoq": [
    {
-    "id": "d-emol-cl",
-    "query": "emol.cl",
-    "field": "status",
-    "want": "registered",
-    "got": "error",
-    "exit": 0
-   },
-   {
-    "id": "d-emol-cl",
-    "query": "emol.cl",
-    "field": "registrar",
-    "want": "NIC Chile",
-    "got": null,
-    "exit": 0
-   },
-   {
-    "id": "d-emol-cl",
-    "query": "emol.cl",
-    "field": "created",
-    "want": "2002-11-12",
-    "got": null,
-    "exit": 0
-   },
-   {
-    "id": "d-emol-cl",
-    "query": "emol.cl",
-    "field": "expires",
-    "want": "2026-12-10",
-    "got": null,
-    "exit": 0
-   },
-   {
-    "id": "d-emol-cl",
-    "query": "emol.cl",
-    "field": "nameservers",
-    "want": [
-     "aragorn.ns.cloudflare.com",
-     "rose.ns.cloudflare.com"
-    ],
-    "got": null,
-    "exit": 0
-   },
-   {
     "id": "d-sapo-pt",
     "query": "sapo.pt",
     "field": "status",
@@ -455,222 +412,40 @@
     "exit": 1
    },
    {
-    "id": "d-google-qa",
-    "query": "google.qa",
+    "id": "d-google-ws",
+    "query": "google.ws",
     "field": "status",
     "want": "registered",
     "got": "error",
-    "exit": 0
+    "exit": 1
    },
    {
-    "id": "d-google-qa",
-    "query": "google.qa",
+    "id": "d-google-ws",
+    "query": "google.ws",
     "field": "registrar",
-    "want": "RoutEdge",
-    "got": null,
-    "exit": 0
-   },
-   {
-    "id": "d-google-qa",
-    "query": "google.qa",
-    "field": "nameservers",
-    "want": [
-     "ns1.google.com",
-     "ns2.google.com",
-     "ns3.google.com",
-     "ns4.google.com"
-    ],
-    "got": null,
-    "exit": 0
-   },
-   {
-    "id": "d-whoq-fresh2-m5x8c3v6-ws",
-    "query": "whoq-fresh2-m5x8c3v6.ws",
-    "field": "status",
-    "want": "available",
-    "got": "error",
-    "exit": 1
-   },
-   {
-    "id": "d-emol-cl",
-    "query": "emol.cl",
-    "field": "status",
-    "want": "registered",
-    "got": "error",
-    "exit": 1
-   },
-   {
-    "id": "d-emol-cl",
-    "query": "emol.cl",
-    "field": "registrar",
-    "want": "NIC Chile",
+    "want": "MarkMonitor Inc.",
     "got": null,
     "exit": 1
    },
    {
-    "id": "d-emol-cl",
-    "query": "emol.cl",
+    "id": "d-google-ws",
+    "query": "google.ws",
     "field": "created",
-    "want": "2002-11-12",
+    "want": "2002-03-03",
     "got": null,
     "exit": 1
    },
    {
-    "id": "d-emol-cl",
-    "query": "emol.cl",
+    "id": "d-google-ws",
+    "query": "google.ws",
     "field": "expires",
-    "want": "2026-12-10",
+    "want": "2027-03-04",
     "got": null,
     "exit": 1
    },
    {
-    "id": "d-emol-cl",
-    "query": "emol.cl",
-    "field": "nameservers",
-    "want": [
-     "aragorn.ns.cloudflare.com",
-     "rose.ns.cloudflare.com"
-    ],
-    "got": null,
-    "exit": 1
-   },
-   {
-    "id": "d-sapo-pt",
-    "query": "sapo.pt",
-    "field": "status",
-    "want": "registered",
-    "got": "error",
-    "exit": 1
-   },
-   {
-    "id": "d-sapo-pt",
-    "query": "sapo.pt",
-    "field": "created",
-    "want": "2002-10-30",
-    "got": null,
-    "exit": 1
-   },
-   {
-    "id": "d-sapo-pt",
-    "query": "sapo.pt",
-    "field": "expires",
-    "want": "2027-11-02",
-    "got": null,
-    "exit": 1
-   },
-   {
-    "id": "d-sapo-pt",
-    "query": "sapo.pt",
-    "field": "nameservers",
-    "want": [
-     "dns01.sapo.pt",
-     "dns02.sapo.pt",
-     "ns.sapo.pt",
-     "ns2.sapo.pt"
-    ],
-    "got": null,
-    "exit": 1
-   },
-   {
-    "id": "d-publico-pt",
-    "query": "publico.pt",
-    "field": "status",
-    "want": "registered",
-    "got": "error",
-    "exit": 1
-   },
-   {
-    "id": "d-publico-pt",
-    "query": "publico.pt",
-    "field": "created",
-    "want": "1995-05-11",
-    "got": null,
-    "exit": 1
-   },
-   {
-    "id": "d-publico-pt",
-    "query": "publico.pt",
-    "field": "expires",
-    "want": "2027-11-02",
-    "got": null,
-    "exit": 1
-   },
-   {
-    "id": "d-publico-pt",
-    "query": "publico.pt",
-    "field": "nameservers",
-    "want": [
-     "ns-112.awsdns-14.com",
-     "ns-1381.awsdns-44.org",
-     "ns-1801.awsdns-33.co.uk",
-     "ns-861.awsdns-43.net"
-    ],
-    "got": null,
-    "exit": 1
-   },
-   {
-    "id": "d-rtp-pt",
-    "query": "rtp.pt",
-    "field": "status",
-    "want": "registered",
-    "got": "error",
-    "exit": 1
-   },
-   {
-    "id": "d-rtp-pt",
-    "query": "rtp.pt",
-    "field": "created",
-    "want": "1993-05-28",
-    "got": null,
-    "exit": 1
-   },
-   {
-    "id": "d-rtp-pt",
-    "query": "rtp.pt",
-    "field": "expires",
-    "want": "2027-11-02",
-    "got": null,
-    "exit": 1
-   },
-   {
-    "id": "d-rtp-pt",
-    "query": "rtp.pt",
-    "field": "nameservers",
-    "want": [
-     "ns1.ptempresas.pt",
-     "ns10.ptempresas.pt",
-     "ns2.ptempresas.pt"
-    ],
-    "got": null,
-    "exit": 1
-   },
-   {
-    "id": "d-whoq-fresh-k4t9z1q7-pt",
-    "query": "whoq-fresh-k4t9z1q7.pt",
-    "field": "status",
-    "want": "available",
-    "got": "error",
-    "exit": 1
-   },
-   {
-    "id": "d-google-qa",
-    "query": "google.qa",
-    "field": "status",
-    "want": "registered",
-    "got": "error",
-    "exit": 1
-   },
-   {
-    "id": "d-google-qa",
-    "query": "google.qa",
-    "field": "registrar",
-    "want": "RoutEdge",
-    "got": null,
-    "exit": 1
-   },
-   {
-    "id": "d-google-qa",
-    "query": "google.qa",
+    "id": "d-google-ws",
+    "query": "google.ws",
     "field": "nameservers",
     "want": [
      "ns1.google.com",
