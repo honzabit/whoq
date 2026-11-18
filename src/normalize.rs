@@ -24,6 +24,7 @@ pub fn parse_date(s: &str) -> Option<String> {
             "%Y.%m.%d %H:%M:%S",
             "%Y/%m/%d %H:%M:%S",
             "%d.%m.%Y %H:%M:%S",
+            "%d/%m/%Y %H:%M:%S",
         ] {
             if let Ok(d) = NaiveDateTime::parse_from_str(s, f) {
                 return Some(d.and_utc());
@@ -45,6 +46,8 @@ pub fn parse_date(s: &str) -> Option<String> {
                 "%a %b %d %Y",
                 "%Y%m%d",
                 "%b %d %Y",
+                "%d %B %Y",
+                "%d %b %Y",
             ]
         {
             if let Ok(d) = NaiveDate::parse_from_str(s, f) {
@@ -61,7 +64,14 @@ pub fn parse_date(s: &str) -> Option<String> {
             let second = toks.next();
             second.and_then(|t| try_one(&format!("{first} {t}"))).or_else(|| try_one(first))
         })
-        .or_else(|| try_one(s.trim_end_matches(" UTC").trim_end_matches(" GMT")))?;
+        .or_else(|| try_one(s.trim_end_matches(" UTC").trim_end_matches(" GMT")))
+        .or_else(|| {
+            // Written out, as .gg and .je do: "30th April 2003 at 00:00:00.000"
+            let t: Vec<&str> = s.split_whitespace().take(3).collect();
+            let [day, month, year] = t[..] else { return None };
+            let day = day.trim_end_matches(|c: char| c.is_ascii_alphabetic());
+            try_one(&format!("{day} {month} {year}"))
+        })?;
     // Reject nonsense (some registries emit 0000-00-00 or year 1)
     if parsed.timestamp() < 0 {
         return None;

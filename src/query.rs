@@ -59,8 +59,13 @@ pub fn parse(input: &str) -> Result<Query, String> {
         return Err(format!("invalid domain name: {host}"));
     }
 
-    let registrable =
-        registrable_domain(&ascii).ok_or_else(|| format!("{ascii} is a public suffix, not a registrable domain"))?;
+    // A second-level suffix such as `gov.sg` or `co.uk` is itself held at the registry, which
+    // answers for it, so it's looked up as given. Only a bare TLD is refused.
+    let registrable = match registrable_domain(&ascii) {
+        Some(r) => r,
+        None if ascii.contains('.') => ascii.clone(),
+        None => return Err(format!("{ascii} is a top-level domain, not a registrable domain")),
+    };
     let (unicode, _) = idna::domain_to_unicode(&registrable);
     let unicode = (unicode != registrable).then_some(unicode);
     Ok(Query::Domain { ascii: registrable, unicode })
@@ -140,7 +145,11 @@ mod tests {
         assert_eq!(dom("alice@mail.example.net"), "example.net");
         assert_eq!(dom("foo.github.io"), "github.io");
         assert_eq!(dom("münchen.de"), "xn--mnchen-3ya.de");
-        assert!(parse("co.uk").is_err());
+        // A second-level suffix is held at the registry and looked up as given; a TLD is not.
+        assert_eq!(dom("gov.sg"), "gov.sg");
+        assert_eq!(dom("co.uk"), "co.uk");
+        assert_eq!(dom("www.gov.sg"), "www.gov.sg");
+        assert!(parse("uk").is_err());
         assert!(parse("localhost").is_err());
     }
 

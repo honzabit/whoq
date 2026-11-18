@@ -58,7 +58,11 @@ pub fn brief_fields(rec: &Record) -> Vec<String> {
         v.push("rdns".into());
     }
     if rec.origin.is_some() {
-        v.extend(["origin.asn", "origin.name", "origin.prefix", "origin.country", "origin.error"].iter().map(|s| s.to_string()));
+        v.extend(
+            ["origin.asn", "origin.name", "origin.prefix", "origin.country", "origin.error"]
+                .iter()
+                .map(|s| s.to_string()),
+        );
     }
     v
 }

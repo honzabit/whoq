@@ -108,8 +108,15 @@ fn split_kv(t: &str) -> Option<(String, String)> {
     {
         return Some((rest[..end].trim().to_lowercase(), rest[end + 1..].trim().to_string()));
     }
-    let (i, _) =
-        t.char_indices().find(|&(i, c)| c == ':' && t[i + 1..].chars().next().is_none_or(|n| n.is_whitespace()))?;
+    let spaced =
+        t.char_indices().find(|&(i, c)| c == ':' && t[i + 1..].chars().next().is_none_or(|n| n.is_whitespace()));
+    // .im writes "Name Server:ns1.google.com." with no space. Accept that only when the key is
+    // plain words and the value isn't a URL's "//", so "http://..." and "12:30" stay values.
+    let (i, _) = spaced.or_else(|| {
+        let i = t.find(':')?;
+        (t[..i].chars().all(|c| c.is_ascii_alphabetic() || c == ' ') && !t[i + 1..].starts_with('/'))
+            .then_some((i, ':'))
+    })?;
     if i == 0 || i >= 48 {
         return None;
     }
@@ -360,7 +367,7 @@ fn classify(key: &str) -> Option<Field> {
     if is("nserver")
         || starts("nameserver")
         || (is("name") && starts("server"))
-        || (is("domain") && is("servers"))
+        || ((is("domain") || is("dns")) && is("servers"))
         || joined.ends_with("host name")
         || joined.ends_with("hostname")
     {
@@ -440,14 +447,23 @@ pub fn parse(r: &mut Record, text: &str, redacted: &mut bool) -> Option<String> 
             *slot = val;
         }
     };
+    // .sk gives the registrar as a handle ("Registrar: PPRP-0001") with its name on the next line.
+    let mut registrar_handle = false;
     for p in pairs(text) {
-        let Some(field) = field_of(&p) else { continue };
-        let v = p.val;
+        let after_handle = std::mem::take(&mut registrar_handle);
+        if after_handle && p.section.is_none() && p.key == "name" && !p.val.is_empty() {
+            if let Some(g) = &mut reg.name {
+                *g = p.val.clone();
+            }
+            continue;
+        }
+        let Some((field, v)) = field_of(&p).map(|f| (f, p.val.clone())).or_else(|| dated_line(&p)) else { continue };
         match field {
             RegistrarName => {
                 let name = v.split(" [Tag").next().unwrap_or(&v).trim().to_string();
-                if !name.is_empty() {
-                    first(&mut reg.name, Some(name))
+                if !name.is_empty() && reg.name.is_none() {
+                    registrar_handle = is_handle(&name);
+                    reg.name = Some(name);
                 }
             }
             RegistrarIana => first(&mut reg.iana_id, Some(v)),
@@ -503,6 +519,26 @@ pub fn parse(r: &mut Record, text: &str, redacted: &mut bool) -> Option<String> 
         r.registrant = Some(who);
     }
     referral
+}
+
+/// A registry handle rather than a name: one word of capitals, digits and dashes with a digit
+/// in it ("PPRP-0001").
+fn is_handle(s: &str) -> bool {
+    s.chars().any(|c| c.is_ascii_digit())
+        && s.chars().all(|c| c.is_ascii_uppercase() || c.is_ascii_digit() || c == '-' || c == '_')
+}
+
+/// A date written as a sentence under a heading, as .gg and .je do under "Relevant dates":
+/// "Registered on 30th April 2003 at 00:00:00.000". Only date fields are read this way, and
+/// only when the date parses, so "Registry fee due on 30th April each year" is skipped.
+fn dated_line(p: &Pair) -> Option<(Field, String)> {
+    if p.section.is_some() {
+        return None;
+    }
+    let (key, rest) = p.val.split_once(" on ")?;
+    let field = classify(key).filter(|f| matches!(f, Field::Created | Field::Updated | Field::Expires))?;
+    parse_date(rest)?;
+    Some((field, rest.to_string()))
 }
 
 fn looks_registered(r: &Record) -> bool {
@@ -590,6 +626,55 @@ mod tests {
     }
 
     // Each fixture below is synthetic, shaped like one registry's port-43 layout.
+
+    #[test]
+    fn parses_indented_dns_servers_heading() {
+        // .am: everything indented, nameservers under "DNS servers:".
+        let r = parsed(
+            "   Domain name: example.am\n   Registrar:   exreg (Example Registrar LLC)\n   Registrant:\n      Example Holder\n      AM\n   DNS servers:\n      ns1.example.net\n      ns2.example.net\n   Registered:    2001-02-03\n   Expires:       2027-02-03\n",
+        );
+        assert_eq!(registrar(&r), "exreg (Example Registrar LLC)");
+        assert_eq!(r.nameservers, vec!["ns1.example.net", "ns2.example.net"]);
+        assert_eq!(r.created.as_deref(), Some("2001-02-03T00:00:00Z"));
+    }
+
+    #[test]
+    fn parses_keys_without_a_space_after_the_colon() {
+        // .im: "Name Server:host." under a bare heading; a URL or a time must not split.
+        let r = parsed(
+            "Domain Name:\texample.im\nDomain Details\nExpiry Date: 16/08/2027 23:59:39\nName Server:ns1.example.net.\nName Server:ns2.example.net.\n",
+        );
+        assert_eq!(r.nameservers, vec!["ns1.example.net", "ns2.example.net"]);
+        assert_eq!(r.expires.as_deref(), Some("2027-08-16T23:59:39Z"));
+        assert_eq!(split_kv("http://example.net"), None);
+        assert_eq!(split_kv("12:30"), None);
+    }
+
+    #[test]
+    fn parses_dates_written_as_sentences() {
+        // .gg and .je: "Registered on 30th April 2003 at 00:00:00.000" under "Relevant dates:";
+        // the yearly fee line has no year and must not become a date.
+        let r = parsed(
+            "Domain:\n     example.gg\nRegistrar:\n     Example Registrar Inc. (http://registrar.example)\nRelevant dates:\n     Registry fee due on 2nd March each year\n     Registered on 1st March 2004 at 00:00:00.000\nName servers:\n     ns1.example.net\n",
+        );
+        assert_eq!(r.created.as_deref(), Some("2004-03-01T00:00:00Z"));
+        assert_eq!(r.expires, None);
+        assert_eq!(r.nameservers, vec!["ns1.example.net"]);
+        assert_eq!(parse_date("22nd November 2019").as_deref(), Some("2019-11-22T00:00:00Z"));
+    }
+
+    #[test]
+    fn registrar_handle_takes_the_name_on_the_next_line() {
+        // .sk: "Registrar: HANDLE" followed by "Name:"; the registrant block before it has the
+        // same shape and must not change the registrar.
+        let r = parsed(
+            "Domain:            example.sk\nDomain registrant: HOLD-0001\nName:              Example Holder s.r.o.\nRegistrar:         EXRG-0042\nName:              Example Registrar, a.s.\nOrganization:      Example Registrar, a.s.\n",
+        );
+        assert_eq!(registrar(&r), "Example Registrar, a.s.");
+        // A plain name is kept even when a Name line follows.
+        let r = parsed("Registrar: Example Registrar\nName: Someone Else\n");
+        assert_eq!(registrar(&r), "Example Registrar");
+    }
 
     #[test]
     fn parses_bare_section_headings() {

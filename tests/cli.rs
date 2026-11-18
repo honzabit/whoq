@@ -219,7 +219,7 @@ fn long_retry_after_fails_at_once() {
 #[test]
 fn invalid_queries_fail_cleanly() {
     let env = Env::new("invalid");
-    let out = env.run(&["-o", "ndjson", "not a domain!!", "co.uk"], None);
+    let out = env.run(&["-o", "ndjson", "not a domain!!", "uk"], None);
     assert_eq!(code(&out), 1);
     let recs = ndjson(&out);
     assert_eq!(recs.len(), 2);
