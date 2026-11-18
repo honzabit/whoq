@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+results/*/raw/
+results/*/runs.jsonl
+results/*/agent_cache.jsonl
+truth_raw/

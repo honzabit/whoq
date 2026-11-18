@@ -1,0 +1,39 @@
+{
+ "started_at": "20261117T042408Z",
+ "truth_built_at": "2026-11-17T04:23:54Z",
+ "tools": {
+  "whoq": {
+   "describe": "whoq --json (/Users/zamanfoo/faw/target/release/whoq)",
+   "version": "whoq 0.1.1"
+  },
+  "whoq-brief": {
+   "describe": "whoq --brief",
+   "version": "whoq 0.1.1"
+  },
+  "whois-gnu": {
+   "describe": "GNU whois (Debian/Linux default)",
+   "version": "Version 5.6.6."
+  },
+  "whois-macos": {
+   "describe": "macOS /usr/bin/whois",
+   "version": "unknown"
+  },
+  "openrdap": {
+   "describe": "OpenRDAP rdap --json",
+   "version": "unknown"
+  },
+  "python-whois": {
+   "describe": "python-whois (PyPI)",
+   "version": "0.9.6"
+  },
+  "whoisit": {
+   "describe": "whoisit (PyPI, RDAP)",
+   "version": "4.1.0"
+  },
+  "ipwhois": {
+   "describe": "ipwhois (PyPI, RDAP)",
+   "version": "1.3.0"
+  }
+ },
+ "items": 42
+}

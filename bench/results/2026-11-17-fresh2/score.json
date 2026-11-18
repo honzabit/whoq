@@ -1,0 +1,2560 @@
+{
+ "overall": {
+  "whoq": {
+   "in output": [
+    109,
+    122
+   ],
+   "as field": [
+    109,
+    122
+   ]
+  },
+  "whois-gnu": {
+   "in output": [
+    113,
+    122
+   ]
+  },
+  "python-whois": {
+   "in output": [
+    86,
+    122
+   ],
+   "as field": [
+    87,
+    122
+   ]
+  },
+  "whoisit": {
+   "in output": [
+    0,
+    122
+   ],
+   "as field": [
+    0,
+    122
+   ]
+  }
+ },
+ "by_category": {
+  "whoq": {
+   "in output": {
+    "fresh2-whois-only": [
+     87,
+     98
+    ],
+    "fresh2-unregistered": [
+     22,
+     24
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "fresh-rdap": [
+     0,
+     0
+    ],
+    "fresh-unregistered": [
+     0,
+     0
+    ],
+    "fresh-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "holdout-unregistered": [
+     0,
+     0
+    ],
+    "holdout-whois-only": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "fresh2-whois-only": [
+     87,
+     98
+    ],
+    "fresh2-unregistered": [
+     22,
+     24
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "fresh-rdap": [
+     0,
+     0
+    ],
+    "fresh-unregistered": [
+     0,
+     0
+    ],
+    "fresh-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "holdout-unregistered": [
+     0,
+     0
+    ],
+    "holdout-whois-only": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   }
+  },
+  "whois-gnu": {
+   "in output": {
+    "fresh2-whois-only": [
+     90,
+     98
+    ],
+    "fresh2-unregistered": [
+     23,
+     24
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "fresh-rdap": [
+     0,
+     0
+    ],
+    "fresh-unregistered": [
+     0,
+     0
+    ],
+    "fresh-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "holdout-unregistered": [
+     0,
+     0
+    ],
+    "holdout-whois-only": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   }
+  },
+  "python-whois": {
+   "in output": {
+    "fresh2-whois-only": [
+     64,
+     98
+    ],
+    "fresh2-unregistered": [
+     22,
+     24
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "fresh-rdap": [
+     0,
+     0
+    ],
+    "fresh-unregistered": [
+     0,
+     0
+    ],
+    "fresh-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "holdout-unregistered": [
+     0,
+     0
+    ],
+    "holdout-whois-only": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "fresh2-whois-only": [
+     66,
+     98
+    ],
+    "fresh2-unregistered": [
+     21,
+     24
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "fresh-rdap": [
+     0,
+     0
+    ],
+    "fresh-unregistered": [
+     0,
+     0
+    ],
+    "fresh-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "holdout-unregistered": [
+     0,
+     0
+    ],
+    "holdout-whois-only": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   }
+  },
+  "whoisit": {
+   "in output": {
+    "fresh2-whois-only": [
+     0,
+     98
+    ],
+    "fresh2-unregistered": [
+     0,
+     24
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "fresh-rdap": [
+     0,
+     0
+    ],
+    "fresh-unregistered": [
+     0,
+     0
+    ],
+    "fresh-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "holdout-unregistered": [
+     0,
+     0
+    ],
+    "holdout-whois-only": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "fresh2-whois-only": [
+     0,
+     98
+    ],
+    "fresh2-unregistered": [
+     0,
+     24
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "fresh-rdap": [
+     0,
+     0
+    ],
+    "fresh-unregistered": [
+     0,
+     0
+    ],
+    "fresh-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "holdout-unregistered": [
+     0,
+     0
+    ],
+    "holdout-whois-only": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   }
+  }
+ },
+ "by_field": {
+  "whoq": {
+   "in output": {
+    "status": [
+     44,
+     48
+    ],
+    "registrar": [
+     17,
+     18
+    ],
+    "nameservers": [
+     20,
+     24
+    ],
+    "created": [
+     14,
+     17
+    ],
+    "expires": [
+     14,
+     15
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "status": [
+     44,
+     48
+    ],
+    "registrar": [
+     17,
+     18
+    ],
+    "nameservers": [
+     20,
+     24
+    ],
+    "created": [
+     14,
+     17
+    ],
+    "expires": [
+     14,
+     15
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   }
+  },
+  "whois-gnu": {
+   "in output": {
+    "status": [
+     46,
+     48
+    ],
+    "registrar": [
+     17,
+     18
+    ],
+    "nameservers": [
+     23,
+     24
+    ],
+    "created": [
+     13,
+     17
+    ],
+    "expires": [
+     14,
+     15
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   }
+  },
+  "python-whois": {
+   "in output": {
+    "status": [
+     40,
+     48
+    ],
+    "registrar": [
+     15,
+     18
+    ],
+    "nameservers": [
+     13,
+     24
+    ],
+    "created": [
+     9,
+     17
+    ],
+    "expires": [
+     9,
+     15
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "status": [
+     42,
+     48
+    ],
+    "registrar": [
+     15,
+     18
+    ],
+    "nameservers": [
+     12,
+     24
+    ],
+    "created": [
+     9,
+     17
+    ],
+    "expires": [
+     9,
+     15
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   }
+  },
+  "whoisit": {
+   "in output": {
+    "status": [
+     0,
+     48
+    ],
+    "registrar": [
+     0,
+     18
+    ],
+    "nameservers": [
+     0,
+     24
+    ],
+    "created": [
+     0,
+     17
+    ],
+    "expires": [
+     0,
+     15
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "status": [
+     0,
+     48
+    ],
+    "registrar": [
+     0,
+     18
+    ],
+    "nameservers": [
+     0,
+     24
+    ],
+    "created": [
+     0,
+     17
+    ],
+    "expires": [
+     0,
+     15
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   }
+  }
+ },
+ "misses": {
+  "whoisit": [
+   {
+    "id": "d-google-ae",
+    "query": "google.ae",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ae",
+    "query": "google.ae",
+    "field": "registrar",
+    "want": "MarkMonitor",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ae",
+    "query": "google.ae",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-am",
+    "query": "google.am",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-am",
+    "query": "google.am",
+    "field": "registrar",
+    "want": "abcdomain (ABCDomain LLC)",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-am",
+    "query": "google.am",
+    "field": "created",
+    "want": "1999-06-05",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-am",
+    "query": "google.am",
+    "field": "expires",
+    "want": "2027-04-15",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-am",
+    "query": "google.am",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-by",
+    "query": "google.by",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-by",
+    "query": "google.by",
+    "field": "registrar",
+    "want": "Open Contact, Ltd",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-by",
+    "query": "google.by",
+    "field": "created",
+    "want": "2004-05-14",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-by",
+    "query": "google.by",
+    "field": "expires",
+    "want": "2027-02-10",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-by",
+    "query": "google.by",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-co",
+    "query": "google.co",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-co",
+    "query": "google.co",
+    "field": "registrar",
+    "want": "MarkMonitor, Inc.",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-co",
+    "query": "google.co",
+    "field": "created",
+    "want": "2010-02-25",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-co",
+    "query": "google.co",
+    "field": "expires",
+    "want": "2027-02-24",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-co",
+    "query": "google.co",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ge",
+    "query": "google.ge",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ge",
+    "query": "google.ge",
+    "field": "registrar",
+    "want": "proservice ltd",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ge",
+    "query": "google.ge",
+    "field": "created",
+    "want": "2006-07-28",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ge",
+    "query": "google.ge",
+    "field": "expires",
+    "want": "2027-07-29",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ge",
+    "query": "google.ge",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-gg",
+    "query": "google.gg",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-gg",
+    "query": "google.gg",
+    "field": "registrar",
+    "want": "MarkMonitor Inc.",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-gg",
+    "query": "google.gg",
+    "field": "created",
+    "want": "2003-04-30",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-gg",
+    "query": "google.gg",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-im",
+    "query": "google.im",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-im",
+    "query": "google.im",
+    "field": "expires",
+    "want": "2027-08-16",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-im",
+    "query": "google.im",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ir",
+    "query": "google.ir",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ir",
+    "query": "google.ir",
+    "field": "nameservers",
+    "want": [
+     "ns1.googledomains.com",
+     "ns2.googledomains.com",
+     "ns3.googledomains.com",
+     "ns4.googledomains.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-je",
+    "query": "google.je",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-je",
+    "query": "google.je",
+    "field": "registrar",
+    "want": "MarkMonitor Inc.",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-je",
+    "query": "google.je",
+    "field": "created",
+    "want": "2002-10-31",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-je",
+    "query": "google.je",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-md",
+    "query": "google.md",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-md",
+    "query": "google.md",
+    "field": "created",
+    "want": "2006-05-02",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-md",
+    "query": "google.md",
+    "field": "expires",
+    "want": "2027-05-02",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-md",
+    "query": "google.md",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-mk",
+    "query": "google.mk",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-mk",
+    "query": "google.mk",
+    "field": "registrar",
+    "want": "UNET-REG",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-mk",
+    "query": "google.mk",
+    "field": "created",
+    "want": "2008-05-13",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-mk",
+    "query": "google.mk",
+    "field": "expires",
+    "want": "2027-05-13",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-mk",
+    "query": "google.mk",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-mn",
+    "query": "google.mn",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-mn",
+    "query": "google.mn",
+    "field": "registrar",
+    "want": "MarkMonitor Inc.",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-mn",
+    "query": "google.mn",
+    "field": "created",
+    "want": "2003-04-07",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-mn",
+    "query": "google.mn",
+    "field": "expires",
+    "want": "2027-04-07",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-mn",
+    "query": "google.mn",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-my",
+    "query": "google.my",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-my",
+    "query": "google.my",
+    "field": "registrar",
+    "want": "MarkMonitor Inc.",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-my",
+    "query": "google.my",
+    "field": "created",
+    "want": "2009-05-12",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-my",
+    "query": "google.my",
+    "field": "expires",
+    "want": "2027-05-12",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-my",
+    "query": "google.my",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-om",
+    "query": "google.om",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-om",
+    "query": "google.om",
+    "field": "registrar",
+    "want": "Abu Ghazaleh Intellectual Property (AGIP)",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-om",
+    "query": "google.om",
+    "field": "nameservers",
+    "want": [
+     "ns1.googledomains.com",
+     "ns2.googledomains.com",
+     "ns3.googledomains.com",
+     "ns4.googledomains.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-pk",
+    "query": "google.pk",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-pk",
+    "query": "google.pk",
+    "field": "created",
+    "want": "2005-12-01",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-pk",
+    "query": "google.pk",
+    "field": "expires",
+    "want": "2028-12-01",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-pk",
+    "query": "google.pk",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-qa",
+    "query": "google.qa",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-qa",
+    "query": "google.qa",
+    "field": "registrar",
+    "want": "RoutEdge",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-qa",
+    "query": "google.qa",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-sa",
+    "query": "google.sa",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-sa",
+    "query": "google.sa",
+    "field": "nameservers",
+    "want": [
+     "ns1.markmonitor.com",
+     "ns3.markmonitor.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-su",
+    "query": "google.su",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-su",
+    "query": "google.su",
+    "field": "registrar",
+    "want": "RUCENTER-SU",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-su",
+    "query": "google.su",
+    "field": "created",
+    "want": "2005-10-15",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-su",
+    "query": "google.su",
+    "field": "expires",
+    "want": "2027-10-15",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-su",
+    "query": "google.su",
+    "field": "nameservers",
+    "want": [
+     "ns1.beget.com",
+     "ns1.beget.pro",
+     "ns2.beget.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-tn",
+    "query": "google.tn",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-tn",
+    "query": "google.tn",
+    "field": "registrar",
+    "want": "ELB",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-tn",
+    "query": "google.tn",
+    "field": "created",
+    "want": "2018-12-05",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-tn",
+    "query": "google.tn",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ug",
+    "query": "google.ug",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ug",
+    "query": "google.ug",
+    "field": "created",
+    "want": "2004-08-03",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ug",
+    "query": "google.ug",
+    "field": "expires",
+    "want": "2027-03-18",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ug",
+    "query": "google.ug",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-us",
+    "query": "google.us",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-us",
+    "query": "google.us",
+    "field": "registrar",
+    "want": "MarkMonitor, Inc.",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-us",
+    "query": "google.us",
+    "field": "created",
+    "want": "2002-04-19",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-us",
+    "query": "google.us",
+    "field": "expires",
+    "want": "2027-04-18",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-us",
+    "query": "google.us",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-com-ve",
+    "query": "google.com.ve",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-com-ve",
+    "query": "google.com.ve",
+    "field": "registrar",
+    "want": "NIC-VE",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-com-ve",
+    "query": "google.com.ve",
+    "field": "created",
+    "want": "2002-06-05",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-com-ve",
+    "query": "google.com.ve",
+    "field": "expires",
+    "want": "2027-05-06",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-com-ve",
+    "query": "google.com.ve",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ws",
+    "query": "google.ws",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ws",
+    "query": "google.ws",
+    "field": "registrar",
+    "want": "MarkMonitor Inc.",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ws",
+    "query": "google.ws",
+    "field": "created",
+    "want": "2002-03-03",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ws",
+    "query": "google.ws",
+    "field": "expires",
+    "want": "2027-03-04",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ws",
+    "query": "google.ws",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-eu",
+    "query": "google.eu",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-eu",
+    "query": "google.eu",
+    "field": "registrar",
+    "want": "Markmonitor Inc.",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-eu",
+    "query": "google.eu",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-ae",
+    "query": "whoq-fresh2-m5x8c3v6.ae",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-am",
+    "query": "whoq-fresh2-m5x8c3v6.am",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-by",
+    "query": "whoq-fresh2-m5x8c3v6.by",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-co",
+    "query": "whoq-fresh2-m5x8c3v6.co",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-ge",
+    "query": "whoq-fresh2-m5x8c3v6.ge",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-gg",
+    "query": "whoq-fresh2-m5x8c3v6.gg",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-im",
+    "query": "whoq-fresh2-m5x8c3v6.im",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-ir",
+    "query": "whoq-fresh2-m5x8c3v6.ir",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-je",
+    "query": "whoq-fresh2-m5x8c3v6.je",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-md",
+    "query": "whoq-fresh2-m5x8c3v6.md",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-mk",
+    "query": "whoq-fresh2-m5x8c3v6.mk",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-mn",
+    "query": "whoq-fresh2-m5x8c3v6.mn",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-my",
+    "query": "whoq-fresh2-m5x8c3v6.my",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-om",
+    "query": "whoq-fresh2-m5x8c3v6.om",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-pk",
+    "query": "whoq-fresh2-m5x8c3v6.pk",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-qa",
+    "query": "whoq-fresh2-m5x8c3v6.qa",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-sa",
+    "query": "whoq-fresh2-m5x8c3v6.sa",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-su",
+    "query": "whoq-fresh2-m5x8c3v6.su",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-tn",
+    "query": "whoq-fresh2-m5x8c3v6.tn",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoqfreshtwo-ug",
+    "query": "whoqfreshtwo.ug",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-us",
+    "query": "whoq-fresh2-m5x8c3v6.us",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-ve",
+    "query": "whoq-fresh2-m5x8c3v6.ve",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-ws",
+    "query": "whoq-fresh2-m5x8c3v6.ws",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-eu",
+    "query": "whoq-fresh2-m5x8c3v6.eu",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   }
+  ],
+  "python-whois": [
+   {
+    "id": "d-google-ae",
+    "query": "google.ae",
+    "field": "registrar",
+    "want": "MarkMonitor",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-ae",
+    "query": "google.ae",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com"
+    ],
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-am",
+    "query": "google.am",
+    "field": "created",
+    "want": "1999-06-05",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-am",
+    "query": "google.am",
+    "field": "expires",
+    "want": "2027-04-15",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-am",
+    "query": "google.am",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-gg",
+    "query": "google.gg",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-je",
+    "query": "google.je",
+    "field": "status",
+    "want": "registered",
+    "got": "available",
+    "exit": 0
+   },
+   {
+    "id": "d-google-je",
+    "query": "google.je",
+    "field": "registrar",
+    "want": "MarkMonitor Inc.",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-je",
+    "query": "google.je",
+    "field": "created",
+    "want": "2002-10-31",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-je",
+    "query": "google.je",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-md",
+    "query": "google.md",
+    "field": "status",
+    "want": "registered",
+    "got": "available",
+    "exit": 0
+   },
+   {
+    "id": "d-google-md",
+    "query": "google.md",
+    "field": "created",
+    "want": "2006-05-02",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-md",
+    "query": "google.md",
+    "field": "expires",
+    "want": "2027-05-02",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-md",
+    "query": "google.md",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com"
+    ],
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-mk",
+    "query": "google.mk",
+    "field": "created",
+    "want": "2008-05-13",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-mk",
+    "query": "google.mk",
+    "field": "expires",
+    "want": "2027-05-13",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-mk",
+    "query": "google.mk",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com"
+    ],
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-sa",
+    "query": "google.sa",
+    "field": "nameservers",
+    "want": [
+     "ns1.markmonitor.com",
+     "ns3.markmonitor.com"
+    ],
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-tn",
+    "query": "google.tn",
+    "field": "created",
+    "want": "2018-12-05",
+    "got": "2018-05-12T11:02:02-01:00",
+    "exit": 0
+   },
+   {
+    "id": "d-google-tn",
+    "query": "google.tn",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": [
+     "ns4.google.com.",
+     "ns1.google.com."
+    ],
+    "exit": 0
+   },
+   {
+    "id": "d-google-ug",
+    "query": "google.ug",
+    "field": "created",
+    "want": "2004-08-03",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-ug",
+    "query": "google.ug",
+    "field": "expires",
+    "want": "2027-03-18",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-ug",
+    "query": "google.ug",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com"
+    ],
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-com-ve",
+    "query": "google.com.ve",
+    "field": "created",
+    "want": "2002-06-05",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-com-ve",
+    "query": "google.com.ve",
+    "field": "expires",
+    "want": "2027-05-06",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-com-ve",
+    "query": "google.com.ve",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-ws",
+    "query": "google.ws",
+    "field": "status",
+    "want": "registered",
+    "got": "available",
+    "exit": 0
+   },
+   {
+    "id": "d-google-ws",
+    "query": "google.ws",
+    "field": "registrar",
+    "want": "MarkMonitor Inc.",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-ws",
+    "query": "google.ws",
+    "field": "created",
+    "want": "2002-03-03",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-ws",
+    "query": "google.ws",
+    "field": "expires",
+    "want": "2027-03-04",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-ws",
+    "query": "google.ws",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-eu",
+    "query": "google.eu",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": "ns4.google.com\n        ns1.google.com\n        ns2.google.com\n        ns3.google.com\n\nPlease visit www.eurid.eu for more info.",
+    "exit": 0
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-im",
+    "query": "whoq-fresh2-m5x8c3v6.im",
+    "field": "status",
+    "want": "available",
+    "got": "registered",
+    "exit": 0
+   },
+   {
+    "id": "d-whoqfreshtwo-ug",
+    "query": "whoqfreshtwo.ug",
+    "field": "status",
+    "want": "available",
+    "got": "registered",
+    "exit": 0
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-eu",
+    "query": "whoq-fresh2-m5x8c3v6.eu",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   }
+  ],
+  "whoq": [
+   {
+    "id": "d-google-am",
+    "query": "google.am",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-gg",
+    "query": "google.gg",
+    "field": "created",
+    "want": "2003-04-30",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-im",
+    "query": "google.im",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-je",
+    "query": "google.je",
+    "field": "created",
+    "want": "2002-10-31",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-google-sa",
+    "query": "google.sa",
+    "field": "status",
+    "want": "registered",
+    "got": "error",
+    "exit": 1
+   },
+   {
+    "id": "d-google-sa",
+    "query": "google.sa",
+    "field": "nameservers",
+    "want": [
+     "ns1.markmonitor.com",
+     "ns3.markmonitor.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ws",
+    "query": "google.ws",
+    "field": "status",
+    "want": "registered",
+    "got": "error",
+    "exit": 1
+   },
+   {
+    "id": "d-google-ws",
+    "query": "google.ws",
+    "field": "registrar",
+    "want": "MarkMonitor Inc.",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ws",
+    "query": "google.ws",
+    "field": "created",
+    "want": "2002-03-03",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ws",
+    "query": "google.ws",
+    "field": "expires",
+    "want": "2027-03-04",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-google-ws",
+    "query": "google.ws",
+    "field": "nameservers",
+    "want": [
+     "ns1.google.com",
+     "ns2.google.com",
+     "ns3.google.com",
+     "ns4.google.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-sa",
+    "query": "whoq-fresh2-m5x8c3v6.sa",
+    "field": "status",
+    "want": "available",
+    "got": "error",
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-fresh2-m5x8c3v6-ws",
+    "query": "whoq-fresh2-m5x8c3v6.ws",
+    "field": "status",
+    "want": "available",
+    "got": "error",
+    "exit": 1
+   }
+  ]
+ }
+}

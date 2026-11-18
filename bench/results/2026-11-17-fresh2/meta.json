@@ -1,0 +1,23 @@
+{
+ "started_at": "20261117T181154Z",
+ "truth_built_at": "2026-11-17T18:11:48Z",
+ "tools": {
+  "whoq": {
+   "describe": "whoq --json (/Users/zamanfoo/faw/target/release/whoq)",
+   "version": "whoq 0.1.1"
+  },
+  "whois-gnu": {
+   "describe": "GNU whois (Debian/Linux default)",
+   "version": "Version 5.6.6."
+  },
+  "python-whois": {
+   "describe": "python-whois (PyPI)",
+   "version": "0.9.6"
+  },
+  "whoisit": {
+   "describe": "whoisit (PyPI, RDAP)",
+   "version": "4.1.0"
+  }
+ },
+ "items": 48
+}

@@ -204,6 +204,10 @@ pub fn apply_domain(r: &mut Record, v: &Value, redacted: &mut bool) {
             set(&mut reg.abuse_phone, vcard_text(a, "tel"));
         }
     }
+    // A registrar entity with nothing usable in it (.kr) is no registrar at all.
+    if r.registrar.as_ref().is_some_and(|g| *g == Registrar::default()) {
+        r.registrar = None;
+    }
     if r.abuse_email.is_none() {
         r.abuse_email = r.registrar.as_ref().and_then(|g| g.abuse_email.clone());
     }
@@ -229,6 +233,46 @@ pub fn apply_domain(r: &mut Record, v: &Value, redacted: &mut bool) {
     }
 }
 
+/// The CIDR blocks that exactly cover `start..=end`; empty if the range is malformed or
+/// would need an unreasonable number of blocks.
+fn range_cidrs(start: &str, end: &str) -> Vec<String> {
+    use std::net::IpAddr;
+    let (Ok(s), Ok(e)) = (start.parse::<IpAddr>(), end.parse::<IpAddr>()) else { return vec![] };
+    let (lo, hi, bits) = match (s, e) {
+        (IpAddr::V4(a), IpAddr::V4(b)) => (u32::from(a) as u128, u32::from(b) as u128, 32u32),
+        (IpAddr::V6(a), IpAddr::V6(b)) => (u128::from(a), u128::from(b), 128u32),
+        _ => return vec![],
+    };
+    if lo > hi {
+        return vec![];
+    }
+    let show = |n: u128| -> String {
+        if bits == 32 {
+            std::net::Ipv4Addr::from(n as u32).to_string()
+        } else {
+            std::net::Ipv6Addr::from(n).to_string()
+        }
+    };
+    let mut out = vec![];
+    let mut cur = lo;
+    loop {
+        // Largest aligned block starting at `cur` that stays within `hi`.
+        let mut size = cur.trailing_zeros().min(bits);
+        while size > 0 && (size >= 128 || cur.checked_add((1u128 << size) - 1).is_none_or(|last| last > hi)) {
+            size -= 1;
+        }
+        out.push(format!("{}/{}", show(cur), bits - size));
+        if out.len() > 16 {
+            return vec![];
+        }
+        let last = if size >= 128 { u128::MAX } else { cur + ((1u128 << size) - 1) };
+        if last >= hi {
+            return out;
+        }
+        cur = last + 1;
+    }
+}
+
 pub fn apply_ip(r: &mut Record, v: &Value, redacted: &mut bool) {
     apply_common(r, v, redacted);
     let cidr = v["cidr0_cidrs"]
@@ -242,9 +286,15 @@ pub fn apply_ip(r: &mut Record, v: &Value, redacted: &mut bool) {
                 .collect()
         })
         .unwrap_or_default();
+    let (start, end) = (str_of(v, "startAddress"), str_of(v, "endAddress"));
+    // Not every RIR sends the cidr0 extension (LACNIC/registro.br); derive it from the range.
+    let cidr = match (&start, &end) {
+        (Some(s), Some(e)) if Vec::is_empty(&cidr) => range_cidrs(s, e),
+        _ => cidr,
+    };
     r.network = Some(Network {
-        start: str_of(v, "startAddress"),
-        end: str_of(v, "endAddress"),
+        start,
+        end,
         cidr,
         name: str_of(v, "name"),
         net_type: str_of(v, "type"),
@@ -299,4 +349,20 @@ pub fn registrar_link(v: &Value, self_url: &str) -> Option<String> {
                 && !h.eq_ignore_ascii_case(self_url)
         })
         .map(str::to_string)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::range_cidrs;
+
+    #[test]
+    fn ranges_become_cidrs() {
+        assert_eq!(range_cidrs("200.160.0.0", "200.160.15.255"), vec!["200.160.0.0/20"]);
+        assert_eq!(range_cidrs("192.0.2.0", "192.0.3.127"), vec!["192.0.2.0/24", "192.0.3.0/25"]);
+        assert_eq!(range_cidrs("192.0.2.7", "192.0.2.7"), vec!["192.0.2.7/32"]);
+        assert_eq!(range_cidrs("2001:12ff::", "2001:12ff:ffff:ffff:ffff:ffff:ffff:ffff"), vec!["2001:12ff::/32"]);
+        assert_eq!(range_cidrs("0.0.0.0", "255.255.255.255"), vec!["0.0.0.0/0"]);
+        assert!(range_cidrs("192.0.2.9", "192.0.2.1").is_empty());
+        assert!(range_cidrs("192.0.2.0", "2001:db8::").is_empty());
+    }
 }

@@ -1,0 +1,3390 @@
+{
+ "overall": {
+  "whoq": {
+   "in output": [
+    143,
+    149
+   ],
+   "as field": [
+    143,
+    149
+   ]
+  },
+  "whoq-brief": {
+   "in output": [
+    139,
+    149
+   ],
+   "as field": [
+    139,
+    149
+   ]
+  },
+  "whois-gnu": {
+   "in output": [
+    138,
+    149
+   ]
+  },
+  "whois-macos": {
+   "in output": [
+    134,
+    149
+   ]
+  },
+  "openrdap": {
+   "in output": [
+    2,
+    149
+   ]
+  },
+  "python-whois": {
+   "in output": [
+    124,
+    149
+   ],
+   "as field": [
+    118,
+    149
+   ]
+  },
+  "whoisit": {
+   "in output": [
+    2,
+    149
+   ],
+   "as field": [
+    0,
+    149
+   ]
+  },
+  "ipwhois": {
+   "in output": [
+    0,
+    0
+   ],
+   "as field": [
+    0,
+    0
+   ]
+  }
+ },
+ "by_category": {
+  "whoq": {
+   "in output": {
+    "holdout-whois-only": [
+     139,
+     139
+    ],
+    "holdout-unregistered": [
+     4,
+     10
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "holdout-whois-only": [
+     139,
+     139
+    ],
+    "holdout-unregistered": [
+     4,
+     10
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   }
+  },
+  "whoq-brief": {
+   "in output": {
+    "holdout-whois-only": [
+     135,
+     139
+    ],
+    "holdout-unregistered": [
+     4,
+     10
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "holdout-whois-only": [
+     135,
+     139
+    ],
+    "holdout-unregistered": [
+     4,
+     10
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   }
+  },
+  "whois-gnu": {
+   "in output": {
+    "holdout-whois-only": [
+     130,
+     139
+    ],
+    "holdout-unregistered": [
+     8,
+     10
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   }
+  },
+  "whois-macos": {
+   "in output": {
+    "holdout-whois-only": [
+     126,
+     139
+    ],
+    "holdout-unregistered": [
+     8,
+     10
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   }
+  },
+  "openrdap": {
+   "in output": {
+    "holdout-whois-only": [
+     2,
+     139
+    ],
+    "holdout-unregistered": [
+     0,
+     10
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   }
+  },
+  "python-whois": {
+   "in output": {
+    "holdout-whois-only": [
+     115,
+     139
+    ],
+    "holdout-unregistered": [
+     9,
+     10
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "holdout-whois-only": [
+     112,
+     139
+    ],
+    "holdout-unregistered": [
+     6,
+     10
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   }
+  },
+  "whoisit": {
+   "in output": {
+    "holdout-whois-only": [
+     2,
+     139
+    ],
+    "holdout-unregistered": [
+     0,
+     10
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "holdout-whois-only": [
+     0,
+     139
+    ],
+    "holdout-unregistered": [
+     0,
+     10
+    ],
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   }
+  },
+  "ipwhois": {
+   "in output": {
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "holdout-unregistered": [
+     0,
+     0
+    ],
+    "holdout-whois-only": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "cctld-rdap": [
+     0,
+     0
+    ],
+    "cctld-whois-only": [
+     0,
+     0
+    ],
+    "gtld": [
+     0,
+     0
+    ],
+    "holdout-unregistered": [
+     0,
+     0
+    ],
+    "holdout-whois-only": [
+     0,
+     0
+    ],
+    "idn": [
+     0,
+     0
+    ],
+    "ngtld": [
+     0,
+     0
+    ],
+    "subdomain": [
+     0,
+     0
+    ],
+    "unregistered": [
+     0,
+     0
+    ],
+    "ipv4-afrinic": [
+     0,
+     0
+    ],
+    "ipv4-apnic": [
+     0,
+     0
+    ],
+    "ipv4-arin": [
+     0,
+     0
+    ],
+    "ipv4-lacnic": [
+     0,
+     0
+    ],
+    "ipv4-ripe": [
+     0,
+     0
+    ],
+    "ipv6-afrinic": [
+     0,
+     0
+    ],
+    "ipv6-apnic": [
+     0,
+     0
+    ],
+    "ipv6-arin": [
+     0,
+     0
+    ],
+    "ipv6-lacnic": [
+     0,
+     0
+    ],
+    "ipv6-ripe": [
+     0,
+     0
+    ]
+   }
+  }
+ },
+ "by_field": {
+  "whoq": {
+   "in output": {
+    "status": [
+     36,
+     42
+    ],
+    "nameservers": [
+     31,
+     31
+    ],
+    "registrar": [
+     23,
+     23
+    ],
+    "created": [
+     30,
+     30
+    ],
+    "expires": [
+     23,
+     23
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "status": [
+     36,
+     42
+    ],
+    "nameservers": [
+     31,
+     31
+    ],
+    "registrar": [
+     23,
+     23
+    ],
+    "created": [
+     30,
+     30
+    ],
+    "expires": [
+     23,
+     23
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   }
+  },
+  "whoq-brief": {
+   "in output": {
+    "status": [
+     35,
+     42
+    ],
+    "nameservers": [
+     30,
+     31
+    ],
+    "registrar": [
+     23,
+     23
+    ],
+    "created": [
+     29,
+     30
+    ],
+    "expires": [
+     22,
+     23
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "status": [
+     35,
+     42
+    ],
+    "nameservers": [
+     30,
+     31
+    ],
+    "registrar": [
+     23,
+     23
+    ],
+    "created": [
+     29,
+     30
+    ],
+    "expires": [
+     22,
+     23
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   }
+  },
+  "whois-gnu": {
+   "in output": {
+    "status": [
+     39,
+     42
+    ],
+    "nameservers": [
+     30,
+     31
+    ],
+    "registrar": [
+     22,
+     23
+    ],
+    "created": [
+     27,
+     30
+    ],
+    "expires": [
+     20,
+     23
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   }
+  },
+  "whois-macos": {
+   "in output": {
+    "status": [
+     38,
+     42
+    ],
+    "nameservers": [
+     29,
+     31
+    ],
+    "registrar": [
+     22,
+     23
+    ],
+    "created": [
+     26,
+     30
+    ],
+    "expires": [
+     19,
+     23
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   }
+  },
+  "openrdap": {
+   "in output": {
+    "status": [
+     1,
+     42
+    ],
+    "nameservers": [
+     0,
+     31
+    ],
+    "registrar": [
+     1,
+     23
+    ],
+    "created": [
+     0,
+     30
+    ],
+    "expires": [
+     0,
+     23
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   }
+  },
+  "python-whois": {
+   "in output": {
+    "status": [
+     38,
+     42
+    ],
+    "nameservers": [
+     25,
+     31
+    ],
+    "registrar": [
+     17,
+     23
+    ],
+    "created": [
+     25,
+     30
+    ],
+    "expires": [
+     19,
+     23
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "status": [
+     35,
+     42
+    ],
+    "nameservers": [
+     22,
+     31
+    ],
+    "registrar": [
+     17,
+     23
+    ],
+    "created": [
+     25,
+     30
+    ],
+    "expires": [
+     19,
+     23
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   }
+  },
+  "whoisit": {
+   "in output": {
+    "status": [
+     1,
+     42
+    ],
+    "nameservers": [
+     0,
+     31
+    ],
+    "registrar": [
+     1,
+     23
+    ],
+    "created": [
+     0,
+     30
+    ],
+    "expires": [
+     0,
+     23
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "status": [
+     0,
+     42
+    ],
+    "nameservers": [
+     0,
+     31
+    ],
+    "registrar": [
+     0,
+     23
+    ],
+    "created": [
+     0,
+     30
+    ],
+    "expires": [
+     0,
+     23
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   }
+  },
+  "ipwhois": {
+   "in output": {
+    "status": [
+     0,
+     0
+    ],
+    "registrar": [
+     0,
+     0
+    ],
+    "created": [
+     0,
+     0
+    ],
+    "expires": [
+     0,
+     0
+    ],
+    "nameservers": [
+     0,
+     0
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   },
+   "as field": {
+    "status": [
+     0,
+     0
+    ],
+    "registrar": [
+     0,
+     0
+    ],
+    "created": [
+     0,
+     0
+    ],
+    "expires": [
+     0,
+     0
+    ],
+    "nameservers": [
+     0,
+     0
+    ],
+    "org": [
+     0,
+     0
+    ],
+    "cidr": [
+     0,
+     0
+    ],
+    "country": [
+     0,
+     0
+    ],
+    "asn": [
+     0,
+     0
+    ]
+   }
+  }
+ },
+ "misses": {
+  "whoisit": [
+   {
+    "id": "d-zeit-de",
+    "query": "zeit.de",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-zeit-de",
+    "query": "zeit.de",
+    "field": "nameservers",
+    "want": [
+     "dns1.p01.nsone.net",
+     "dns2.p01.nsone.net",
+     "dns3.p01.nsone.net",
+     "dns4.p01.nsone.net"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-heise-de",
+    "query": "heise.de",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-heise-de",
+    "query": "heise.de",
+    "field": "nameservers",
+    "want": [
+     "ns.heise.de",
+     "ns.plusline.de",
+     "ns.pop-hannover.de",
+     "ns.s.plusline.de",
+     "ns2.pop-hannover.net"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-repubblica-it",
+    "query": "repubblica.it",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-repubblica-it",
+    "query": "repubblica.it",
+    "field": "registrar",
+    "want": "Gandi SAS",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-repubblica-it",
+    "query": "repubblica.it",
+    "field": "created",
+    "want": "1996-05-15",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-repubblica-it",
+    "query": "repubblica.it",
+    "field": "expires",
+    "want": "2027-01-16",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-repubblica-it",
+    "query": "repubblica.it",
+    "field": "nameservers",
+    "want": [
+     "ns-1541.awsdns-00.co.uk",
+     "ns-1477.awsdns-56.org",
+     "ns-723.awsdns-26.net",
+     "ns-353.awsdns-44.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-gazzetta-it",
+    "query": "gazzetta.it",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-gazzetta-it",
+    "query": "gazzetta.it",
+    "field": "registrar",
+    "want": "Tuonome Registrar S.r.l.",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-gazzetta-it",
+    "query": "gazzetta.it",
+    "field": "created",
+    "want": "1996-01-29",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-gazzetta-it",
+    "query": "gazzetta.it",
+    "field": "expires",
+    "want": "2027-08-05",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-gazzetta-it",
+    "query": "gazzetta.it",
+    "field": "nameservers",
+    "want": [
+     "dnsgeo5.tuonomeregistrar.com",
+     "dnsgeo6.tuonomeregistrar.net",
+     "dnsgeo7.tuonomeregistrar.org",
+     "dnsgeo8.tuonomeregistrar.info"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-standaard-be",
+    "query": "standaard.be",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-standaard-be",
+    "query": "standaard.be",
+    "field": "registrar",
+    "want": "Mediahuis Technology & Product Studio NV",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-standaard-be",
+    "query": "standaard.be",
+    "field": "created",
+    "want": "1995-02-24",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-standaard-be",
+    "query": "standaard.be",
+    "field": "nameservers",
+    "want": [
+     "elliot.ns.cloudflare.com",
+     "erin.ns.cloudflare.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-hln-be",
+    "query": "hln.be",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-hln-be",
+    "query": "hln.be",
+    "field": "registrar",
+    "want": "Registrar.eu",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-hln-be",
+    "query": "hln.be",
+    "field": "created",
+    "want": "1999-03-11",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-hln-be",
+    "query": "hln.be",
+    "field": "nameservers",
+    "want": [
+     "eur2.akam.net",
+     "eur6.akam.net",
+     "ns1-25.akam.net",
+     "eur5.akam.net",
+     "ns1-125.akam.net",
+     "usc2.akam.net",
+     "use2.akam.net",
+     "use5.akam.net"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-derstandard-at",
+    "query": "derstandard.at",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-derstandard-at",
+    "query": "derstandard.at",
+    "field": "created",
+    "want": "2000-08-25",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-derstandard-at",
+    "query": "derstandard.at",
+    "field": "nameservers",
+    "want": [
+     "balancer1.derstandard.at",
+     "ns.mail.at",
+     "sec1.rcode0.net",
+     "sec2.rcode0.net"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-krone-at",
+    "query": "krone.at",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-krone-at",
+    "query": "krone.at",
+    "field": "created",
+    "want": "2000-08-25",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-krone-at",
+    "query": "krone.at",
+    "field": "nameservers",
+    "want": [
+     "ns-1351.awsdns-40.org",
+     "ns-1581.awsdns-05.co.uk",
+     "ns-294.awsdns-36.com",
+     "ns-999.awsdns-60.net"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-dn-se",
+    "query": "dn.se",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-dn-se",
+    "query": "dn.se",
+    "field": "registrar",
+    "want": "Abion AB",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-dn-se",
+    "query": "dn.se",
+    "field": "created",
+    "want": "1991-12-02",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-dn-se",
+    "query": "dn.se",
+    "field": "expires",
+    "want": "2026-12-31",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-dn-se",
+    "query": "dn.se",
+    "field": "nameservers",
+    "want": [
+     "ns-cloud-d1.googledomains.com",
+     "ns-cloud-d2.googledomains.com",
+     "ns-cloud-d3.googledomains.com",
+     "ns-cloud-d4.googledomains.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-aftonbladet-se",
+    "query": "aftonbladet.se",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-aftonbladet-se",
+    "query": "aftonbladet.se",
+    "field": "registrar",
+    "want": "ExcedoNetworksAB",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-aftonbladet-se",
+    "query": "aftonbladet.se",
+    "field": "created",
+    "want": "2000-08-28",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-aftonbladet-se",
+    "query": "aftonbladet.se",
+    "field": "expires",
+    "want": "2027-08-28",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-aftonbladet-se",
+    "query": "aftonbladet.se",
+    "field": "nameservers",
+    "want": [
+     "a.ns.ip-only.net",
+     "b.ns.ip-only.net",
+     "c.ns.ip-only.net",
+     "ns1.schibsted.se",
+     "ns2.schibsted.se",
+     "ystad.dns.swip.net"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-tv2-dk",
+    "query": "tv2.dk",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-tv2-dk",
+    "query": "tv2.dk",
+    "field": "registrar",
+    "want": "Eurodns S.A",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-tv2-dk",
+    "query": "tv2.dk",
+    "field": "created",
+    "want": "1997-12-03",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-tv2-dk",
+    "query": "tv2.dk",
+    "field": "expires",
+    "want": "2026-12-31",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-tv2-dk",
+    "query": "tv2.dk",
+    "field": "nameservers",
+    "want": [
+     "ns1-04.azure-dns.com",
+     "ns2-04.azure-dns.net",
+     "ns3-04.azure-dns.org",
+     "ns4-04.azure-dns.info"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-politiken-dk",
+    "query": "politiken.dk",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-politiken-dk",
+    "query": "politiken.dk",
+    "field": "created",
+    "want": "1995-01-24",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-politiken-dk",
+    "query": "politiken.dk",
+    "field": "expires",
+    "want": "2027-03-31",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-politiken-dk",
+    "query": "politiken.dk",
+    "field": "nameservers",
+    "want": [
+     "ns-1307.awsdns-35.org",
+     "ns-155.awsdns-19.com",
+     "ns-1951.awsdns-51.co.uk",
+     "ns-534.awsdns-02.net"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-mail-ru",
+    "query": "mail.ru",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-mail-ru",
+    "query": "mail.ru",
+    "field": "registrar",
+    "want": "RU-CENTER-RU",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-mail-ru",
+    "query": "mail.ru",
+    "field": "created",
+    "want": "1997-09-27",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-mail-ru",
+    "query": "mail.ru",
+    "field": "expires",
+    "want": "2027-09-30",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-mail-ru",
+    "query": "mail.ru",
+    "field": "nameservers",
+    "want": [
+     "ns1.mail.ru",
+     "ns2.mail.ru"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-rbc-ru",
+    "query": "rbc.ru",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-rbc-ru",
+    "query": "rbc.ru",
+    "field": "registrar",
+    "want": "RU-CENTER-RU",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-rbc-ru",
+    "query": "rbc.ru",
+    "field": "created",
+    "want": "1998-07-22",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-rbc-ru",
+    "query": "rbc.ru",
+    "field": "expires",
+    "want": "2027-07-31",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-rbc-ru",
+    "query": "rbc.ru",
+    "field": "nameservers",
+    "want": [
+     "ns2.rbc.ru",
+     "ns3.rbc.ru"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-sina-cn",
+    "query": "sina.cn",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-sina-cn",
+    "query": "sina.cn",
+    "field": "registrar",
+    "want": "北京国科云计算技术有限公司（原北京中科三方网络技术有限公司）",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-sina-cn",
+    "query": "sina.cn",
+    "field": "created",
+    "want": "2003-03-17",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-sina-cn",
+    "query": "sina.cn",
+    "field": "expires",
+    "want": "2027-03-17",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-sina-cn",
+    "query": "sina.cn",
+    "field": "nameservers",
+    "want": [
+     "ns2.sina.com.cn",
+     "ns3.sina.com.cn"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-rakuten-co-jp",
+    "query": "rakuten.co.jp",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-rakuten-co-jp",
+    "query": "rakuten.co.jp",
+    "field": "created",
+    "want": "1997-02-07",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-rakuten-co-jp",
+    "query": "rakuten.co.jp",
+    "field": "expires",
+    "want": "2027-02-28",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-rakuten-co-jp",
+    "query": "rakuten.co.jp",
+    "field": "nameservers",
+    "want": [
+     "ns02.rakuten.co.jp",
+     "ns06.rakuten.co.jp",
+     "ns01.rakuten.ad.jp",
+     "ns02.rakuten.ad.jp"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-nikkei-co-jp",
+    "query": "nikkei.co.jp",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-nikkei-co-jp",
+    "query": "nikkei.co.jp",
+    "field": "created",
+    "want": "1993-05-27",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-nikkei-co-jp",
+    "query": "nikkei.co.jp",
+    "field": "expires",
+    "want": "2027-05-31",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-nikkei-co-jp",
+    "query": "nikkei.co.jp",
+    "field": "nameservers",
+    "want": [
+     "ns-448.awsdns-56.com",
+     "ns-1228.awsdns-25.org",
+     "ns-762.awsdns-31.net",
+     "ns-1885.awsdns-43.co.uk"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-itam-mx",
+    "query": "itam.mx",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-itam-mx",
+    "query": "itam.mx",
+    "field": "registrar",
+    "want": "AKKY ONLINE SOLUTIONS, S.A. DE C.V.",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-itam-mx",
+    "query": "itam.mx",
+    "field": "created",
+    "want": "1995-01-02",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-itam-mx",
+    "query": "itam.mx",
+    "field": "expires",
+    "want": "2027-01-01",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-itam-mx",
+    "query": "itam.mx",
+    "field": "nameservers",
+    "want": [
+     "esparta.itam.mx",
+     "hopper2.itam.mx"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-latercera-cl",
+    "query": "latercera.cl",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-latercera-cl",
+    "query": "latercera.cl",
+    "field": "registrar",
+    "want": "NIC Chile",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-latercera-cl",
+    "query": "latercera.cl",
+    "field": "created",
+    "want": "1997-08-11",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-latercera-cl",
+    "query": "latercera.cl",
+    "field": "expires",
+    "want": "2027-05-05",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-latercera-cl",
+    "query": "latercera.cl",
+    "field": "nameservers",
+    "want": [
+     "ns-1422.awsdns-49.org",
+     "ns-2015.awsdns-59.co.uk",
+     "ns-44.awsdns-05.com",
+     "ns-594.awsdns-10.net"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-nzherald-co-nz",
+    "query": "nzherald.co.nz",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-nzherald-co-nz",
+    "query": "nzherald.co.nz",
+    "field": "registrar",
+    "want": "Netregistry PTY Ltd/TA Webcentral and Melbourne IT",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-nzherald-co-nz",
+    "query": "nzherald.co.nz",
+    "field": "created",
+    "want": "1997-04-16",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-nzherald-co-nz",
+    "query": "nzherald.co.nz",
+    "field": "nameservers",
+    "want": [
+     "dns1.p01.nsone.net",
+     "dns2.p01.nsone.net",
+     "dns3.p01.nsone.net",
+     "dns4.p01.nsone.net"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-independent-ie",
+    "query": "independent.ie",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-independent-ie",
+    "query": "independent.ie",
+    "field": "registrar",
+    "want": "Letshost/ Team Blue Internet Services IE Ltd",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-independent-ie",
+    "query": "independent.ie",
+    "field": "created",
+    "want": "2001-01-12",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-independent-ie",
+    "query": "independent.ie",
+    "field": "expires",
+    "want": "2027-01-12",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-independent-ie",
+    "query": "independent.ie",
+    "field": "nameservers",
+    "want": [
+     "elliot.ns.cloudflare.com",
+     "erin.ns.cloudflare.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-publico-pt",
+    "query": "publico.pt",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-publico-pt",
+    "query": "publico.pt",
+    "field": "created",
+    "want": "1995-05-11",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-publico-pt",
+    "query": "publico.pt",
+    "field": "expires",
+    "want": "2027-11-02",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-publico-pt",
+    "query": "publico.pt",
+    "field": "nameservers",
+    "want": [
+     "ns-112.awsdns-14.com",
+     "ns-1381.awsdns-44.org",
+     "ns-1801.awsdns-33.co.uk",
+     "ns-861.awsdns-43.net"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-milliyet-com-tr",
+    "query": "milliyet.com.tr",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-milliyet-com-tr",
+    "query": "milliyet.com.tr",
+    "field": "registrar",
+    "want": "ODTÜ GELİŞTİRME VAKFI BİLGİ TEKNOLOJİLERİ SAN. VE TİC. A.Ş.",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-milliyet-com-tr",
+    "query": "milliyet.com.tr",
+    "field": "created",
+    "want": "1996-10-15",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-milliyet-com-tr",
+    "query": "milliyet.com.tr",
+    "field": "expires",
+    "want": "2029-10-14",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-milliyet-com-tr",
+    "query": "milliyet.com.tr",
+    "field": "nameservers",
+    "want": [
+     "ns-98.awsdns-12.com",
+     "ns-1504.awsdns-60.org",
+     "ns-766.awsdns-31.net",
+     "ns-1815.awsdns-34.co.uk"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-haaretz-co-il",
+    "query": "haaretz.co.il",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-haaretz-co-il",
+    "query": "haaretz.co.il",
+    "field": "registrar",
+    "want": "Israel Internet Association ISOC-IL",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-haaretz-co-il",
+    "query": "haaretz.co.il",
+    "field": "created",
+    "want": "1995-03-27",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-haaretz-co-il",
+    "query": "haaretz.co.il",
+    "field": "nameservers",
+    "want": [
+     "ns-cloud-b1.googledomains.com",
+     "ns-cloud-b2.googledomains.com",
+     "ns-cloud-b3.googledomains.com",
+     "ns-cloud-b4.googledomains.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-cuhk-edu-hk",
+    "query": "cuhk.edu.hk",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-cuhk-edu-hk",
+    "query": "cuhk.edu.hk",
+    "field": "registrar",
+    "want": "Hong Kong Domain Name Registration Company Limited",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-cuhk-edu-hk",
+    "query": "cuhk.edu.hk",
+    "field": "created",
+    "want": "1995-11-16",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-cuhk-edu-hk",
+    "query": "cuhk.edu.hk",
+    "field": "expires",
+    "want": "2032-09-01",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-cuhk-edu-hk",
+    "query": "cuhk.edu.hk",
+    "field": "nameservers",
+    "want": [
+     "dns1.cuhk.edu.hk",
+     "dns2.cuhk.edu.hk",
+     "anyns.cuhk.edu.hk",
+     "ns4.gdnsec.com",
+     "ns4.gdnsdef.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-fly-io",
+    "query": "fly.io",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-fly-io",
+    "query": "fly.io",
+    "field": "registrar",
+    "want": "MarkMonitor Inc.",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-fly-io",
+    "query": "fly.io",
+    "field": "created",
+    "want": "2004-07-15",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-fly-io",
+    "query": "fly.io",
+    "field": "expires",
+    "want": "2033-07-15",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-fly-io",
+    "query": "fly.io",
+    "field": "nameservers",
+    "want": [
+     "ns1077.hosted.flydns.net",
+     "ns1970.hosted.flydns.net",
+     "ns479.hosted.flydns.net",
+     "ns967.hosted.flydns.net"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-about-me",
+    "query": "about.me",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-about-me",
+    "query": "about.me",
+    "field": "registrar",
+    "want": "NameCheap, Inc.",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-about-me",
+    "query": "about.me",
+    "field": "created",
+    "want": "2008-04-29",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-about-me",
+    "query": "about.me",
+    "field": "expires",
+    "want": "2034-04-29",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-about-me",
+    "query": "about.me",
+    "field": "nameservers",
+    "want": [
+     "matteo.ns.cloudflare.com",
+     "nola.ns.cloudflare.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-lrt-lt",
+    "query": "lrt.lt",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-lrt-lt",
+    "query": "lrt.lt",
+    "field": "registrar",
+    "want": "Kauno technologijos universitetas",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-lrt-lt",
+    "query": "lrt.lt",
+    "field": "created",
+    "want": "2001-12-05",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-lrt-lt",
+    "query": "lrt.lt",
+    "field": "expires",
+    "want": "2027-12-05",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-lrt-lt",
+    "query": "lrt.lt",
+    "field": "nameservers",
+    "want": [
+     "leonidas.ns.cloudflare.com",
+     "tia.ns.cloudflare.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-err-ee",
+    "query": "err.ee",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-err-ee",
+    "query": "err.ee",
+    "field": "registrar",
+    "want": "Zone Media OÜ",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-err-ee",
+    "query": "err.ee",
+    "field": "created",
+    "want": "2010-07-04",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-err-ee",
+    "query": "err.ee",
+    "field": "expires",
+    "want": "2033-11-13",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-err-ee",
+    "query": "err.ee",
+    "field": "nameservers",
+    "want": [
+     "ns-cloud-a1.googledomains.com",
+     "ns-cloud-a2.googledomains.com",
+     "ns-cloud-a3.googledomains.com",
+     "ns-cloud-a4.googledomains.com",
+     "ns1.err.ee",
+     "ns2.err.ee"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-origo-hu",
+    "query": "origo.hu",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-origo-hu",
+    "query": "origo.hu",
+    "field": "created",
+    "want": "1998-11-30",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-xn-80ac9br-xn-p1ai",
+    "query": "хабр.рф",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-xn-80ac9br-xn-p1ai",
+    "query": "хабр.рф",
+    "field": "registrar",
+    "want": "RUCENTER-RF",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-xn-80ac9br-xn-p1ai",
+    "query": "хабр.рф",
+    "field": "created",
+    "want": "2021-01-12",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-xn-80ac9br-xn-p1ai",
+    "query": "хабр.рф",
+    "field": "expires",
+    "want": "2028-01-12",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-xn-80ac9br-xn-p1ai",
+    "query": "хабр.рф",
+    "field": "nameservers",
+    "want": [
+     "ns3.site.su",
+     "ns4.site.su"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-kommersant-ru",
+    "query": "kommersant.ru",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-kommersant-ru",
+    "query": "kommersant.ru",
+    "field": "registrar",
+    "want": "RU-CENTER-RU",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-kommersant-ru",
+    "query": "kommersant.ru",
+    "field": "created",
+    "want": "1997-09-21",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-kommersant-ru",
+    "query": "kommersant.ru",
+    "field": "expires",
+    "want": "2027-09-30",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-kommersant-ru",
+    "query": "kommersant.ru",
+    "field": "nameservers",
+    "want": [
+     "ns.kommersant.ru",
+     "ns5.kommersant.ru"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-it",
+    "query": "whoq-holdout-r8p3w6n2.it",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-be",
+    "query": "whoq-holdout-r8p3w6n2.be",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-dk",
+    "query": "whoq-holdout-r8p3w6n2.dk",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-hk",
+    "query": "whoq-holdout-r8p3w6n2.hk",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-com-tr",
+    "query": "whoq-holdout-r8p3w6n2.com.tr",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-co-il",
+    "query": "whoq-holdout-r8p3w6n2.co.il",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-ee",
+    "query": "whoq-holdout-r8p3w6n2.ee",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-ru",
+    "query": "whoq-holdout-r8p3w6n2.ru",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-co-jp",
+    "query": "whoq-holdout-r8p3w6n2.co.jp",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-at",
+    "query": "whoq-holdout-r8p3w6n2.at",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   }
+  ],
+  "python-whois": [
+   {
+    "id": "d-standaard-be",
+    "query": "standaard.be",
+    "field": "registrar",
+    "want": "Mediahuis Technology & Product Studio NV",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-hln-be",
+    "query": "hln.be",
+    "field": "registrar",
+    "want": "Registrar.eu",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-hln-be",
+    "query": "hln.be",
+    "field": "nameservers",
+    "want": [
+     "eur2.akam.net",
+     "eur6.akam.net",
+     "ns1-25.akam.net",
+     "eur5.akam.net",
+     "ns1-125.akam.net",
+     "usc2.akam.net",
+     "use2.akam.net",
+     "use5.akam.net"
+    ],
+    "got": "eur2.akam.net\r\n\teur6.akam.net",
+    "exit": 0
+   },
+   {
+    "id": "d-derstandard-at",
+    "query": "derstandard.at",
+    "field": "created",
+    "want": "2000-08-25",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-krone-at",
+    "query": "krone.at",
+    "field": "created",
+    "want": "2000-08-25",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-mail-ru",
+    "query": "mail.ru",
+    "field": "nameservers",
+    "want": [
+     "ns1.mail.ru",
+     "ns2.mail.ru"
+    ],
+    "got": [
+     "ns1.mail.ru. 217.69.139.112",
+     "ns2.mail.ru. 94.100.180.138"
+    ],
+    "exit": 0
+   },
+   {
+    "id": "d-rbc-ru",
+    "query": "rbc.ru",
+    "field": "nameservers",
+    "want": [
+     "ns2.rbc.ru",
+     "ns3.rbc.ru"
+    ],
+    "got": [
+     "ns2.rbc.ru. 185.72.229.26",
+     "ns3.rbc.ru. 80.68.253.26"
+    ],
+    "exit": 0
+   },
+   {
+    "id": "d-rakuten-co-jp",
+    "query": "rakuten.co.jp",
+    "field": "expires",
+    "want": "2027-02-28",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-nikkei-co-jp",
+    "query": "nikkei.co.jp",
+    "field": "expires",
+    "want": "2027-05-31",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-publico-pt",
+    "query": "publico.pt",
+    "field": "status",
+    "want": "registered",
+    "got": "available",
+    "exit": 0
+   },
+   {
+    "id": "d-publico-pt",
+    "query": "publico.pt",
+    "field": "created",
+    "want": "1995-05-11",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-publico-pt",
+    "query": "publico.pt",
+    "field": "expires",
+    "want": "2027-11-02",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-publico-pt",
+    "query": "publico.pt",
+    "field": "nameservers",
+    "want": [
+     "ns-112.awsdns-14.com",
+     "ns-1381.awsdns-44.org",
+     "ns-1801.awsdns-33.co.uk",
+     "ns-861.awsdns-43.net"
+    ],
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-milliyet-com-tr",
+    "query": "milliyet.com.tr",
+    "field": "registrar",
+    "want": "ODTÜ GELİŞTİRME VAKFI BİLGİ TEKNOLOJİLERİ SAN. VE TİC. A.Ş.",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-haaretz-co-il",
+    "query": "haaretz.co.il",
+    "field": "status",
+    "want": "registered",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-haaretz-co-il",
+    "query": "haaretz.co.il",
+    "field": "registrar",
+    "want": "Israel Internet Association ISOC-IL",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-haaretz-co-il",
+    "query": "haaretz.co.il",
+    "field": "created",
+    "want": "1995-03-27",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-haaretz-co-il",
+    "query": "haaretz.co.il",
+    "field": "nameservers",
+    "want": [
+     "ns-cloud-b1.googledomains.com",
+     "ns-cloud-b2.googledomains.com",
+     "ns-cloud-b3.googledomains.com",
+     "ns-cloud-b4.googledomains.com"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-about-me",
+    "query": "about.me",
+    "field": "nameservers",
+    "want": [
+     "matteo.ns.cloudflare.com",
+     "nola.ns.cloudflare.com"
+    ],
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-lrt-lt",
+    "query": "lrt.lt",
+    "field": "registrar",
+    "want": "Kauno technologijos universitetas",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-lrt-lt",
+    "query": "lrt.lt",
+    "field": "nameservers",
+    "want": [
+     "leonidas.ns.cloudflare.com",
+     "tia.ns.cloudflare.com"
+    ],
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-xn-80ac9br-xn-p1ai",
+    "query": "хабр.рф",
+    "field": "status",
+    "want": "registered",
+    "got": "available",
+    "exit": 0
+   },
+   {
+    "id": "d-xn-80ac9br-xn-p1ai",
+    "query": "хабр.рф",
+    "field": "registrar",
+    "want": "RUCENTER-RF",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-xn-80ac9br-xn-p1ai",
+    "query": "хабр.рф",
+    "field": "created",
+    "want": "2021-01-12",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-xn-80ac9br-xn-p1ai",
+    "query": "хабр.рф",
+    "field": "expires",
+    "want": "2028-01-12",
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-xn-80ac9br-xn-p1ai",
+    "query": "хабр.рф",
+    "field": "nameservers",
+    "want": [
+     "ns3.site.su",
+     "ns4.site.su"
+    ],
+    "got": null,
+    "exit": 0
+   },
+   {
+    "id": "d-kommersant-ru",
+    "query": "kommersant.ru",
+    "field": "nameservers",
+    "want": [
+     "ns.kommersant.ru",
+     "ns5.kommersant.ru"
+    ],
+    "got": [
+     "ns5.kommersant.ru. 185.147.37.131",
+     "ns.kommersant.ru. 62.64.7.155"
+    ],
+    "exit": 0
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-it",
+    "query": "whoq-holdout-r8p3w6n2.it",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-be",
+    "query": "whoq-holdout-r8p3w6n2.be",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-hk",
+    "query": "whoq-holdout-r8p3w6n2.hk",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-at",
+    "query": "whoq-holdout-r8p3w6n2.at",
+    "field": "status",
+    "want": "available",
+    "got": null,
+    "exit": 1
+   }
+  ],
+  "whoq-brief": [
+   {
+    "id": "d-politiken-dk",
+    "query": "politiken.dk",
+    "field": "status",
+    "want": "registered",
+    "got": "error",
+    "exit": 1
+   },
+   {
+    "id": "d-politiken-dk",
+    "query": "politiken.dk",
+    "field": "created",
+    "want": "1995-01-24",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-politiken-dk",
+    "query": "politiken.dk",
+    "field": "expires",
+    "want": "2027-03-31",
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-politiken-dk",
+    "query": "politiken.dk",
+    "field": "nameservers",
+    "want": [
+     "ns-1307.awsdns-35.org",
+     "ns-155.awsdns-19.com",
+     "ns-1951.awsdns-51.co.uk",
+     "ns-534.awsdns-02.net"
+    ],
+    "got": null,
+    "exit": 1
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-it",
+    "query": "whoq-holdout-r8p3w6n2.it",
+    "field": "status",
+    "want": "available",
+    "got": "registered",
+    "exit": 0
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-be",
+    "query": "whoq-holdout-r8p3w6n2.be",
+    "field": "status",
+    "want": "available",
+    "got": "registered",
+    "exit": 0
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-hk",
+    "query": "whoq-holdout-r8p3w6n2.hk",
+    "field": "status",
+    "want": "available",
+    "got": "registered",
+    "exit": 0
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-com-tr",
+    "query": "whoq-holdout-r8p3w6n2.com.tr",
+    "field": "status",
+    "want": "available",
+    "got": "registered",
+    "exit": 0
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-co-il",
+    "query": "whoq-holdout-r8p3w6n2.co.il",
+    "field": "status",
+    "want": "available",
+    "got": "registered",
+    "exit": 0
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-at",
+    "query": "whoq-holdout-r8p3w6n2.at",
+    "field": "status",
+    "want": "available",
+    "got": "error",
+    "exit": 1
+   }
+  ],
+  "whoq": [
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-it",
+    "query": "whoq-holdout-r8p3w6n2.it",
+    "field": "status",
+    "want": "available",
+    "got": "registered",
+    "exit": 0
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-be",
+    "query": "whoq-holdout-r8p3w6n2.be",
+    "field": "status",
+    "want": "available",
+    "got": "registered",
+    "exit": 0
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-hk",
+    "query": "whoq-holdout-r8p3w6n2.hk",
+    "field": "status",
+    "want": "available",
+    "got": "registered",
+    "exit": 0
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-com-tr",
+    "query": "whoq-holdout-r8p3w6n2.com.tr",
+    "field": "status",
+    "want": "available",
+    "got": "registered",
+    "exit": 0
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-co-il",
+    "query": "whoq-holdout-r8p3w6n2.co.il",
+    "field": "status",
+    "want": "available",
+    "got": "registered",
+    "exit": 0
+   },
+   {
+    "id": "d-whoq-holdout-r8p3w6n2-at",
+    "query": "whoq-holdout-r8p3w6n2.at",
+    "field": "status",
+    "want": "available",
+    "got": "registered",
+    "exit": 0
+   }
+  ]
+ }
+}

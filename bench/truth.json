@@ -1,0 +1,4530 @@
+{
+ "built_at": "2026-11-17T18:11:48Z",
+ "items": {
+  "d-google-com": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "1997-09-15",
+   "expires": "2028-09-14",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "google.com",
+   "query": "google.com",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-github-com": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "2007-10-09",
+   "expires": "2028-10-09",
+   "nameservers": [
+    "dns1.p08.nsone.net",
+    "dns2.p08.nsone.net",
+    "dns3.p08.nsone.net",
+    "dns4.p08.nsone.net",
+    "ns-1283.awsdns-32.org",
+    "ns-1707.awsdns-21.co.uk",
+    "ns-421.awsdns-52.com",
+    "ns-520.awsdns-01.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "github.com",
+   "query": "github.com",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-amazon-com": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "1994-11-01",
+   "expires": "2027-10-31",
+   "nameservers": [
+    "ns-1447.awsdns-52.org",
+    "ns-1707.awsdns-21.co.uk",
+    "ns-264.awsdns-33.com",
+    "ns-521.awsdns-01.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "amazon.com",
+   "query": "amazon.com",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-apple-com": {
+   "status": "registered",
+   "registrar": "Nom-iq Ltd. dba COM LAUDE",
+   "created": "1987-02-19",
+   "expires": "2027-02-20",
+   "nameservers": [
+    "a.ns.apple.com",
+    "b.ns.apple.com",
+    "c.ns.apple.com",
+    "d.ns.apple.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "apple.com",
+   "query": "apple.com",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-microsoft-com": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "1991-05-02",
+   "expires": "2027-05-03",
+   "nameservers": [
+    "ns1-39.azure-dns.com",
+    "ns2-39.azure-dns.net",
+    "ns3-39.azure-dns.org",
+    "ns4-39.azure-dns.info"
+   ],
+   "source": "rdap-registry",
+   "registrable": "microsoft.com",
+   "query": "microsoft.com",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-netflix-com": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "1997-11-11",
+   "expires": "2027-11-10",
+   "nameservers": [
+    "ns-1372.awsdns-43.org",
+    "ns-1984.awsdns-56.co.uk",
+    "ns-659.awsdns-18.net",
+    "ns-81.awsdns-10.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "netflix.com",
+   "query": "netflix.com",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-cloudflare-com": {
+   "status": "registered",
+   "registrar": "Cloudflare, Inc.",
+   "created": "2009-02-17",
+   "expires": "2033-02-17",
+   "nameservers": [
+    "ns3.cloudflare.com",
+    "ns4.cloudflare.com",
+    "ns5.cloudflare.com",
+    "ns6.cloudflare.com",
+    "ns7.cloudflare.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "cloudflare.com",
+   "query": "cloudflare.com",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-stackoverflow-com": {
+   "status": "registered",
+   "registrar": "CSC Corporate Domains, Inc.",
+   "created": "2003-12-26",
+   "expires": "2027-02-02",
+   "nameservers": [
+    "damian.ns.cloudflare.com",
+    "sureena.ns.cloudflare.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "stackoverflow.com",
+   "query": "stackoverflow.com",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-wikipedia-org": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "2001-01-13",
+   "expires": "2027-01-13",
+   "nameservers": [
+    "ns0.wikimedia.org",
+    "ns1.wikimedia.org",
+    "ns2.wikimedia.org"
+   ],
+   "source": "rdap-registry",
+   "registrable": "wikipedia.org",
+   "query": "wikipedia.org",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-mozilla-org": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "1998-01-24",
+   "expires": "2027-01-23",
+   "nameservers": [
+    "ns1-240.akam.net",
+    "ns4-64.akam.net",
+    "ns5-65.akam.net",
+    "ns7-66.akam.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "mozilla.org",
+   "query": "mozilla.org",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-python-org": {
+   "status": "registered",
+   "registrar": "Gandi SAS",
+   "created": "1995-03-27",
+   "expires": "2033-03-28",
+   "nameservers": [
+    "ns-1134.awsdns-13.org",
+    "ns-2046.awsdns-63.co.uk",
+    "ns-484.awsdns-60.com",
+    "ns-981.awsdns-58.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "python.org",
+   "query": "python.org",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-archive-org": {
+   "status": "registered",
+   "registrar": "easyDNS Technologies Inc.",
+   "created": "1995-12-14",
+   "expires": "2030-12-13",
+   "nameservers": [
+    "ns-global.kjsl.com",
+    "ns0036.secondary.cloudflare.com",
+    "ns0208.secondary.cloudflare.com",
+    "ns1.archive.org",
+    "ns2.archive.org",
+    "ns3.archive.org"
+   ],
+   "source": "rdap-registry",
+   "registrable": "archive.org",
+   "query": "archive.org",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-eff-org": {
+   "status": "registered",
+   "registrar": "Gandi SAS",
+   "created": "1990-10-10",
+   "expires": "2027-10-09",
+   "nameservers": [
+    "ns1.eff.org",
+    "ns2.eff.org",
+    "ns4.eff.org"
+   ],
+   "source": "rdap-registry",
+   "registrable": "eff.org",
+   "query": "eff.org",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-debian-org": {
+   "status": "registered",
+   "registrar": "Gandi SAS",
+   "created": "1999-03-10",
+   "expires": "2027-03-10",
+   "nameservers": [
+    "dns4.easydns.info",
+    "nsp.dnsnode.net",
+    "sec1.rcode0.net",
+    "sec2.rcode0.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "debian.org",
+   "query": "debian.org",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-kernel-org": {
+   "status": "registered",
+   "registrar": "Gandi SAS",
+   "created": "1997-03-07",
+   "expires": "2027-03-08",
+   "nameservers": [
+    "ns11.constellix.com",
+    "ns21.constellix.com",
+    "ns31.constellix.com",
+    "ns41.constellix.net",
+    "ns51.constellix.net",
+    "ns61.constellix.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "kernel.org",
+   "query": "kernel.org",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-rust-lang-org": {
+   "status": "registered",
+   "registrar": "Amazon Registrar, Inc.",
+   "created": "2010-03-30",
+   "expires": "2027-03-30",
+   "nameservers": [
+    "ns-1493.awsdns-58.org",
+    "ns-177.awsdns-22.com",
+    "ns-1800.awsdns-33.co.uk",
+    "ns-683.awsdns-21.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "rust-lang.org",
+   "query": "rust-lang.org",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-php-net": {
+   "status": "registered",
+   "registrar": "Tucows Domains Inc.",
+   "created": "1997-11-18",
+   "expires": "2029-11-17",
+   "nameservers": [
+    "dns1.easydns.com",
+    "dns2.easydns.net",
+    "dns3.easydns.org",
+    "dns4.easydns.info"
+   ],
+   "source": "rdap-registry",
+   "registrable": "php.net",
+   "query": "php.net",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-speedtest-net": {
+   "status": "registered",
+   "registrar": "CSC Corporate Domains, Inc.",
+   "created": "1999-06-25",
+   "expires": "2032-06-25",
+   "nameservers": [
+    "ns-1071.awsdns-05.org",
+    "ns-1643.awsdns-13.co.uk",
+    "ns-372.awsdns-46.com",
+    "ns-787.awsdns-34.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "speedtest.net",
+   "query": "speedtest.net",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-nic-info": {
+   "status": "registered",
+   "registrar": "Registry Operator acts as Registrar (9999)",
+   "created": "2001-07-27",
+   "expires": "2027-07-27",
+   "nameservers": [
+    "ns1.ams1.afilias-nst.info",
+    "ns1.hkg1.afilias-nst.info",
+    "ns1.mia1.afilias-nst.info",
+    "ns1.sea1.afilias-nst.info",
+    "ns1.yyz1.afilias-nst.info"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nic.info",
+   "query": "nic.info",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-nic-biz": {
+   "status": "registered",
+   "registrar": "Registry Services, LLC",
+   "created": "2001-09-30",
+   "expires": "2026-11-06",
+   "nameservers": [
+    "pdns1.ultradns.net",
+    "pdns2.ultradns.net",
+    "pdns3.ultradns.org",
+    "pdns4.ultradns.org",
+    "pdns5.ultradns.info",
+    "pdns6.ultradns.co.uk"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nic.biz",
+   "query": "nic.biz",
+   "kind": "domain",
+   "category": "gtld"
+  },
+  "d-nic-xyz": {
+   "status": "registered",
+   "registrar": "XYZ.com, LLC",
+   "created": "2013-09-11",
+   "expires": "2027-09-11",
+   "nameservers": [
+    "generationxyz.nic.xyz",
+    "x.nic.xyz",
+    "y.nic.xyz",
+    "z.nic.xyz"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nic.xyz",
+   "query": "nic.xyz",
+   "kind": "domain",
+   "category": "ngtld"
+  },
+  "d-nic-online": {
+   "status": "registered",
+   "registrar": "Radix Technologies Inc. SEZC / CO Services Cayman Limited",
+   "created": "2015-01-21",
+   "expires": "2027-01-21",
+   "nameservers": [
+    "ns03.trs-dns.com",
+    "ns03.trs-dns.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nic.online",
+   "query": "nic.online",
+   "kind": "domain",
+   "category": "ngtld"
+  },
+  "d-nic-shop": {
+   "status": "registered",
+   "registrar": "GMO Registry",
+   "created": "2014-02-27",
+   "expires": "2027-02-27",
+   "nameservers": [
+    "ns1.gmointernet.com",
+    "ns1.gmointernet.jp"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nic.shop",
+   "query": "nic.shop",
+   "kind": "domain",
+   "category": "ngtld"
+  },
+  "d-nic-site": {
+   "status": "registered",
+   "registrar": "Radix Technologies Inc. SEZC / CO Services Cayman Limited",
+   "created": "2014-11-13",
+   "expires": "2027-11-13",
+   "nameservers": [
+    "ns03.trs-dns.com",
+    "ns03.trs-dns.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nic.site",
+   "query": "nic.site",
+   "kind": "domain",
+   "category": "ngtld"
+  },
+  "d-nic-top": {
+   "status": "registered",
+   "registrar": "邦宁数字技术股份有限公司",
+   "created": "2014-05-21",
+   "expires": "2029-05-21",
+   "nameservers": [
+    "cns1.zdnscloud.net",
+    "ins1.zdnscloud.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nic.top",
+   "query": "nic.top",
+   "kind": "domain",
+   "category": "ngtld"
+  },
+  "d-nic-store": {
+   "status": "registered",
+   "registrar": "Radix Technologies Inc. SEZC / CO Services Cayman Limited",
+   "created": "2016-01-05",
+   "expires": "2027-01-05",
+   "nameservers": [
+    "ns03.trs-dns.com",
+    "ns03.trs-dns.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nic.store",
+   "query": "nic.store",
+   "kind": "domain",
+   "category": "ngtld"
+  },
+  "d-nic-tech": {
+   "status": "registered",
+   "registrar": "Radix Technologies Inc. SEZC / CO Services Cayman Limited",
+   "created": "2014-11-13",
+   "expires": "2027-11-13",
+   "nameservers": [
+    "ns03.trs-dns.com",
+    "ns03.trs-dns.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nic.tech",
+   "query": "nic.tech",
+   "kind": "domain",
+   "category": "ngtld"
+  },
+  "d-nic-club": {
+   "status": "registered",
+   "registrar": "DOTCLUB DOMAINS, LLC",
+   "created": "2013-08-09",
+   "expires": "2027-08-08",
+   "nameservers": [
+    "ns1.dns.nic.club",
+    "ns2.dns.nic.club",
+    "ns3.dns.nic.club",
+    "ns4.dns.nic.club",
+    "ns5.dns.nic.club",
+    "ns6.dns.nic.club"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nic.club",
+   "query": "nic.club",
+   "kind": "domain",
+   "category": "ngtld"
+  },
+  "d-nic-app": {
+   "status": "registered",
+   "registrar": "Charleston Road Registry NonBillable",
+   "created": "2015-06-22",
+   "expires": "2027-06-22",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nic.app",
+   "query": "nic.app",
+   "kind": "domain",
+   "category": "ngtld"
+  },
+  "d-web-dev": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "2018-10-29",
+   "expires": "2027-10-29",
+   "nameservers": [
+    "ns1.zdns.google",
+    "ns2.zdns.google",
+    "ns3.zdns.google",
+    "ns4.zdns.google"
+   ],
+   "source": "rdap-registry",
+   "registrable": "web.dev",
+   "query": "web.dev",
+   "kind": "domain",
+   "category": "ngtld"
+  },
+  "d-go-dev": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "2019-02-13",
+   "expires": "2027-02-13",
+   "nameservers": [
+    "ns-cloud-e1.googledomains.com",
+    "ns-cloud-e2.googledomains.com",
+    "ns-cloud-e3.googledomains.com",
+    "ns-cloud-e4.googledomains.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "go.dev",
+   "query": "go.dev",
+   "kind": "domain",
+   "category": "ngtld"
+  },
+  "d-nic-blog": {
+   "status": "registered",
+   "registrar": "Knock Knock WHOIS There, LLC",
+   "created": "2025-04-08",
+   "expires": "3000-01-01",
+   "nameservers": [
+    "a.ns.nic.blog",
+    "b.ns.nic.blog",
+    "c.ns.nic.blog",
+    "d.ns.nic.blog"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nic.blog",
+   "query": "nic.blog",
+   "kind": "domain",
+   "category": "ngtld"
+  },
+  "d-nic-cloud": {
+   "status": "registered",
+   "registrar": "Aruba PEC SpA",
+   "created": "2023-09-13",
+   "expires": "2033-09-13",
+   "nameservers": [
+    "ns03.trs-dns.com",
+    "ns03.trs-dns.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nic.cloud",
+   "query": "nic.cloud",
+   "kind": "domain",
+   "category": "ngtld"
+  },
+  "d-nic-london": {
+   "status": "registered",
+   "registrar": "Dot London Domains Limited",
+   "created": "2014-02-25",
+   "expires": "2031-02-25",
+   "nameservers": [
+    "a.nic.london",
+    "b.nic.london",
+    "c.nic.london",
+    "d.nic.london"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nic.london",
+   "query": "nic.london",
+   "kind": "domain",
+   "category": "ngtld"
+  },
+  "d-nic-berlin": {
+   "status": "registered",
+   "registrar": null,
+   "created": "2013-12-12",
+   "expires": "2026-12-12",
+   "nameservers": [
+    "sec1.rcode0.net",
+    "sec2.rcode0.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nic.berlin",
+   "query": "nic.berlin",
+   "kind": "domain",
+   "category": "ngtld"
+  },
+  "d-bbc-co-uk": {
+   "status": "registered",
+   "registrar": "British Broadcasting Corporation",
+   "created": "1994-12-13",
+   "expires": "2034-12-13",
+   "nameservers": [
+    "ddns0.bbc.co.uk",
+    "ddns0.bbc.com",
+    "ddns1.bbc.co.uk",
+    "ddns1.bbc.com",
+    "dns0.bbc.co.uk",
+    "dns0.bbc.com",
+    "dns1.bbc.co.uk",
+    "dns1.bbc.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "bbc.co.uk",
+   "query": "bbc.co.uk",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-spiegel-de": {
+   "status": "registered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": [
+    "pns101.cloudns.net",
+    "pns102.cloudns.net",
+    "pns103.cloudns.net",
+    "pns104.cloudns.net"
+   ],
+   "source": "whois:whois.denic.de",
+   "review": false,
+   "registrable": "spiegel.de",
+   "query": "spiegel.de",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": "DENIC publishes only nameservers and status"
+  },
+  "d-lemonde-fr": {
+   "status": "registered",
+   "registrar": "NAMESHIELD",
+   "created": "2005-08-02",
+   "expires": "2027-06-09",
+   "nameservers": [
+    "ns-cloud-b1.googledomains.com",
+    "ns-cloud-b2.googledomains.com",
+    "ns-cloud-b3.googledomains.com",
+    "ns-cloud-b4.googledomains.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "lemonde.fr",
+   "query": "lemonde.fr",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-corriere-it": {
+   "status": "registered",
+   "registrar": "Tuonome Registrar S.r.l.",
+   "created": "1996-01-29",
+   "expires": "2027-08-05",
+   "nameservers": [
+    "dnsgeo5.tuonomeregistrar.com",
+    "dnsgeo6.tuonomeregistrar.net",
+    "dnsgeo7.tuonomeregistrar.org",
+    "dnsgeo8.tuonomeregistrar.info"
+   ],
+   "source": "whois:whois.nic.it",
+   "review": false,
+   "registrable": "corriere.it",
+   "query": "corriere.it",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": true
+  },
+  "d-nos-nl": {
+   "status": "registered",
+   "registrar": "NPO",
+   "created": "1995-05-17",
+   "expires": null,
+   "nameservers": [
+    "ns-1511.awsdns-60.org",
+    "ns-1582.awsdns-05.co.uk",
+    "ns-311.awsdns-38.com",
+    "ns-823.awsdns-38.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nos.nl",
+   "query": "nos.nl",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-rtbf-be": {
+   "status": "registered",
+   "registrar": "BELNET",
+   "created": "1996-02-22",
+   "expires": null,
+   "nameservers": [
+    "ns1.belnet.be",
+    "ns2.belnet.be",
+    "ns3.belnet.be",
+    "ns1.rtbf.be",
+    "ns2.rtbf.be"
+   ],
+   "source": "whois:whois.dns.be",
+   "review": false,
+   "registrable": "rtbf.be",
+   "query": "rtbf.be",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": "DNS Belgium publishes no expiry"
+  },
+  "d-orf-at": {
+   "status": "registered",
+   "registrar": "APA-IT Informations Technologie GmbH",
+   "created": "2000-08-25",
+   "expires": null,
+   "nameservers": [
+    "ns3.apa.at",
+    "ns4.apa.net"
+   ],
+   "source": "whois:whois.nic.at",
+   "review": false,
+   "registrable": "orf.at",
+   "query": "orf.at",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": "nic.at publishes no expiry"
+  },
+  "d-svt-se": {
+   "status": "registered",
+   "registrar": "CSC Corp Domains",
+   "created": "1993-06-10",
+   "expires": "2026-12-31",
+   "nameservers": [
+    "a1-8.akam.net",
+    "a14-64.akam.net",
+    "a2-65.akam.net",
+    "a3-67.akam.net",
+    "nsa.dnsnode.net",
+    "nsp.dnsnode.net",
+    "nsu.dnsnode.net"
+   ],
+   "source": "whois:whois.iis.se",
+   "review": false,
+   "registrable": "svt.se",
+   "query": "svt.se",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": "draft confirmed"
+  },
+  "d-dr-dk": {
+   "status": "registered",
+   "registrar": null,
+   "created": "1998-03-11",
+   "expires": "2027-03-31",
+   "nameservers": [
+    "a1-63.akam.net",
+    "a10-66.akam.net",
+    "a11-67.akam.net",
+    "a24-64.akam.net",
+    "a26-65.akam.net",
+    "a3-66.akam.net"
+   ],
+   "source": "whois:whois.punktum.dk",
+   "review": false,
+   "registrable": "dr.dk",
+   "query": "dr.dk",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": "Punktum publishes no registrar"
+  },
+  "d-nrk-no": {
+   "status": "registered",
+   "registrar": "Domeneshop AS",
+   "created": "1999-11-14",
+   "expires": null,
+   "nameservers": [
+    "a1-251.akam.net",
+    "a10-64.akam.net",
+    "a13-65.akam.net",
+    "a20-66.akam.net",
+    "a26-67.akam.net",
+    "a7-64.akam.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "nrk.no",
+   "query": "nrk.no",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-yle-fi": {
+   "status": "registered",
+   "registrar": null,
+   "created": "1991-01-01",
+   "expires": "2027-08-31",
+   "nameservers": [
+    "ns-1394.awsdns-46.org",
+    "ns-1882.awsdns-43.co.uk",
+    "ns-76.awsdns-09.com",
+    "ns-997.awsdns-60.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "yle.fi",
+   "query": "yle.fi",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-onet-pl": {
+   "status": "registered",
+   "registrar": "cyber_Folks S.A.",
+   "created": "1996-06-21",
+   "expires": "2026-12-31",
+   "nameservers": [
+    "ns5.ringpublishing.net",
+    "ns6.ringpublishing.net",
+    "ns7.ringpublishing.net",
+    "ns8.ringpublishing.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "onet.pl",
+   "query": "onet.pl",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-seznam-cz": {
+   "status": "registered",
+   "registrar": "Seznam.cz, a.s.",
+   "created": "1996-10-07",
+   "expires": "2027-10-28",
+   "nameservers": [
+    "ams.seznam.cz",
+    "ans.seznam.cz"
+   ],
+   "source": "rdap-registry",
+   "registrable": "seznam.cz",
+   "query": "seznam.cz",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-yandex-ru": {
+   "status": "registered",
+   "registrar": "RU-CENTER-RU",
+   "created": "1997-09-23",
+   "expires": "2027-09-30",
+   "nameservers": [
+    "ns1.yandex.ru",
+    "ns2.yandex.ru"
+   ],
+   "source": "whois:whois.tcinet.ru",
+   "review": false,
+   "registrable": "yandex.ru",
+   "query": "yandex.ru",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": "draft confirmed"
+  },
+  "d-baidu-cn": {
+   "status": "registered",
+   "registrar": "互联网域名系统北京市工程研究中心有限公司",
+   "created": "2003-03-17",
+   "expires": "2029-03-17",
+   "nameservers": [
+    "ns1.baidu.cn",
+    "ns2.baidu.cn",
+    "ns3.baidu.cn",
+    "ns4.baidu.cn"
+   ],
+   "source": "whois:whois.cnnic.cn",
+   "review": false,
+   "registrable": "baidu.cn",
+   "query": "baidu.cn",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": true
+  },
+  "d-yahoo-co-jp": {
+   "status": "registered",
+   "registrar": null,
+   "created": "2019-09-27",
+   "expires": "2027-09-30",
+   "nameservers": [
+    "ns01.yahoo.co.jp",
+    "ns02.yahoo.co.jp",
+    "ns11.yahoo.co.jp",
+    "ns12.yahoo.co.jp"
+   ],
+   "source": "whois:whois.jprs.jp",
+   "review": false,
+   "registrable": "yahoo.co.jp",
+   "query": "yahoo.co.jp",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": "JPRS: registration date and the 'Connected (until)' date; no registrar in the default view"
+  },
+  "d-kisa-or-kr": {
+   "status": "registered",
+   "registrar": null,
+   "created": "1996-07-19",
+   "expires": "9999-12-30",
+   "nameservers": [
+    "center.kisa.or.kr",
+    "hera.kisa.or.kr",
+    "rhea.kisa.or.kr"
+   ],
+   "source": "rdap-registry",
+   "registrable": "kisa.or.kr",
+   "query": "kisa.or.kr",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-globo-com-br": {
+   "status": "registered",
+   "registrar": null,
+   "created": "1996-10-25",
+   "expires": "2029-10-25",
+   "nameservers": [
+    "ns01.oghost.com.br",
+    "ns02.oghost.com.br",
+    "ns03.oghost.com.br",
+    "ns04.oghost.com.br"
+   ],
+   "source": "rdap-registry",
+   "registrable": "globo.com.br",
+   "query": "globo.com.br",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-abc-net-au": {
+   "status": "registered",
+   "registrar": "Domain Directors Pty Ltd trading as Instra",
+   "created": null,
+   "expires": null,
+   "nameservers": [
+    "asia1.akam.net",
+    "eur2.akam.net",
+    "eur3.akam.net",
+    "eur5.akam.net",
+    "ns1-129.akam.net",
+    "ns1-31.akam.net",
+    "usw1.akam.net",
+    "usw5.akam.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "abc.net.au",
+   "query": "abc.net.au",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-cbc-ca": {
+   "status": "registered",
+   "registrar": "Authentic Web Inc.",
+   "created": "2000-10-16",
+   "expires": "2027-11-24",
+   "nameservers": [
+    "a1-29.akam.net",
+    "a14-66.akam.net",
+    "a26-67.akam.net",
+    "a4-64.akam.net",
+    "a5-65.akam.net",
+    "a9-66.akam.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "cbc.ca",
+   "query": "cbc.ca",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-iitb-ac-in": {
+   "status": "registered",
+   "registrar": "ERNET India",
+   "created": "2004-02-28",
+   "expires": "2034-02-28",
+   "nameservers": [
+    "dns1.iitb.ac.in",
+    "dns2.iitb.ac.in",
+    "dns3.iitb.ac.in"
+   ],
+   "source": "rdap-registry",
+   "registrable": "iitb.ac.in",
+   "query": "iitb.ac.in",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-unam-mx": {
+   "status": "registered",
+   "registrar": "AKKY ONLINE SOLUTIONS, S.A. DE C.V.",
+   "created": "1989-03-31",
+   "expires": "2027-03-30",
+   "nameservers": [
+    "ns3.unam.mx",
+    "ns4.unam.mx"
+   ],
+   "source": "whois:whois.mx",
+   "review": false,
+   "registrable": "unam.mx",
+   "query": "unam.mx",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": true
+  },
+  "d-clarin-com-ar": {
+   "status": "registered",
+   "registrar": null,
+   "created": "1996-01-01",
+   "expires": "2027-01-01",
+   "nameservers": [
+    "cash.ns.cloudflare.com",
+    "vita.ns.cloudflare.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "clarin.com.ar",
+   "query": "clarin.com.ar",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-emol-cl": {
+   "status": "registered",
+   "registrar": "NIC Chile",
+   "created": "2002-11-12",
+   "expires": "2026-12-10",
+   "nameservers": [
+    "aragorn.ns.cloudflare.com",
+    "rose.ns.cloudflare.com"
+   ],
+   "source": "whois:whois.nic.cl",
+   "review": false,
+   "registrable": "emol.cl",
+   "query": "emol.cl",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": true
+  },
+  "d-stuff-co-nz": {
+   "status": "registered",
+   "registrar": "Metaname",
+   "created": "1997-09-14",
+   "expires": null,
+   "nameservers": [
+    "ns-1037.awsdns-01.org",
+    "ns-1935.awsdns-49.co.uk",
+    "ns-317.awsdns-39.com",
+    "ns-626.awsdns-14.net"
+   ],
+   "source": "whois:whois.irs.net.nz",
+   "review": false,
+   "registrable": "stuff.co.nz",
+   "query": "stuff.co.nz",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": "InternetNZ publishes no expiry"
+  },
+  "d-rte-ie": {
+   "status": "registered",
+   "registrar": "Blacknight Solutions",
+   "created": "2000-02-11",
+   "expires": "2034-03-31",
+   "nameservers": [
+    "blue.foundationdns.com",
+    "blue.foundationdns.net",
+    "blue.foundationdns.org"
+   ],
+   "source": "whois:whois.weare.ie",
+   "review": false,
+   "registrable": "rte.ie",
+   "query": "rte.ie",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": true
+  },
+  "d-sapo-pt": {
+   "status": "registered",
+   "registrar": null,
+   "created": "2002-10-30",
+   "expires": "2027-11-02",
+   "nameservers": [
+    "dns01.sapo.pt",
+    "dns02.sapo.pt",
+    "ns.sapo.pt",
+    "ns2.sapo.pt"
+   ],
+   "source": "whois:whois.dns.pt",
+   "review": false,
+   "registrable": "sapo.pt",
+   "query": "sapo.pt",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": "DNS.PT publishes no registrar"
+  },
+  "d-hurriyet-com-tr": {
+   "status": "registered",
+   "registrar": "ODTÜ GELİŞTİRME VAKFI BİLGİ TEKNOLOJİLERİ SAN. VE TİC. A.Ş.",
+   "created": "1996-10-31",
+   "expires": "2029-10-30",
+   "nameservers": [
+    "ns-63.awsdns-07.com",
+    "ns-1789.awsdns-31.co.uk",
+    "ns-601.awsdns-11.net",
+    "ns-1172.awsdns-18.org"
+   ],
+   "source": "whois:whois.trabis.gov.tr",
+   "review": false,
+   "registrable": "hurriyet.com.tr",
+   "query": "hurriyet.com.tr",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": true
+  },
+  "d-ynet-co-il": {
+   "status": "registered",
+   "registrar": "Domain The Net Technologies Ltd",
+   "created": "2016-11-01",
+   "expires": "2027-11-01",
+   "nameservers": [
+    "eur2.akam.net",
+    "ns1-61.akam.net",
+    "ns1-92.akam.net",
+    "usc2.akam.net",
+    "use1.akam.net"
+   ],
+   "source": "whois:whois.isoc.org.il",
+   "review": false,
+   "registrable": "ynet.co.il",
+   "query": "ynet.co.il",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": "dates are DD-MM-YYYY"
+  },
+  "d-gov-sg": {
+   "status": "registered",
+   "registrar": "SGNIC",
+   "created": "2024-02-29",
+   "expires": "3000-01-01",
+   "nameservers": [
+    "dsany2.sgnic.sg",
+    "dsany3.sgnic.sg",
+    "dsany4.sgnic.sg",
+    "pch.sgzones.sg"
+   ],
+   "source": "rdap-registry",
+   "registrable": "gov.sg",
+   "query": "gov.sg",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-hku-hk": {
+   "status": "registered",
+   "registrar": "Hong Kong Domain Name Registration Company Limited",
+   "created": "1990-01-03",
+   "expires": "2033-06-07",
+   "nameservers": [
+    "ns1.hku.hk",
+    "ns2.cuhk.edu.hk",
+    "ns2.hku.hk",
+    "ns3.hku.hk",
+    "ns4.hku.hk",
+    "ns10.gdnsdef.com",
+    "ns10.gdnsec.com"
+   ],
+   "source": "whois:whois.hkirc.hk",
+   "review": false,
+   "registrable": "hku.hk",
+   "query": "hku.hk",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": "dates are DD-MM-YYYY"
+  },
+  "d-pchome-com-tw": {
+   "status": "registered",
+   "registrar": "PCHOME",
+   "created": "1985-07-03",
+   "expires": "2035-05-30",
+   "nameservers": [
+    "dns.pchome.com.tw",
+    "dns2.pchome.com.tw",
+    "dns3.pchome.com.tw"
+   ],
+   "source": "rdap-registry",
+   "registrable": "pchome.com.tw",
+   "query": "pchome.com.tw",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-ui-ac-id": {
+   "status": "registered",
+   "registrar": "PT Cyberindo Aditama",
+   "created": "1995-01-01",
+   "expires": "2027-10-01",
+   "nameservers": [
+    "dns1.pandi.id",
+    "ranggalawe.ui.ac.id",
+    "uicsgtw.cs.ui.ac.id"
+   ],
+   "source": "rdap-registry",
+   "registrable": "ui.ac.id",
+   "query": "ui.ac.id",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-github-io": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "2013-03-08",
+   "expires": "2027-03-08",
+   "nameservers": [
+    "dns1.p05.nsone.net",
+    "dns2.p05.nsone.net",
+    "dns3.p05.nsone.net",
+    "ns-1622.awsdns-10.co.uk",
+    "ns-692.awsdns-22.net"
+   ],
+   "source": "whois:whois.nic.io",
+   "review": false,
+   "registrable": "github.io",
+   "query": "github.io",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": true
+  },
+  "d-notion-so": {
+   "status": "registered",
+   "registrar": "1API",
+   "created": "2015-03-31",
+   "expires": "2027-03-31",
+   "nameservers": [
+    "dana.ns.cloudflare.com",
+    "woz.ns.cloudflare.com"
+   ],
+   "source": "whois:whois.nic.so",
+   "review": false,
+   "registrable": "notion.so",
+   "query": "notion.so",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": true
+  },
+  "d-x-ai": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "2017-12-16",
+   "expires": "2029-09-15",
+   "nameservers": [
+    "chelsea.ns.cloudflare.com",
+    "damon.ns.cloudflare.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "x.ai",
+   "query": "x.ai",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-bit-ly": {
+   "status": "registered",
+   "registrar": "Libyan Spider Network (int)",
+   "created": "2008-05-17",
+   "expires": "2032-05-17",
+   "nameservers": [
+    "ns-1372.awsdns-43.org",
+    "ns-705.awsdns-24.net",
+    "ns-cloud-c1.googledomains.com",
+    "ns-cloud-c2.googledomains.com",
+    "ns-cloud-c3.googledomains.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "bit.ly",
+   "query": "bit.ly",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-youtu-be": {
+   "status": "registered",
+   "registrar": "Markmonitor Inc.",
+   "created": "2007-12-24",
+   "expires": null,
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.dns.be",
+   "review": false,
+   "registrable": "youtu.be",
+   "query": "youtu.be",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": "DNS Belgium publishes no expiry"
+  },
+  "d-google-me": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "2008-06-13",
+   "expires": "2027-06-13",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.nic.me",
+   "review": false,
+   "registrable": "google.me",
+   "query": "google.me",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": true
+  },
+  "d-google-tv": {
+   "status": "registered",
+   "registrar": "MarkMonitor, Inc.",
+   "created": "2002-08-02",
+   "expires": "2027-08-02",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "google.tv",
+   "query": "google.tv",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-google-cc": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "1999-06-07",
+   "expires": "2027-06-07",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "google.cc",
+   "query": "google.cc",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-ix-lt": {
+   "status": "registered",
+   "registrar": "UAB \"Interneto vizija\"",
+   "created": "2018-12-05",
+   "expires": "2027-12-06",
+   "nameservers": [
+    "ns1.serveriai.lt",
+    "ns2.serveriai.lt",
+    "ns3.serveriai.lt",
+    "ns4.serveriai.lt"
+   ],
+   "source": "whois:whois.domreg.lt",
+   "review": false,
+   "registrable": "ix.lt",
+   "query": "ix.lt",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": "draft confirmed"
+  },
+  "d-delfi-ee": {
+   "status": "registered",
+   "registrar": "Zone Media OÜ",
+   "created": "2010-07-04",
+   "expires": "2027-11-17",
+   "nameservers": [
+    "ns-1018.awsdns-63.net",
+    "ns-1049.awsdns-03.org",
+    "ns-1864.awsdns-41.co.uk",
+    "ns-350.awsdns-43.com"
+   ],
+   "source": "whois:whois.tld.ee",
+   "review": false,
+   "registrable": "delfi.ee",
+   "query": "delfi.ee",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": true
+  },
+  "d-index-hu": {
+   "status": "registered",
+   "registrar": null,
+   "created": "1999-05-17",
+   "expires": null,
+   "nameservers": null,
+   "source": "whois:whois.nic.hu",
+   "review": false,
+   "registrable": "index.hu",
+   "query": "index.hu",
+   "kind": "domain",
+   "category": "cctld-whois-only",
+   "checked_by_hand": "domain.hu publishes only the creation date"
+  },
+  "d-rtvslo-si": {
+   "status": "registered",
+   "registrar": "Webtasy, d.o.o.",
+   "created": "1995-06-28",
+   "expires": "2029-06-06",
+   "nameservers": [
+    "ns1.rtvslo.si",
+    "ns2.amis.net",
+    "ns2.rtvslo.si",
+    "ns3.amis.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "rtvslo.si",
+   "query": "rtvslo.si",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-ukr-net": {
+   "status": "registered",
+   "registrar": "Network Solutions, LLC",
+   "created": "1999-02-10",
+   "expires": "2030-02-10",
+   "nameservers": [
+    "dns1.fwdcdn.net",
+    "dns2.fwdcdn.net",
+    "dns3.fwdcdn.net",
+    "dns4.fwdcdn.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "ukr.net",
+   "query": "ukr.net",
+   "kind": "domain",
+   "category": "cctld-rdap"
+  },
+  "d-xn-bcher-kva-de": {
+   "status": "registered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": [
+    "ken.ns.cloudflare.com",
+    "sasha.ns.cloudflare.com"
+   ],
+   "source": "whois:whois.denic.de",
+   "review": false,
+   "registrable": "bücher.de",
+   "query": "bücher.de",
+   "kind": "domain",
+   "category": "idn",
+   "checked_by_hand": "DENIC publishes only nameservers and status"
+  },
+  "d-xn-d1acpjx3f-xn-p1ai": {
+   "status": "registered",
+   "registrar": "RUCENTER-RF",
+   "created": "2009-11-25",
+   "expires": "2026-11-25",
+   "nameservers": [
+    "ns1.yandex.ru",
+    "ns2.yandex.ru"
+   ],
+   "source": "whois:whois.tcinet.ru",
+   "review": false,
+   "registrable": "яндекс.рф",
+   "query": "яндекс.рф",
+   "kind": "domain",
+   "category": "idn",
+   "checked_by_hand": "draft confirmed"
+  },
+  "d-xn-mnchen-3ya-de": {
+   "status": "registered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": [
+    "ns01e.muenchen.de",
+    "ns02e.muenchen.de",
+    "ns05e.muenchen.de",
+    "ns06e.muenchen.de"
+   ],
+   "source": "whois:whois.denic.de",
+   "review": false,
+   "registrable": "münchen.de",
+   "query": "münchen.de",
+   "kind": "domain",
+   "category": "idn",
+   "checked_by_hand": "DENIC publishes only nameservers and status"
+  },
+  "d-whoq-bench-q7x2m9v4k1-com": {
+   "status": "available",
+   "source": "rdap-registry",
+   "registrable": "whoq-bench-q7x2m9v4k1.com",
+   "query": "whoq-bench-q7x2m9v4k1.com",
+   "kind": "domain",
+   "category": "unregistered"
+  },
+  "d-whoq-bench-q7x2m9v4k1-net": {
+   "status": "available",
+   "source": "rdap-registry",
+   "registrable": "whoq-bench-q7x2m9v4k1.net",
+   "query": "whoq-bench-q7x2m9v4k1.net",
+   "kind": "domain",
+   "category": "unregistered"
+  },
+  "d-whoq-bench-q7x2m9v4k1-org": {
+   "status": "available",
+   "source": "rdap-registry",
+   "registrable": "whoq-bench-q7x2m9v4k1.org",
+   "query": "whoq-bench-q7x2m9v4k1.org",
+   "kind": "domain",
+   "category": "unregistered"
+  },
+  "d-whoq-bench-q7x2m9v4k1-de": {
+   "status": "available",
+   "source": "whois:whois.denic.de",
+   "review": false,
+   "registrable": "whoq-bench-q7x2m9v4k1.de",
+   "query": "whoq-bench-q7x2m9v4k1.de",
+   "kind": "domain",
+   "category": "unregistered",
+   "checked_by_hand": "Status: free"
+  },
+  "d-whoq-bench-q7x2m9v4k1-co-uk": {
+   "status": "available",
+   "source": "rdap-registry",
+   "registrable": "whoq-bench-q7x2m9v4k1.co.uk",
+   "query": "whoq-bench-q7x2m9v4k1.co.uk",
+   "kind": "domain",
+   "category": "unregistered"
+  },
+  "d-whoq-bench-q7x2m9v4k1-io": {
+   "status": "available",
+   "source": "whois:whois.nic.io",
+   "review": false,
+   "registrable": "whoq-bench-q7x2m9v4k1.io",
+   "query": "whoq-bench-q7x2m9v4k1.io",
+   "kind": "domain",
+   "category": "unregistered",
+   "checked_by_hand": "Domain not found"
+  },
+  "d-whoq-bench-q7x2m9v4k1-app": {
+   "status": "available",
+   "source": "rdap-registry",
+   "registrable": "whoq-bench-q7x2m9v4k1.app",
+   "query": "whoq-bench-q7x2m9v4k1.app",
+   "kind": "domain",
+   "category": "unregistered"
+  },
+  "d-whoq-bench-q7x2m9v4k1-fr": {
+   "status": "available",
+   "source": "rdap-registry",
+   "registrable": "whoq-bench-q7x2m9v4k1.fr",
+   "query": "whoq-bench-q7x2m9v4k1.fr",
+   "kind": "domain",
+   "category": "unregistered"
+  },
+  "d-whoq-bench-q7x2m9v4k1-nl": {
+   "status": "available",
+   "source": "rdap-registry",
+   "registrable": "whoq-bench-q7x2m9v4k1.nl",
+   "query": "whoq-bench-q7x2m9v4k1.nl",
+   "kind": "domain",
+   "category": "unregistered"
+  },
+  "d-whoq-bench-q7x2m9v4k1-jp": {
+   "status": "available",
+   "source": "whois:whois.jprs.jp",
+   "review": false,
+   "registrable": "whoq-bench-q7x2m9v4k1.jp",
+   "query": "whoq-bench-q7x2m9v4k1.jp",
+   "kind": "domain",
+   "category": "unregistered",
+   "checked_by_hand": "No match"
+  },
+  "d-zeit-de": {
+   "status": "registered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": [
+    "dns1.p01.nsone.net",
+    "dns2.p01.nsone.net",
+    "dns3.p01.nsone.net",
+    "dns4.p01.nsone.net"
+   ],
+   "source": "whois:whois.denic.de",
+   "review": false,
+   "registrable": "zeit.de",
+   "query": "zeit.de",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "DENIC publishes only nameservers and status"
+  },
+  "d-heise-de": {
+   "status": "registered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": [
+    "ns.heise.de",
+    "ns.plusline.de",
+    "ns.pop-hannover.de",
+    "ns.s.plusline.de",
+    "ns2.pop-hannover.net"
+   ],
+   "source": "whois:whois.denic.de",
+   "review": false,
+   "registrable": "heise.de",
+   "query": "heise.de",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "DENIC publishes only nameservers and status"
+  },
+  "d-repubblica-it": {
+   "status": "registered",
+   "registrar": "Gandi SAS",
+   "created": "1996-05-15",
+   "expires": "2027-01-16",
+   "nameservers": [
+    "ns-1541.awsdns-00.co.uk",
+    "ns-1477.awsdns-56.org",
+    "ns-723.awsdns-26.net",
+    "ns-353.awsdns-44.com"
+   ],
+   "source": "whois:whois.nic.it",
+   "review": false,
+   "registrable": "repubblica.it",
+   "query": "repubblica.it",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": true
+  },
+  "d-gazzetta-it": {
+   "status": "registered",
+   "registrar": "Tuonome Registrar S.r.l.",
+   "created": "1996-01-29",
+   "expires": "2027-08-05",
+   "nameservers": [
+    "dnsgeo5.tuonomeregistrar.com",
+    "dnsgeo6.tuonomeregistrar.net",
+    "dnsgeo7.tuonomeregistrar.org",
+    "dnsgeo8.tuonomeregistrar.info"
+   ],
+   "source": "whois:whois.nic.it",
+   "review": false,
+   "registrable": "gazzetta.it",
+   "query": "gazzetta.it",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": true
+  },
+  "d-standaard-be": {
+   "status": "registered",
+   "registrar": "Mediahuis Technology & Product Studio NV",
+   "created": "1995-02-24",
+   "expires": null,
+   "nameservers": [
+    "elliot.ns.cloudflare.com",
+    "erin.ns.cloudflare.com"
+   ],
+   "source": "whois:whois.dns.be",
+   "review": false,
+   "registrable": "standaard.be",
+   "query": "standaard.be",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "DNS Belgium publishes no expiry"
+  },
+  "d-hln-be": {
+   "status": "registered",
+   "registrar": "Registrar.eu",
+   "created": "1999-03-11",
+   "expires": null,
+   "nameservers": [
+    "eur2.akam.net",
+    "eur6.akam.net",
+    "ns1-25.akam.net",
+    "eur5.akam.net",
+    "ns1-125.akam.net",
+    "usc2.akam.net",
+    "use2.akam.net",
+    "use5.akam.net"
+   ],
+   "source": "whois:whois.dns.be",
+   "review": false,
+   "registrable": "hln.be",
+   "query": "hln.be",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "DNS Belgium publishes no expiry"
+  },
+  "d-derstandard-at": {
+   "status": "registered",
+   "registrar": null,
+   "created": "2000-08-25",
+   "expires": null,
+   "nameservers": [
+    "balancer1.derstandard.at",
+    "ns.mail.at",
+    "sec1.rcode0.net",
+    "sec2.rcode0.net"
+   ],
+   "source": "whois:whois.nic.at",
+   "review": false,
+   "registrable": "derstandard.at",
+   "query": "derstandard.at",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "registrar field empty; nic.at publishes no expiry"
+  },
+  "d-krone-at": {
+   "status": "registered",
+   "registrar": null,
+   "created": "2000-08-25",
+   "expires": null,
+   "nameservers": [
+    "ns-1351.awsdns-40.org",
+    "ns-1581.awsdns-05.co.uk",
+    "ns-294.awsdns-36.com",
+    "ns-999.awsdns-60.net"
+   ],
+   "source": "whois:whois.nic.at",
+   "review": false,
+   "registrable": "krone.at",
+   "query": "krone.at",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "registrar field empty; nic.at publishes no expiry"
+  },
+  "d-dn-se": {
+   "status": "registered",
+   "registrar": "Abion AB",
+   "created": "1991-12-02",
+   "expires": "2026-12-31",
+   "nameservers": [
+    "ns-cloud-d1.googledomains.com",
+    "ns-cloud-d2.googledomains.com",
+    "ns-cloud-d3.googledomains.com",
+    "ns-cloud-d4.googledomains.com"
+   ],
+   "source": "whois:whois.iis.se",
+   "review": false,
+   "registrable": "dn.se",
+   "query": "dn.se",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "draft confirmed"
+  },
+  "d-aftonbladet-se": {
+   "status": "registered",
+   "registrar": "ExcedoNetworksAB",
+   "created": "2000-08-28",
+   "expires": "2027-08-28",
+   "nameservers": [
+    "a.ns.ip-only.net",
+    "b.ns.ip-only.net",
+    "c.ns.ip-only.net",
+    "ns1.schibsted.se",
+    "ns2.schibsted.se",
+    "ystad.dns.swip.net"
+   ],
+   "source": "whois:whois.iis.se",
+   "review": false,
+   "registrable": "aftonbladet.se",
+   "query": "aftonbladet.se",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "draft confirmed"
+  },
+  "d-tv2-dk": {
+   "status": "registered",
+   "registrar": "Eurodns S.A",
+   "created": "1997-12-03",
+   "expires": "2026-12-31",
+   "nameservers": [
+    "ns1-04.azure-dns.com",
+    "ns2-04.azure-dns.net",
+    "ns3-04.azure-dns.org",
+    "ns4-04.azure-dns.info"
+   ],
+   "source": "whois:whois.punktum.dk",
+   "review": false,
+   "registrable": "tv2.dk",
+   "query": "tv2.dk",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": true
+  },
+  "d-politiken-dk": {
+   "status": "registered",
+   "registrar": null,
+   "created": "1995-01-24",
+   "expires": "2027-03-31",
+   "nameservers": [
+    "ns-1307.awsdns-35.org",
+    "ns-155.awsdns-19.com",
+    "ns-1951.awsdns-51.co.uk",
+    "ns-534.awsdns-02.net"
+   ],
+   "source": "whois:whois.punktum.dk",
+   "review": false,
+   "registrable": "politiken.dk",
+   "query": "politiken.dk",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "no registrar shown"
+  },
+  "d-mail-ru": {
+   "status": "registered",
+   "registrar": "RU-CENTER-RU",
+   "created": "1997-09-27",
+   "expires": "2027-09-30",
+   "nameservers": [
+    "ns1.mail.ru",
+    "ns2.mail.ru"
+   ],
+   "source": "whois:whois.tcinet.ru",
+   "review": false,
+   "registrable": "mail.ru",
+   "query": "mail.ru",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "draft confirmed"
+  },
+  "d-rbc-ru": {
+   "status": "registered",
+   "registrar": "RU-CENTER-RU",
+   "created": "1998-07-22",
+   "expires": "2027-07-31",
+   "nameservers": [
+    "ns2.rbc.ru",
+    "ns3.rbc.ru"
+   ],
+   "source": "whois:whois.tcinet.ru",
+   "review": false,
+   "registrable": "rbc.ru",
+   "query": "rbc.ru",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "draft confirmed"
+  },
+  "d-sina-cn": {
+   "status": "registered",
+   "registrar": "北京国科云计算技术有限公司（原北京中科三方网络技术有限公司）",
+   "created": "2003-03-17",
+   "expires": "2027-03-17",
+   "nameservers": [
+    "ns2.sina.com.cn",
+    "ns3.sina.com.cn"
+   ],
+   "source": "whois:whois.cnnic.cn",
+   "review": false,
+   "registrable": "sina.cn",
+   "query": "sina.cn",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": true
+  },
+  "d-rakuten-co-jp": {
+   "status": "registered",
+   "registrar": null,
+   "created": "1997-02-07",
+   "expires": "2027-02-28",
+   "nameservers": [
+    "ns02.rakuten.co.jp",
+    "ns06.rakuten.co.jp",
+    "ns01.rakuten.ad.jp",
+    "ns02.rakuten.ad.jp"
+   ],
+   "source": "whois:whois.jprs.jp",
+   "review": false,
+   "registrable": "rakuten.co.jp",
+   "query": "rakuten.co.jp",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "JPRS registration date and Connected-until date"
+  },
+  "d-nikkei-co-jp": {
+   "status": "registered",
+   "registrar": null,
+   "created": "1993-05-27",
+   "expires": "2027-05-31",
+   "nameservers": [
+    "ns-448.awsdns-56.com",
+    "ns-1228.awsdns-25.org",
+    "ns-762.awsdns-31.net",
+    "ns-1885.awsdns-43.co.uk"
+   ],
+   "source": "whois:whois.jprs.jp",
+   "review": false,
+   "registrable": "nikkei.co.jp",
+   "query": "nikkei.co.jp",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "JPRS registration date and Connected-until date"
+  },
+  "d-itam-mx": {
+   "status": "registered",
+   "registrar": "AKKY ONLINE SOLUTIONS, S.A. DE C.V.",
+   "created": "1995-01-02",
+   "expires": "2027-01-01",
+   "nameservers": [
+    "esparta.itam.mx",
+    "hopper2.itam.mx"
+   ],
+   "source": "whois:whois.mx",
+   "review": false,
+   "registrable": "itam.mx",
+   "query": "itam.mx",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": true
+  },
+  "d-latercera-cl": {
+   "status": "registered",
+   "registrar": "NIC Chile",
+   "created": "1997-08-11",
+   "expires": "2027-05-05",
+   "nameservers": [
+    "ns-1422.awsdns-49.org",
+    "ns-2015.awsdns-59.co.uk",
+    "ns-44.awsdns-05.com",
+    "ns-594.awsdns-10.net"
+   ],
+   "source": "whois:whois.nic.cl",
+   "review": false,
+   "registrable": "latercera.cl",
+   "query": "latercera.cl",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": true
+  },
+  "d-nzherald-co-nz": {
+   "status": "registered",
+   "registrar": "Netregistry PTY Ltd/TA Webcentral and Melbourne IT",
+   "created": "1997-04-16",
+   "expires": null,
+   "nameservers": [
+    "dns1.p01.nsone.net",
+    "dns2.p01.nsone.net",
+    "dns3.p01.nsone.net",
+    "dns4.p01.nsone.net"
+   ],
+   "source": "whois:whois.irs.net.nz",
+   "review": false,
+   "registrable": "nzherald.co.nz",
+   "query": "nzherald.co.nz",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "no expiry published"
+  },
+  "d-independent-ie": {
+   "status": "registered",
+   "registrar": "Letshost/ Team Blue Internet Services IE Ltd",
+   "created": "2001-01-12",
+   "expires": "2027-01-12",
+   "nameservers": [
+    "elliot.ns.cloudflare.com",
+    "erin.ns.cloudflare.com"
+   ],
+   "source": "whois:whois.weare.ie",
+   "review": false,
+   "registrable": "independent.ie",
+   "query": "independent.ie",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": true
+  },
+  "d-publico-pt": {
+   "status": "registered",
+   "registrar": null,
+   "created": "1995-05-11",
+   "expires": "2027-11-02",
+   "nameservers": [
+    "ns-112.awsdns-14.com",
+    "ns-1381.awsdns-44.org",
+    "ns-1801.awsdns-33.co.uk",
+    "ns-861.awsdns-43.net"
+   ],
+   "source": "whois:whois.dns.pt",
+   "review": false,
+   "registrable": "publico.pt",
+   "query": "publico.pt",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "DD/MM/YYYY dates; no registrar shown"
+  },
+  "d-milliyet-com-tr": {
+   "status": "registered",
+   "registrar": "ODTÜ GELİŞTİRME VAKFI BİLGİ TEKNOLOJİLERİ SAN. VE TİC. A.Ş.",
+   "created": "1996-10-15",
+   "expires": "2029-10-14",
+   "nameservers": [
+    "ns-98.awsdns-12.com",
+    "ns-1504.awsdns-60.org",
+    "ns-766.awsdns-31.net",
+    "ns-1815.awsdns-34.co.uk"
+   ],
+   "source": "whois:whois.trabis.gov.tr",
+   "review": false,
+   "registrable": "milliyet.com.tr",
+   "query": "milliyet.com.tr",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": true
+  },
+  "d-haaretz-co-il": {
+   "status": "registered",
+   "registrar": "Israel Internet Association ISOC-IL",
+   "created": "1995-03-27",
+   "expires": null,
+   "nameservers": [
+    "ns-cloud-b1.googledomains.com",
+    "ns-cloud-b2.googledomains.com",
+    "ns-cloud-b3.googledomains.com",
+    "ns-cloud-b4.googledomains.com"
+   ],
+   "source": "whois:whois.isoc.org.il",
+   "review": false,
+   "registrable": "haaretz.co.il",
+   "query": "haaretz.co.il",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "validity N/A"
+  },
+  "d-cuhk-edu-hk": {
+   "status": "registered",
+   "registrar": "Hong Kong Domain Name Registration Company Limited",
+   "created": "1995-11-16",
+   "expires": "2032-09-01",
+   "nameservers": [
+    "dns1.cuhk.edu.hk",
+    "dns2.cuhk.edu.hk",
+    "anyns.cuhk.edu.hk",
+    "ns4.gdnsec.com",
+    "ns4.gdnsdef.com"
+   ],
+   "source": "whois:whois.hkirc.hk",
+   "review": false,
+   "registrable": "cuhk.edu.hk",
+   "query": "cuhk.edu.hk",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "DD-MM-YYYY dates"
+  },
+  "d-fly-io": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "2004-07-15",
+   "expires": "2033-07-15",
+   "nameservers": [
+    "ns1077.hosted.flydns.net",
+    "ns1970.hosted.flydns.net",
+    "ns479.hosted.flydns.net",
+    "ns967.hosted.flydns.net"
+   ],
+   "source": "whois:whois.nic.io",
+   "review": false,
+   "registrable": "fly.io",
+   "query": "fly.io",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": true
+  },
+  "d-about-me": {
+   "status": "registered",
+   "registrar": "NameCheap, Inc.",
+   "created": "2008-04-29",
+   "expires": "2034-04-29",
+   "nameservers": [
+    "matteo.ns.cloudflare.com",
+    "nola.ns.cloudflare.com"
+   ],
+   "source": "whois:whois.nic.me",
+   "review": false,
+   "registrable": "about.me",
+   "query": "about.me",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": true
+  },
+  "d-lrt-lt": {
+   "status": "registered",
+   "registrar": "Kauno technologijos universitetas",
+   "created": "2001-12-05",
+   "expires": "2027-12-05",
+   "nameservers": [
+    "leonidas.ns.cloudflare.com",
+    "tia.ns.cloudflare.com"
+   ],
+   "source": "whois:whois.domreg.lt",
+   "review": false,
+   "registrable": "lrt.lt",
+   "query": "lrt.lt",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "draft confirmed"
+  },
+  "d-err-ee": {
+   "status": "registered",
+   "registrar": "Zone Media OÜ",
+   "created": "2010-07-04",
+   "expires": "2033-11-13",
+   "nameservers": [
+    "ns-cloud-a1.googledomains.com",
+    "ns-cloud-a2.googledomains.com",
+    "ns-cloud-a3.googledomains.com",
+    "ns-cloud-a4.googledomains.com",
+    "ns1.err.ee",
+    "ns2.err.ee"
+   ],
+   "source": "whois:whois.tld.ee",
+   "review": false,
+   "registrable": "err.ee",
+   "query": "err.ee",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": true
+  },
+  "d-origo-hu": {
+   "status": "registered",
+   "registrar": null,
+   "created": "1998-11-30",
+   "expires": null,
+   "nameservers": null,
+   "source": "whois:whois.nic.hu",
+   "review": false,
+   "registrable": "origo.hu",
+   "query": "origo.hu",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "domain.hu publishes only the creation date"
+  },
+  "d-xn-80ac9br-xn-p1ai": {
+   "status": "registered",
+   "registrar": "RUCENTER-RF",
+   "created": "2021-01-12",
+   "expires": "2028-01-12",
+   "nameservers": [
+    "ns3.site.su",
+    "ns4.site.su"
+   ],
+   "source": "whois:whois.tcinet.ru",
+   "review": false,
+   "registrable": "хабр.рф",
+   "query": "хабр.рф",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "draft confirmed"
+  },
+  "d-kommersant-ru": {
+   "status": "registered",
+   "registrar": "RU-CENTER-RU",
+   "created": "1997-09-21",
+   "expires": "2027-09-30",
+   "nameservers": [
+    "ns.kommersant.ru",
+    "ns5.kommersant.ru"
+   ],
+   "source": "whois:whois.tcinet.ru",
+   "review": false,
+   "registrable": "kommersant.ru",
+   "query": "kommersant.ru",
+   "kind": "domain",
+   "category": "holdout-whois-only",
+   "checked_by_hand": "draft confirmed"
+  },
+  "d-whoq-holdout-r8p3w6n2-it": {
+   "status": "available",
+   "source": "whois:whois.nic.it",
+   "review": false,
+   "registrable": "whoq-holdout-r8p3w6n2.it",
+   "query": "whoq-holdout-r8p3w6n2.it",
+   "kind": "domain",
+   "category": "holdout-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-holdout-r8p3w6n2-be": {
+   "status": "available",
+   "source": "whois:whois.dns.be",
+   "review": false,
+   "registrable": "whoq-holdout-r8p3w6n2.be",
+   "query": "whoq-holdout-r8p3w6n2.be",
+   "kind": "domain",
+   "category": "holdout-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-holdout-r8p3w6n2-dk": {
+   "status": "available",
+   "source": "whois:whois.punktum.dk",
+   "review": false,
+   "registrable": "whoq-holdout-r8p3w6n2.dk",
+   "query": "whoq-holdout-r8p3w6n2.dk",
+   "kind": "domain",
+   "category": "holdout-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-holdout-r8p3w6n2-hk": {
+   "status": "available",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "source": "whois:whois.hkirc.hk",
+   "review": false,
+   "registrable": "whoq-holdout-r8p3w6n2.hk",
+   "query": "whoq-holdout-r8p3w6n2.hk",
+   "kind": "domain",
+   "category": "holdout-unregistered",
+   "checked_by_hand": "The domain has not been registered."
+  },
+  "d-whoq-holdout-r8p3w6n2-com-tr": {
+   "status": "available",
+   "source": "whois:whois.trabis.gov.tr",
+   "review": false,
+   "registrable": "whoq-holdout-r8p3w6n2.com.tr",
+   "query": "whoq-holdout-r8p3w6n2.com.tr",
+   "kind": "domain",
+   "category": "holdout-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-holdout-r8p3w6n2-co-il": {
+   "status": "available",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "source": "whois:whois.isoc.org.il",
+   "review": false,
+   "registrable": "whoq-holdout-r8p3w6n2.co.il",
+   "query": "whoq-holdout-r8p3w6n2.co.il",
+   "kind": "domain",
+   "category": "holdout-unregistered",
+   "checked_by_hand": "No data was found to match the request criteria."
+  },
+  "d-whoq-holdout-r8p3w6n2-ee": {
+   "status": "available",
+   "source": "whois:whois.tld.ee",
+   "review": false,
+   "registrable": "whoq-holdout-r8p3w6n2.ee",
+   "query": "whoq-holdout-r8p3w6n2.ee",
+   "kind": "domain",
+   "category": "holdout-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-holdout-r8p3w6n2-ru": {
+   "status": "available",
+   "source": "whois:whois.tcinet.ru",
+   "review": false,
+   "registrable": "whoq-holdout-r8p3w6n2.ru",
+   "query": "whoq-holdout-r8p3w6n2.ru",
+   "kind": "domain",
+   "category": "holdout-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-holdout-r8p3w6n2-co-jp": {
+   "status": "available",
+   "source": "whois:whois.jprs.jp",
+   "review": false,
+   "registrable": "whoq-holdout-r8p3w6n2.co.jp",
+   "query": "whoq-holdout-r8p3w6n2.co.jp",
+   "kind": "domain",
+   "category": "holdout-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-holdout-r8p3w6n2-at": {
+   "status": "available",
+   "source": "whois:whois.nic.at",
+   "review": false,
+   "registrable": "whoq-holdout-r8p3w6n2.at",
+   "query": "whoq-holdout-r8p3w6n2.at",
+   "kind": "domain",
+   "category": "holdout-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-delfi-lt": {
+   "status": "registered",
+   "registrar": "Telia Lietuva, AB",
+   "created": "1999-09-13",
+   "expires": "2027-09-13",
+   "nameservers": [
+    "ns-1247.awsdns-27.org",
+    "ns-1738.awsdns-25.co.uk",
+    "ns-301.awsdns-37.com",
+    "ns-745.awsdns-29.net"
+   ],
+   "source": "whois:whois.domreg.lt",
+   "review": false,
+   "registrable": "delfi.lt",
+   "query": "delfi.lt",
+   "kind": "domain",
+   "category": "fresh-whois-only",
+   "checked_by_hand": "draft confirmed"
+  },
+  "d-rtp-pt": {
+   "status": "registered",
+   "registrar": null,
+   "created": "1993-05-28",
+   "expires": "2027-11-02",
+   "nameservers": [
+    "ns1.ptempresas.pt",
+    "ns10.ptempresas.pt",
+    "ns2.ptempresas.pt"
+   ],
+   "source": "whois:whois.dns.pt",
+   "review": false,
+   "registrable": "rtp.pt",
+   "query": "rtp.pt",
+   "kind": "domain",
+   "category": "fresh-whois-only",
+   "checked_by_hand": "no registrar shown; DD/MM/YYYY dates"
+  },
+  "d-biobiochile-cl": {
+   "status": "registered",
+   "registrar": "NIC Chile",
+   "created": "2010-10-25",
+   "expires": "2029-11-22",
+   "nameservers": [
+    "ns1-06.azure-dns.com",
+    "ns2-06.azure-dns.net",
+    "ns3-06.azure-dns.org",
+    "ns4-06.azure-dns.info"
+   ],
+   "source": "whois:whois.nic.cl",
+   "review": false,
+   "registrable": "biobiochile.cl",
+   "query": "biobiochile.cl",
+   "kind": "domain",
+   "category": "fresh-whois-only",
+   "checked_by_hand": true
+  },
+  "d-eluniversal-com-mx": {
+   "status": "registered",
+   "registrar": "AKKY ONLINE SOLUTIONS, S.A. DE C.V.",
+   "created": "2000-07-25",
+   "expires": "2027-07-24",
+   "nameservers": [
+    "lola.ns.cloudflare.com",
+    "mark.ns.cloudflare.com"
+   ],
+   "source": "whois:whois.mx",
+   "review": false,
+   "registrable": "eluniversal.com.mx",
+   "query": "eluniversal.com.mx",
+   "kind": "domain",
+   "category": "fresh-whois-only",
+   "checked_by_hand": true
+  },
+  "d-rnz-co-nz": {
+   "status": "registered",
+   "registrar": "Metaname",
+   "created": "1997-02-26",
+   "expires": null,
+   "nameservers": [
+    "ns-1117.awsdns-11.org",
+    "ns-1948.awsdns-51.co.uk",
+    "ns-262.awsdns-32.com",
+    "ns-646.awsdns-16.net"
+   ],
+   "source": "whois:whois.irs.net.nz",
+   "review": false,
+   "registrable": "rnz.co.nz",
+   "query": "rnz.co.nz",
+   "kind": "domain",
+   "category": "fresh-whois-only",
+   "checked_by_hand": true
+  },
+  "d-irishtimes-ie": {
+   "status": "registered",
+   "registrar": "Blacknight Solutions",
+   "created": "2007-06-10",
+   "expires": "2027-06-11",
+   "nameservers": [
+    "ns1.blacknight.com",
+    "ns2.blacknight.com",
+    "ns3.blacknight.com",
+    "ns4.blacknight.com"
+   ],
+   "source": "whois:whois.weare.ie",
+   "review": false,
+   "registrable": "irishtimes.ie",
+   "query": "irishtimes.ie",
+   "kind": "domain",
+   "category": "fresh-whois-only",
+   "checked_by_hand": true
+  },
+  "d-telex-hu": {
+   "status": "registered",
+   "registrar": null,
+   "created": "2020-09-25",
+   "expires": null,
+   "nameservers": null,
+   "source": "whois:whois.nic.hu",
+   "review": false,
+   "registrable": "telex.hu",
+   "query": "telex.hu",
+   "kind": "domain",
+   "category": "fresh-whois-only",
+   "checked_by_hand": "domain.hu publishes only the creation date"
+  },
+  "d-people-cn": {
+   "status": "registered",
+   "registrar": "北京国科云计算技术有限公司（原北京中科三方网络技术有限公司）",
+   "created": "2003-03-10",
+   "expires": "2032-04-23",
+   "nameservers": [
+    "ns1.people.cn",
+    "ns2.people.cn",
+    "ns3.people.cn",
+    "ns4.people.cn",
+    "ns5.people.cn"
+   ],
+   "source": "whois:whois.cnnic.cn",
+   "review": false,
+   "registrable": "people.cn",
+   "query": "people.cn",
+   "kind": "domain",
+   "category": "fresh-whois-only",
+   "checked_by_hand": true
+  },
+  "d-delfi-lv": {
+   "status": "registered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": [
+    "ns-1492.awsdns-58.org",
+    "ns-1638.awsdns-12.co.uk",
+    "ns-229.awsdns-28.com",
+    "ns-980.awsdns-58.net"
+   ],
+   "source": "whois:whois.nic.lv",
+   "review": false,
+   "registrable": "delfi.lv",
+   "query": "delfi.lv",
+   "kind": "domain",
+   "category": "fresh-whois-only",
+   "checked_by_hand": "NIC.LV publishes no registrar or dates"
+  },
+  "d-sme-sk": {
+   "status": "registered",
+   "registrar": "Petit Printing Press, a.s., organizačná zložka",
+   "created": "2003-03-24",
+   "expires": "2030-03-24",
+   "nameservers": [
+    "ivan.ns.cloudflare.com",
+    "pat.ns.cloudflare.com"
+   ],
+   "source": "whois:whois.sk-nic.sk",
+   "review": false,
+   "registrable": "sme.sk",
+   "query": "sme.sk",
+   "kind": "domain",
+   "category": "fresh-whois-only",
+   "checked_by_hand": "Registrar field is the handle PPRP-0001; its Name line gives the name"
+  },
+  "d-digi24-ro": {
+   "status": "registered",
+   "registrar": "RCS & RDS SA",
+   "created": "2011-10-18",
+   "expires": null,
+   "nameservers": [
+    "ns.rdsnet.eu",
+    "ns.rdsnet.org",
+    "ns.rdsnet.ro",
+    "ns.rdsnet.tech"
+   ],
+   "source": "whois:whois.rotld.ro",
+   "review": false,
+   "registrable": "digi24.ro",
+   "query": "digi24.ro",
+   "kind": "domain",
+   "category": "fresh-whois-only",
+   "checked_by_hand": "draft confirmed; no expiry published"
+  },
+  "d-dnevnik-bg": {
+   "status": "registered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": [
+    "curt.ns.cloudflare.com",
+    "sneh.ns.cloudflare.com"
+   ],
+   "source": "whois:whois.register.bg",
+   "review": false,
+   "registrable": "dnevnik.bg",
+   "query": "dnevnik.bg",
+   "kind": "domain",
+   "category": "fresh-whois-only",
+   "checked_by_hand": "Register.bg publishes nameservers and status only"
+  },
+  "d-ruv-is": {
+   "status": "registered",
+   "registrar": null,
+   "created": "1995-02-17",
+   "expires": null,
+   "nameservers": [
+    "adrian.ns.cloudflare.com",
+    "igor.ns.cloudflare.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "ruv.is",
+   "query": "ruv.is",
+   "kind": "domain",
+   "category": "fresh-rdap"
+  },
+  "d-rtl-lu": {
+   "status": "registered",
+   "registrar": "EuroDNS SA",
+   "created": null,
+   "expires": null,
+   "nameservers": [
+    "ns-1363.awsdns-42.org",
+    "ns-1637.awsdns-12.co.uk",
+    "ns-175.awsdns-21.com",
+    "ns-907.awsdns-49.net"
+   ],
+   "source": "whois:whois.dns.lu",
+   "review": false,
+   "registrable": "rtl.lu",
+   "query": "rtl.lu",
+   "kind": "domain",
+   "category": "fresh-whois-only",
+   "checked_by_hand": true
+  },
+  "d-index-hr": {
+   "status": "registered",
+   "registrar": "Tomsoft d.o.o.",
+   "created": "2012-09-13",
+   "expires": "2028-09-13",
+   "nameservers": [
+    "alex.ns.cloudflare.com",
+    "pam.ns.cloudflare.com"
+   ],
+   "source": "whois:whois.dns.hr",
+   "review": false,
+   "registrable": "index.hr",
+   "query": "index.hr",
+   "kind": "domain",
+   "category": "fresh-whois-only",
+   "checked_by_hand": true
+  },
+  "d-b92-net": {
+   "status": "registered",
+   "registrar": "Network Solutions, LLC",
+   "created": "1998-09-03",
+   "expires": "2027-09-02",
+   "nameservers": [
+    "ns2.b92.net",
+    "primary.b92.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "b92.net",
+   "query": "b92.net",
+   "kind": "domain",
+   "category": "fresh-rdap"
+  },
+  "d-pravda-com-ua": {
+   "status": "registered",
+   "registrar": "Internet Invest LLC",
+   "created": "2001-02-01",
+   "expires": "2029-10-18",
+   "nameservers": [
+    "elsa.ns.cloudflare.com",
+    "tim.ns.cloudflare.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "pravda.com.ua",
+   "query": "pravda.com.ua",
+   "kind": "domain",
+   "category": "fresh-rdap"
+  },
+  "d-tengrinews-kz": {
+   "status": "registered",
+   "registrar": "ICPS",
+   "created": "2010-09-14",
+   "expires": "2029-09-14",
+   "nameservers": [
+    "bill.ns.cloudflare.com",
+    "may.ns.cloudflare.com"
+   ],
+   "source": "whois:whois.nic.kz",
+   "review": false,
+   "registrable": "tengrinews.kz",
+   "query": "tengrinews.kz",
+   "kind": "domain",
+   "category": "fresh-whois-only",
+   "checked_by_hand": "Current Registrar"
+  },
+  "d-sverigesradio-se": {
+   "status": "registered",
+   "registrar": "Loopia AB",
+   "created": "2003-04-24",
+   "expires": "2027-04-24",
+   "nameservers": [
+    "a.ns.ip-only.net",
+    "b.ns.ip-only.net",
+    "bersillies.sr.se",
+    "boussois.sr.se",
+    "c.ns.ip-only.net",
+    "d.ns.ip-only.net",
+    "rimplas.sr.se"
+   ],
+   "source": "whois:whois.iis.se",
+   "review": false,
+   "registrable": "sverigesradio.se",
+   "query": "sverigesradio.se",
+   "kind": "domain",
+   "category": "fresh-whois-only",
+   "checked_by_hand": "draft confirmed"
+  },
+  "d-hs-fi": {
+   "status": "registered",
+   "registrar": null,
+   "created": "2009-07-10",
+   "expires": "2029-07-14",
+   "nameservers": [
+    "ns-1461.awsdns-54.org",
+    "ns-1635.awsdns-12.co.uk",
+    "ns-678.awsdns-20.net",
+    "ns-83.awsdns-10.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "hs.fi",
+   "query": "hs.fi",
+   "kind": "domain",
+   "category": "fresh-rdap"
+  },
+  "d-whoq-fresh-k4t9z1q7-se": {
+   "status": "available",
+   "source": "whois:whois.iis.se",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.se",
+   "query": "whoq-fresh-k4t9z1q7.se",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-lt": {
+   "status": "available",
+   "source": "whois:whois.domreg.lt",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.lt",
+   "query": "whoq-fresh-k4t9z1q7.lt",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-pt": {
+   "status": "available",
+   "source": "whois:whois.dns.pt",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.pt",
+   "query": "whoq-fresh-k4t9z1q7.pt",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-cl": {
+   "status": "available",
+   "source": "whois:whois.nic.cl",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.cl",
+   "query": "whoq-fresh-k4t9z1q7.cl",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-com-mx": {
+   "status": "available",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "source": "whois:whois.mx",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.com.mx",
+   "query": "whoq-fresh-k4t9z1q7.com.mx",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-co-nz": {
+   "status": "available",
+   "source": "whois:whois.irs.net.nz",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.co.nz",
+   "query": "whoq-fresh-k4t9z1q7.co.nz",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-ie": {
+   "status": "available",
+   "source": "whois:whois.weare.ie",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.ie",
+   "query": "whoq-fresh-k4t9z1q7.ie",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-hu": {
+   "status": "available",
+   "source": "whois:whois.nic.hu",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.hu",
+   "query": "whoq-fresh-k4t9z1q7.hu",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-cn": {
+   "status": "available",
+   "source": "whois:whois.cnnic.cn",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.cn",
+   "query": "whoq-fresh-k4t9z1q7.cn",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-lv": {
+   "status": "available",
+   "source": "whois:whois.nic.lv",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.lv",
+   "query": "whoq-fresh-k4t9z1q7.lv",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-sk": {
+   "status": "available",
+   "source": "whois:whois.sk-nic.sk",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.sk",
+   "query": "whoq-fresh-k4t9z1q7.sk",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-ro": {
+   "status": "available",
+   "source": "whois:whois.rotld.ro",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.ro",
+   "query": "whoq-fresh-k4t9z1q7.ro",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-bg": {
+   "status": "available",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "source": "whois:whois.register.bg",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.bg",
+   "query": "whoq-fresh-k4t9z1q7.bg",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-is": {
+   "status": "available",
+   "source": "rdap-registry",
+   "registrable": "whoq-fresh-k4t9z1q7.is",
+   "query": "whoq-fresh-k4t9z1q7.is",
+   "kind": "domain",
+   "category": "fresh-unregistered"
+  },
+  "d-whoq-fresh-k4t9z1q7-lu": {
+   "status": "available",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "source": "whois:whois.dns.lu",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.lu",
+   "query": "whoq-fresh-k4t9z1q7.lu",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-hr": {
+   "status": "available",
+   "source": "whois:whois.dns.hr",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.hr",
+   "query": "whoq-fresh-k4t9z1q7.hr",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-rs": {
+   "status": "available",
+   "source": "whois:whois.rnids.rs",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.rs",
+   "query": "whoq-fresh-k4t9z1q7.rs",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-com-ua": {
+   "status": "available",
+   "source": "rdap-registry",
+   "registrable": "whoq-fresh-k4t9z1q7.com.ua",
+   "query": "whoq-fresh-k4t9z1q7.com.ua",
+   "kind": "domain",
+   "category": "fresh-unregistered"
+  },
+  "d-whoq-fresh-k4t9z1q7-kz": {
+   "status": "available",
+   "source": "whois:whois.nic.kz",
+   "review": false,
+   "registrable": "whoq-fresh-k4t9z1q7.kz",
+   "query": "whoq-fresh-k4t9z1q7.kz",
+   "kind": "domain",
+   "category": "fresh-unregistered",
+   "checked_by_hand": "registry says not found/available"
+  },
+  "d-whoq-fresh-k4t9z1q7-fi": {
+   "status": "available",
+   "source": "rdap-registry",
+   "registrable": "whoq-fresh-k4t9z1q7.fi",
+   "query": "whoq-fresh-k4t9z1q7.fi",
+   "kind": "domain",
+   "category": "fresh-unregistered"
+  },
+  "d-google-ae": {
+   "status": "registered",
+   "registrar": "MarkMonitor",
+   "created": null,
+   "expires": null,
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com"
+   ],
+   "source": "whois:whois.aeda.net.ae",
+   "review": false,
+   "registrable": "google.ae",
+   "query": "google.ae",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "Registrar Name line; no dates published"
+  },
+  "d-google-am": {
+   "status": "registered",
+   "registrar": "abcdomain (ABCDomain LLC)",
+   "created": "1999-06-05",
+   "expires": "2027-04-15",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.amnic.net",
+   "review": false,
+   "registrable": "google.am",
+   "query": "google.am",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "nameservers listed under \"DNS servers:\""
+  },
+  "d-google-by": {
+   "status": "registered",
+   "registrar": "Open Contact, Ltd",
+   "created": "2004-05-14",
+   "expires": "2027-02-10",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.cctld.by",
+   "review": false,
+   "registrable": "google.by",
+   "query": "google.by",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "draft matches"
+  },
+  "d-google-co": {
+   "status": "registered",
+   "registrar": "MarkMonitor, Inc.",
+   "created": "2010-02-25",
+   "expires": "2027-02-24",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.registry.co",
+   "review": false,
+   "registrable": "google.co",
+   "query": "google.co",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "Registrar: line, not the WHOIS Server line"
+  },
+  "d-google-ge": {
+   "status": "registered",
+   "registrar": "proservice ltd",
+   "created": "2006-07-28",
+   "expires": "2027-07-29",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.nic.ge",
+   "review": false,
+   "registrable": "google.ge",
+   "query": "google.ge",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "draft matches"
+  },
+  "d-google-gg": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "2003-04-30",
+   "expires": null,
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.gg",
+   "review": false,
+   "registrable": "google.gg",
+   "query": "google.gg",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "\"Registered on 30th April 2003\"; fee due yearly, no expiry date"
+  },
+  "d-google-im": {
+   "status": "registered",
+   "registrar": null,
+   "created": null,
+   "expires": "2027-08-16",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.nic.im",
+   "review": false,
+   "registrable": "google.im",
+   "query": "google.im",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "only an expiry date and nameservers are published"
+  },
+  "d-google-ir": {
+   "status": "registered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": [
+    "ns1.googledomains.com",
+    "ns2.googledomains.com",
+    "ns3.googledomains.com",
+    "ns4.googledomains.com"
+   ],
+   "source": "whois:whois.nic.ir",
+   "review": false,
+   "registrable": "google.ir",
+   "query": "google.ir",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "details hidden by holder; nameservers only"
+  },
+  "d-google-je": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "2002-10-31",
+   "expires": null,
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.je",
+   "review": false,
+   "registrable": "google.je",
+   "query": "google.je",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "\"Registered on 31st October 2002\"; no expiry date"
+  },
+  "d-google-md": {
+   "status": "registered",
+   "registrar": null,
+   "created": "2006-05-02",
+   "expires": "2027-05-02",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com"
+   ],
+   "source": "whois:whois.nic.md",
+   "review": false,
+   "registrable": "google.md",
+   "query": "google.md",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "no registrar published"
+  },
+  "d-google-mk": {
+   "status": "registered",
+   "registrar": "UNET-REG",
+   "created": "2008-05-13",
+   "expires": "2027-05-13",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com"
+   ],
+   "source": "whois:whois.marnet.mk",
+   "review": false,
+   "registrable": "google.mk",
+   "query": "google.mk",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "registry publishes the registrar handle only"
+  },
+  "d-google-mn": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "2003-04-07",
+   "expires": "2027-04-07",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.nic.mn",
+   "review": false,
+   "registrable": "google.mn",
+   "query": "google.mn",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "Registrar: line"
+  },
+  "d-google-my": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "2009-05-12",
+   "expires": "2027-05-12",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com"
+   ],
+   "source": "whois:whois.mynic.my",
+   "review": false,
+   "registrable": "google.my",
+   "query": "google.my",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "Registrar: line"
+  },
+  "d-google-om": {
+   "status": "registered",
+   "registrar": "Abu Ghazaleh Intellectual Property (AGIP)",
+   "created": null,
+   "expires": null,
+   "nameservers": [
+    "ns1.googledomains.com",
+    "ns2.googledomains.com",
+    "ns3.googledomains.com",
+    "ns4.googledomains.com"
+   ],
+   "source": "whois:whois.registry.om",
+   "review": false,
+   "registrable": "google.om",
+   "query": "google.om",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "no dates published"
+  },
+  "d-google-pk": {
+   "status": "registered",
+   "registrar": null,
+   "created": "2005-12-01",
+   "expires": "2028-12-01",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.pknic.net.pk",
+   "review": false,
+   "registrable": "google.pk",
+   "query": "google.pk",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "no registrar published"
+  },
+  "d-google-qa": {
+   "status": "registered",
+   "registrar": "RoutEdge",
+   "created": null,
+   "expires": null,
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.registry.qa",
+   "review": false,
+   "registrable": "google.qa",
+   "query": "google.qa",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "no dates published"
+  },
+  "d-google-sa": {
+   "status": "registered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": [
+    "ns1.markmonitor.com",
+    "ns3.markmonitor.com"
+   ],
+   "source": "whois:whois.nic.net.sa",
+   "review": false,
+   "registrable": "google.sa",
+   "query": "google.sa",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "registrant and nameservers only"
+  },
+  "d-google-su": {
+   "status": "registered",
+   "registrar": "RUCENTER-SU",
+   "created": "2005-10-15",
+   "expires": "2027-10-15",
+   "nameservers": [
+    "ns1.beget.com",
+    "ns1.beget.pro",
+    "ns2.beget.com"
+   ],
+   "source": "whois:whois.tcinet.ru",
+   "review": false,
+   "registrable": "google.su",
+   "query": "google.su",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "draft matches"
+  },
+  "d-google-tn": {
+   "status": "registered",
+   "registrar": "ELB",
+   "created": "2018-12-05",
+   "expires": null,
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.ati.tn",
+   "review": false,
+   "registrable": "google.tn",
+   "query": "google.tn",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": ".tn dates are day-first (23-07-2002 elsewhere); nameservers as Name lines under \"DNS servers\""
+  },
+  "d-google-ug": {
+   "status": "registered",
+   "registrar": null,
+   "created": "2004-08-03",
+   "expires": "2027-03-18",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com"
+   ],
+   "source": "whois:whois.co.ug",
+   "review": false,
+   "registrable": "google.ug",
+   "query": "google.ug",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "no registrar published"
+  },
+  "d-google-us": {
+   "status": "registered",
+   "registrar": "MarkMonitor, Inc.",
+   "created": "2002-04-19",
+   "expires": "2027-04-18",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.nic.us",
+   "review": false,
+   "registrable": "google.us",
+   "query": "google.us",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "Registrar: line"
+  },
+  "d-google-com-ve": {
+   "status": "registered",
+   "registrar": "NIC-VE",
+   "created": "2002-06-05",
+   "expires": "2027-05-06",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.nic.ve",
+   "review": false,
+   "registrable": "google.com.ve",
+   "query": "google.com.ve",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "registry is the registrar (NIC-VE)"
+  },
+  "d-google-ws": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "2002-03-03",
+   "expires": "2027-03-04",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.website.ws",
+   "review": false,
+   "registrable": "google.ws",
+   "query": "google.ws",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "Registrar: line; expiry from Registrar Registration Expiration Date"
+  },
+  "d-google-eu": {
+   "status": "registered",
+   "registrar": "Markmonitor Inc.",
+   "created": null,
+   "expires": null,
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "whois:whois.eu",
+   "review": false,
+   "registrable": "google.eu",
+   "query": "google.eu",
+   "kind": "domain",
+   "category": "fresh2-whois-only",
+   "checked_by_hand": "Name under Registrar:; no dates published"
+  },
+  "d-whoq-fresh2-m5x8c3v6-ae": {
+   "status": "available",
+   "source": "whois:whois.aeda.net.ae",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.ae",
+   "query": "whoq-fresh2-m5x8c3v6.ae",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-am": {
+   "status": "available",
+   "source": "whois:whois.amnic.net",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.am",
+   "query": "whoq-fresh2-m5x8c3v6.am",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-by": {
+   "status": "available",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "source": "whois:whois.cctld.by",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.by",
+   "query": "whoq-fresh2-m5x8c3v6.by",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-co": {
+   "status": "available",
+   "source": "whois:whois.registry.co",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.co",
+   "query": "whoq-fresh2-m5x8c3v6.co",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-ge": {
+   "status": "available",
+   "source": "whois:whois.nic.ge",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.ge",
+   "query": "whoq-fresh2-m5x8c3v6.ge",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-gg": {
+   "status": "available",
+   "source": "whois:whois.gg",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.gg",
+   "query": "whoq-fresh2-m5x8c3v6.gg",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-im": {
+   "status": "available",
+   "source": "whois:whois.nic.im",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.im",
+   "query": "whoq-fresh2-m5x8c3v6.im",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-ir": {
+   "status": "available",
+   "source": "whois:whois.nic.ir",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.ir",
+   "query": "whoq-fresh2-m5x8c3v6.ir",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-je": {
+   "status": "available",
+   "source": "whois:whois.je",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.je",
+   "query": "whoq-fresh2-m5x8c3v6.je",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-md": {
+   "status": "available",
+   "source": "whois:whois.nic.md",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.md",
+   "query": "whoq-fresh2-m5x8c3v6.md",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-mk": {
+   "status": "available",
+   "source": "whois:whois.marnet.mk",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.mk",
+   "query": "whoq-fresh2-m5x8c3v6.mk",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-mn": {
+   "status": "available",
+   "source": "whois:whois.nic.mn",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.mn",
+   "query": "whoq-fresh2-m5x8c3v6.mn",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-my": {
+   "status": "available",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "source": "whois:whois.mynic.my",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.my",
+   "query": "whoq-fresh2-m5x8c3v6.my",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-om": {
+   "status": "available",
+   "source": "whois:whois.registry.om",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.om",
+   "query": "whoq-fresh2-m5x8c3v6.om",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-pk": {
+   "status": "available",
+   "source": "whois:whois.pknic.net.pk",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.pk",
+   "query": "whoq-fresh2-m5x8c3v6.pk",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-qa": {
+   "status": "available",
+   "source": "whois:whois.registry.qa",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.qa",
+   "query": "whoq-fresh2-m5x8c3v6.qa",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-sa": {
+   "status": "available",
+   "source": "whois:whois.nic.net.sa",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.sa",
+   "query": "whoq-fresh2-m5x8c3v6.sa",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-su": {
+   "status": "available",
+   "source": "whois:whois.tcinet.ru",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.su",
+   "query": "whoq-fresh2-m5x8c3v6.su",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-tn": {
+   "status": "available",
+   "source": "whois:whois.ati.tn",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.tn",
+   "query": "whoq-fresh2-m5x8c3v6.tn",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoqfreshtwo-ug": {
+   "status": "available",
+   "source": "whois:whois.co.ug",
+   "review": false,
+   "registrable": "whoqfreshtwo.ug",
+   "query": "whoqfreshtwo.ug",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "\"Domain not Found\"; the hyphenated name was rejected as invalid"
+  },
+  "d-whoq-fresh2-m5x8c3v6-us": {
+   "status": "available",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "source": "whois:whois.nic.us",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.us",
+   "query": "whoq-fresh2-m5x8c3v6.us",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-ve": {
+   "status": "available",
+   "source": "whois:whois.nic.ve",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.ve",
+   "query": "whoq-fresh2-m5x8c3v6.ve",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-ws": {
+   "status": "available",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "source": "whois:whois.website.ws",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.ws",
+   "query": "whoq-fresh2-m5x8c3v6.ws",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-whoq-fresh2-m5x8c3v6-eu": {
+   "status": "available",
+   "source": "whois:whois.eu",
+   "review": false,
+   "registrable": "whoq-fresh2-m5x8c3v6.eu",
+   "query": "whoq-fresh2-m5x8c3v6.eu",
+   "kind": "domain",
+   "category": "fresh2-unregistered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": null,
+   "checked_by_hand": "registry reports no such domain"
+  },
+  "d-www-bbc-co-uk": {
+   "status": "registered",
+   "registrar": "British Broadcasting Corporation",
+   "created": "1994-12-13",
+   "expires": "2034-12-13",
+   "nameservers": [
+    "ddns0.bbc.co.uk",
+    "ddns0.bbc.com",
+    "ddns1.bbc.co.uk",
+    "ddns1.bbc.com",
+    "dns0.bbc.co.uk",
+    "dns0.bbc.com",
+    "dns1.bbc.co.uk",
+    "dns1.bbc.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "bbc.co.uk",
+   "query": "www.bbc.co.uk",
+   "kind": "domain",
+   "category": "subdomain"
+  },
+  "d-mail-google-com": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "1997-09-15",
+   "expires": "2028-09-14",
+   "nameservers": [
+    "ns1.google.com",
+    "ns2.google.com",
+    "ns3.google.com",
+    "ns4.google.com"
+   ],
+   "source": "rdap-registry",
+   "registrable": "google.com",
+   "query": "mail.google.com",
+   "kind": "domain",
+   "category": "subdomain"
+  },
+  "d-docs-github-com": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "2007-10-09",
+   "expires": "2028-10-09",
+   "nameservers": [
+    "dns1.p08.nsone.net",
+    "dns2.p08.nsone.net",
+    "dns3.p08.nsone.net",
+    "dns4.p08.nsone.net",
+    "ns-1283.awsdns-32.org",
+    "ns-1707.awsdns-21.co.uk",
+    "ns-421.awsdns-52.com",
+    "ns-520.awsdns-01.net"
+   ],
+   "source": "rdap-registry",
+   "registrable": "github.com",
+   "query": "docs.github.com",
+   "kind": "domain",
+   "category": "subdomain"
+  },
+  "d-en-wikipedia-org": {
+   "status": "registered",
+   "registrar": "MarkMonitor Inc.",
+   "created": "2001-01-13",
+   "expires": "2027-01-13",
+   "nameservers": [
+    "ns0.wikimedia.org",
+    "ns1.wikimedia.org",
+    "ns2.wikimedia.org"
+   ],
+   "source": "rdap-registry",
+   "registrable": "wikipedia.org",
+   "query": "en.wikipedia.org",
+   "kind": "domain",
+   "category": "subdomain"
+  },
+  "d-www-spiegel-de": {
+   "status": "registered",
+   "registrar": null,
+   "created": null,
+   "expires": null,
+   "nameservers": [
+    "pns101.cloudns.net",
+    "pns102.cloudns.net",
+    "pns103.cloudns.net",
+    "pns104.cloudns.net"
+   ],
+   "source": "whois:whois.denic.de",
+   "review": false,
+   "registrable": "spiegel.de",
+   "query": "www.spiegel.de",
+   "kind": "domain",
+   "category": "subdomain",
+   "checked_by_hand": "DENIC publishes only nameservers and status"
+  },
+  "ip-8-8-8-8": {
+   "status": "found",
+   "rir": "arin",
+   "net_name": "GOGL",
+   "cidr": "8.8.8.0/24",
+   "cidrs": [
+    "8.8.8.0/24"
+   ],
+   "country": null,
+   "org": "Google LLC",
+   "asns": [
+    15169
+   ],
+   "source": "rdap:arin + ripestat-bgp",
+   "query": "8.8.8.8",
+   "kind": "ip",
+   "category": "ipv4-arin"
+  },
+  "ip-9-9-9-9": {
+   "status": "found",
+   "rir": "arin",
+   "net_name": "CLEAN-97",
+   "cidr": "9.9.9.0/24",
+   "cidrs": [
+    "9.9.9.0/24"
+   ],
+   "country": null,
+   "org": null,
+   "asns": [
+    19281
+   ],
+   "source": "rdap:arin + ripestat-bgp",
+   "query": "9.9.9.9",
+   "kind": "ip",
+   "category": "ipv4-arin"
+  },
+  "ip-208-67-222-222": {
+   "status": "found",
+   "rir": "arin",
+   "net_name": "OPENDNS-NET-1",
+   "cidr": "208.67.216.0/21",
+   "cidrs": [
+    "208.67.216.0/21"
+   ],
+   "country": null,
+   "org": "Cisco OpenDNS, LLC",
+   "asns": [
+    36692
+   ],
+   "source": "rdap:arin + ripestat-bgp",
+   "query": "208.67.222.222",
+   "kind": "ip",
+   "category": "ipv4-arin"
+  },
+  "ip-4-2-2-2": {
+   "status": "found",
+   "rir": "arin",
+   "net_name": "LVLT-ORG-4-8",
+   "cidr": "4.0.0.0/9",
+   "cidrs": [
+    "4.0.0.0/9"
+   ],
+   "country": null,
+   "org": "Level 3 Parent, LLC",
+   "asns": [
+    3356
+   ],
+   "source": "rdap:arin + ripestat-bgp",
+   "query": "4.2.2.2",
+   "kind": "ip",
+   "category": "ipv4-arin"
+  },
+  "ip-17-253-144-10": {
+   "status": "found",
+   "rir": "arin",
+   "net_name": "APPLE-WWNET",
+   "cidr": "17.0.0.0/8",
+   "cidrs": [
+    "17.0.0.0/8"
+   ],
+   "country": null,
+   "org": "Apple Inc.",
+   "asns": [
+    714
+   ],
+   "source": "rdap:arin + ripestat-bgp",
+   "query": "17.253.144.10",
+   "kind": "ip",
+   "category": "ipv4-arin"
+  },
+  "ip-140-82-112-3": {
+   "status": "found",
+   "rir": "arin",
+   "net_name": "GITHU",
+   "cidr": "140.82.112.0/20",
+   "cidrs": [
+    "140.82.112.0/20"
+   ],
+   "country": null,
+   "org": "GitHub, Inc.",
+   "asns": [
+    36459
+   ],
+   "source": "rdap:arin + ripestat-bgp",
+   "query": "140.82.112.3",
+   "kind": "ip",
+   "category": "ipv4-arin"
+  },
+  "ip-151-101-1-140": {
+   "status": "found",
+   "rir": "ripe",
+   "net_name": "SKYCA-3",
+   "cidr": "151.101.0.0/16",
+   "cidrs": [
+    "151.101.0.0/16"
+   ],
+   "country": null,
+   "org": "Fastly, Inc.",
+   "asns": [
+    54113
+   ],
+   "source": "rdap:ripe + ripestat-bgp",
+   "query": "151.101.1.140",
+   "kind": "ip",
+   "category": "ipv4-ripe"
+  },
+  "ip-13-107-42-14": {
+   "status": "found",
+   "rir": "arin",
+   "net_name": "MSFT",
+   "cidr": null,
+   "cidrs": [
+    "13.64.0.0/11",
+    "13.96.0.0/13",
+    "13.104.0.0/14"
+   ],
+   "country": null,
+   "org": "Microsoft Corporation",
+   "asns": [
+    8068
+   ],
+   "source": "rdap:arin + ripestat-bgp",
+   "query": "13.107.42.14",
+   "kind": "ip",
+   "category": "ipv4-arin"
+  },
+  "ip-52-95-110-1": {
+   "status": "found",
+   "rir": "arin",
+   "net_name": "AT-88-Z",
+   "cidr": null,
+   "cidrs": [
+    "52.84.0.0/14",
+    "52.88.0.0/13"
+   ],
+   "country": null,
+   "org": "Amazon Technologies Inc.",
+   "asns": [
+    16509
+   ],
+   "source": "rdap:arin + ripestat-bgp",
+   "query": "52.95.110.1",
+   "kind": "ip",
+   "category": "ipv4-arin"
+  },
+  "ip-104-16-132-229": {
+   "status": "found",
+   "rir": "arin",
+   "net_name": "CLOUDFLARENET",
+   "cidr": "104.16.0.0/12",
+   "cidrs": [
+    "104.16.0.0/12"
+   ],
+   "country": null,
+   "org": "Cloudflare, Inc.",
+   "asns": [
+    13335
+   ],
+   "source": "rdap:arin + ripestat-bgp",
+   "query": "104.16.132.229",
+   "kind": "ip",
+   "category": "ipv4-arin"
+  },
+  "ip-193-0-6-139": {
+   "status": "found",
+   "rir": "ripe",
+   "net_name": "RIPE-NCC",
+   "cidr": "193.0.0.0/21",
+   "cidrs": [
+    "193.0.0.0/21"
+   ],
+   "country": "NL",
+   "org": "Reseaux IP Europeens Network Coordination Centre (RIPE NCC)",
+   "asns": [
+    3333
+   ],
+   "source": "rdap:ripe + ripestat-bgp",
+   "query": "193.0.6.139",
+   "kind": "ip",
+   "category": "ipv4-ripe"
+  },
+  "ip-77-88-8-8": {
+   "status": "found",
+   "rir": "ripe",
+   "net_name": "YANDEX-77-88-8-0",
+   "cidr": "77.88.8.0/24",
+   "cidrs": [
+    "77.88.8.0/24"
+   ],
+   "country": "RU",
+   "org": "YANDEX LLC",
+   "asns": [
+    13238,
+    208398
+   ],
+   "source": "rdap:ripe + ripestat-bgp",
+   "query": "77.88.8.8",
+   "kind": "ip",
+   "category": "ipv4-ripe"
+  },
+  "ip-141-1-1-1": {
+   "status": "found",
+   "rir": "ripe",
+   "net_name": "UK-VEEL-19900607",
+   "cidr": "141.1.0.0/16",
+   "cidrs": [
+    "141.1.0.0/16"
+   ],
+   "country": "GB",
+   "org": "Vodafone Enterprise Equipment Limited",
+   "asns": [
+    1273
+   ],
+   "source": "rdap:ripe + ripestat-bgp",
+   "query": "141.1.1.1",
+   "kind": "ip",
+   "category": "ipv4-ripe"
+  },
+  "ip-2-16-0-1": {
+   "status": "found",
+   "rir": "ripe",
+   "net_name": "AKAMAI-PA",
+   "cidr": "2.16.0.0/23",
+   "cidrs": [
+    "2.16.0.0/23"
+   ],
+   "country": "EU",
+   "org": null,
+   "asns": [
+    20940
+   ],
+   "source": "rdap:ripe + ripestat-bgp",
+   "query": "2.16.0.1",
+   "kind": "ip",
+   "category": "ipv4-ripe"
+  },
+  "ip-46-4-0-1": {
+   "status": "found",
+   "rir": "ripe",
+   "net_name": "HETZNER-fsn1-dc4",
+   "cidr": "46.4.0.0/27",
+   "cidrs": [
+    "46.4.0.0/27"
+   ],
+   "country": "DE",
+   "org": null,
+   "asns": [
+    24940
+   ],
+   "source": "rdap:ripe + ripestat-bgp",
+   "query": "46.4.0.1",
+   "kind": "ip",
+   "category": "ipv4-ripe"
+  },
+  "ip-31-13-64-35": {
+   "status": "found",
+   "rir": "ripe",
+   "net_name": "IE-FACEBOOK-20110418",
+   "cidr": "31.13.64.0/18",
+   "cidrs": [
+    "31.13.64.0/18"
+   ],
+   "country": "IE",
+   "org": null,
+   "asns": [
+    32934
+   ],
+   "source": "rdap:ripe + ripestat-bgp",
+   "query": "31.13.64.35",
+   "kind": "ip",
+   "category": "ipv4-ripe"
+  },
+  "ip-5-255-255-5": {
+   "status": "found",
+   "rir": "ripe",
+   "net_name": "YANDEX-5-255-255-0",
+   "cidr": "5.255.255.0/24",
+   "cidrs": [
+    "5.255.255.0/24"
+   ],
+   "country": "RU",
+   "org": "YANDEX LLC",
+   "asns": [
+    13238,
+    208398
+   ],
+   "source": "rdap:ripe + ripestat-bgp",
+   "query": "5.255.255.5",
+   "kind": "ip",
+   "category": "ipv4-ripe"
+  },
+  "ip-185-199-108-153": {
+   "status": "found",
+   "rir": "ripe",
+   "net_name": "US-GITHUB-20170413",
+   "cidr": "185.199.108.0/22",
+   "cidrs": [
+    "185.199.108.0/22"
+   ],
+   "country": "US",
+   "org": "GitHub, Inc.",
+   "asns": [
+    54113
+   ],
+   "source": "rdap:ripe + ripestat-bgp",
+   "query": "185.199.108.153",
+   "kind": "ip",
+   "category": "ipv4-ripe"
+  },
+  "ip-80-80-80-80": {
+   "status": "found",
+   "rir": "ripe",
+   "net_name": "CHECKME-RESOLVERS-A",
+   "cidr": "80.80.80.0/24",
+   "cidrs": [
+    "80.80.80.0/24"
+   ],
+   "country": "SM",
+   "org": null,
+   "asns": [
+    61005
+   ],
+   "source": "rdap:ripe + ripestat-bgp",
+   "query": "80.80.80.80",
+   "kind": "ip",
+   "category": "ipv4-ripe"
+  },
+  "ip-212-58-244-20": {
+   "status": "found",
+   "rir": "ripe",
+   "net_name": "BBC-TELHC-WWW-1",
+   "cidr": "212.58.244.0/24",
+   "cidrs": [
+    "212.58.244.0/24"
+   ],
+   "country": "GB",
+   "org": null,
+   "asns": [
+    2818
+   ],
+   "source": "rdap:ripe + ripestat-bgp",
+   "query": "212.58.244.20",
+   "kind": "ip",
+   "category": "ipv4-ripe"
+  },
+  "ip-1-1-1-1": {
+   "status": "found",
+   "rir": "apnic",
+   "net_name": "APNIC-LABS",
+   "cidr": "1.1.1.0/24",
+   "cidrs": [
+    "1.1.1.0/24"
+   ],
+   "country": "AU",
+   "org": "APNIC Research and Development",
+   "asns": [
+    13335
+   ],
+   "source": "rdap:apnic + ripestat-bgp",
+   "query": "1.1.1.1",
+   "kind": "ip",
+   "category": "ipv4-apnic"
+  },
+  "ip-101-6-6-6": {
+   "status": "found",
+   "rir": "apnic",
+   "net_name": "BJR-CERNET",
+   "cidr": "101.4.0.0/14",
+   "cidrs": [
+    "101.4.0.0/14"
+   ],
+   "country": "CN",
+   "org": null,
+   "asns": [
+    4538
+   ],
+   "source": "rdap:apnic + ripestat-bgp",
+   "query": "101.6.6.6",
+   "kind": "ip",
+   "category": "ipv4-apnic"
+  },
+  "ip-114-114-114-114": {
+   "status": "found",
+   "rir": "apnic",
+   "net_name": "XFInfo",
+   "cidr": "114.114.0.0/16",
+   "cidrs": [
+    "114.114.0.0/16"
+   ],
+   "country": "CN",
+   "org": null,
+   "asns": [
+    21859,
+    137702
+   ],
+   "source": "rdap:apnic + ripestat-bgp",
+   "query": "114.114.114.114",
+   "kind": "ip",
+   "category": "ipv4-apnic"
+  },
+  "ip-223-5-5-5": {
+   "status": "found",
+   "rir": "apnic",
+   "net_name": "ALISOFT",
+   "cidr": "223.4.0.0/14",
+   "cidrs": [
+    "223.4.0.0/14"
+   ],
+   "country": "CN",
+   "org": null,
+   "asns": [
+    45102
+   ],
+   "source": "rdap:apnic + ripestat-bgp",
+   "query": "223.5.5.5",
+   "kind": "ip",
+   "category": "ipv4-apnic"
+  },
+  "ip-202-12-27-33": {
+   "status": "found",
+   "rir": "apnic",
+   "net_name": "NSPIXP-2",
+   "cidr": "202.12.27.0/24",
+   "cidrs": [
+    "202.12.27.0/24"
+   ],
+   "country": "JP",
+   "org": null,
+   "asns": [
+    7500
+   ],
+   "source": "rdap:apnic + ripestat-bgp",
+   "query": "202.12.27.33",
+   "kind": "ip",
+   "category": "ipv4-apnic"
+  },
+  "ip-203-119-95-53": {
+   "status": "found",
+   "rir": "apnic",
+   "net_name": "APNIC-SERVICES-AU",
+   "cidr": "203.119.95.0/24",
+   "cidrs": [
+    "203.119.95.0/24"
+   ],
+   "country": "AU",
+   "org": "Asia Pacific Network Information Centre",
+   "asns": [
+    18369
+   ],
+   "source": "rdap:apnic + ripestat-bgp",
+   "query": "203.119.95.53",
+   "kind": "ip",
+   "category": "ipv4-apnic"
+  },
+  "ip-180-76-76-76": {
+   "status": "found",
+   "rir": "apnic",
+   "net_name": "Baidu",
+   "cidr": "180.76.0.0/16",
+   "cidrs": [
+    "180.76.0.0/16"
+   ],
+   "country": "CN",
+   "org": null,
+   "asns": [
+    38365,
+    55967
+   ],
+   "source": "rdap:apnic + ripestat-bgp",
+   "query": "180.76.76.76",
+   "kind": "ip",
+   "category": "ipv4-apnic"
+  },
+  "ip-210-130-0-1": {
+   "status": "found",
+   "rir": "apnic",
+   "net_name": "IIJNET",
+   "cidr": "210.130.0.0/18",
+   "cidrs": [
+    "210.130.0.0/18"
+   ],
+   "country": "JP",
+   "org": null,
+   "asns": [
+    2497
+   ],
+   "source": "rdap:apnic + ripestat-bgp",
+   "query": "210.130.0.1",
+   "kind": "ip",
+   "category": "ipv4-apnic"
+  },
+  "ip-61-135-169-121": {
+   "status": "found",
+   "rir": "apnic",
+   "net_name": "UNICOM-BJ",
+   "cidr": "61.135.0.0/16",
+   "cidrs": [
+    "61.135.0.0/16"
+   ],
+   "country": "CN",
+   "org": null,
+   "asns": [
+    4808
+   ],
+   "source": "rdap:apnic + ripestat-bgp",
+   "query": "61.135.169.121",
+   "kind": "ip",
+   "category": "ipv4-apnic"
+  },
+  "ip-139-130-4-5": {
+   "status": "found",
+   "rir": "arin",
+   "net_name": "TELSTRAINTERNET35-AU",
+   "cidr": "139.130.0.0/16",
+   "cidrs": [
+    "139.130.0.0/16"
+   ],
+   "country": "AU",
+   "org": "Telstra Limited",
+   "asns": [
+    1221
+   ],
+   "source": "rdap:arin + ripestat-bgp",
+   "query": "139.130.4.5",
+   "kind": "ip",
+   "category": "ipv4-arin"
+  },
+  "ip-200-160-2-3": {
+   "status": "found",
+   "rir": "lacnic",
+   "net_name": "22817",
+   "cidr": "200.160.0.0/20",
+   "cidrs": [
+    "200.160.0.0/20"
+   ],
+   "country": "BR",
+   "org": "Núcleo de Inf. e Coord. do Ponto BR - NIC.BR",
+   "asns": [
+    22548
+   ],
+   "source": "rdap:lacnic + ripestat-bgp",
+   "query": "200.160.2.3",
+   "kind": "ip",
+   "category": "ipv4-lacnic"
+  },
+  "ip-200-160-0-8": {
+   "status": "found",
+   "rir": "lacnic",
+   "net_name": "22817",
+   "cidr": "200.160.0.0/20",
+   "cidrs": [
+    "200.160.0.0/20"
+   ],
+   "country": "BR",
+   "org": "Núcleo de Inf. e Coord. do Ponto BR - NIC.BR",
+   "asns": [
+    22548
+   ],
+   "source": "rdap:lacnic + ripestat-bgp",
+   "query": "200.160.0.8",
+   "kind": "ip",
+   "category": "ipv4-lacnic"
+  },
+  "ip-200-221-11-100": {
+   "status": "found",
+   "rir": "lacnic",
+   "net_name": "3703",
+   "cidr": "200.221.0.0/18",
+   "cidrs": [
+    "200.221.0.0/18"
+   ],
+   "country": "BR",
+   "org": "Universo Online S.A.",
+   "asns": [
+    7162
+   ],
+   "source": "rdap:lacnic + ripestat-bgp",
+   "query": "200.221.11.100",
+   "kind": "ip",
+   "category": "ipv4-lacnic"
+  },
+  "ip-200-40-30-245": {
+   "status": "found",
+   "rir": "lacnic",
+   "net_name": "200.40.0.0 - 200.40.127.255",
+   "cidr": "200.40.0.0/17",
+   "cidrs": [
+    "200.40.0.0/17"
+   ],
+   "country": null,
+   "org": "Administracion Nacional de Telecomunicaciones",
+   "asns": [
+    6057
+   ],
+   "source": "rdap:lacnic + ripestat-bgp",
+   "query": "200.40.30.245",
+   "kind": "ip",
+   "category": "ipv4-lacnic"
+  },
+  "ip-190-104-1-1": {
+   "status": "found",
+   "rir": "lacnic",
+   "net_name": "190.104.0.0 - 190.104.31.255",
+   "cidr": "190.104.0.0/19",
+   "cidrs": [
+    "190.104.0.0/19"
+   ],
+   "country": null,
+   "org": "Telefónica Celular de Bolivia S.A.",
+   "asns": [
+    27882
+   ],
+   "source": "rdap:lacnic + ripestat-bgp",
+   "query": "190.104.1.1",
+   "kind": "ip",
+   "category": "ipv4-lacnic"
+  },
+  "ip-196-216-2-1": {
+   "status": "found",
+   "rir": "afrinic",
+   "net_name": "ORG-AFNC1-AFRINIC",
+   "cidr": "196.216.2.0/23",
+   "cidrs": [
+    "196.216.2.0/23"
+   ],
+   "country": "ZA",
+   "org": "African Network Information Center - (AfriNIC) Ltd",
+   "asns": [
+    33764
+   ],
+   "source": "rdap:afrinic + ripestat-bgp",
+   "query": "196.216.2.1",
+   "kind": "ip",
+   "category": "ipv4-afrinic"
+  },
+  "ip-41-203-18-1": {
+   "status": "found",
+   "rir": "afrinic",
+   "net_name": null,
+   "cidr": "41.203.16.0/22",
+   "cidrs": [
+    "41.203.16.0/22"
+   ],
+   "country": "ZA",
+   "org": null,
+   "asns": [
+    37153
+   ],
+   "source": "rdap:afrinic + ripestat-bgp",
+   "query": "41.203.18.1",
+   "kind": "ip",
+   "category": "ipv4-afrinic"
+  },
+  "ip-197-234-240-1": {
+   "status": "found",
+   "rir": "afrinic",
+   "net_name": null,
+   "cidr": "197.234.240.0/24",
+   "cidrs": [
+    "197.234.240.0/24"
+   ],
+   "country": "ZA",
+   "org": null,
+   "asns": [
+    13335
+   ],
+   "source": "rdap:afrinic + ripestat-bgp",
+   "query": "197.234.240.1",
+   "kind": "ip",
+   "category": "ipv4-afrinic"
+  },
+  "ip-105-235-237-1": {
+   "status": "found",
+   "rir": "afrinic",
+   "net_name": null,
+   "cidr": "105.235.237.0/24",
+   "cidrs": [
+    "105.235.237.0/24"
+   ],
+   "country": "GQ",
+   "org": null,
+   "asns": [
+    37487
+   ],
+   "source": "rdap:afrinic + ripestat-bgp",
+   "query": "105.235.237.1",
+   "kind": "ip",
+   "category": "ipv4-afrinic"
+  },
+  "ip-41-0-0-1": {
+   "status": "found",
+   "rir": "afrinic",
+   "net_name": null,
+   "cidr": "41.0.0.0/16",
+   "cidrs": [
+    "41.0.0.0/16"
+   ],
+   "country": "ZA",
+   "org": null,
+   "asns": [
+    36994
+   ],
+   "source": "rdap:afrinic + ripestat-bgp",
+   "query": "41.0.0.1",
+   "kind": "ip",
+   "category": "ipv4-afrinic"
+  },
+  "ip-2001-4860-4860-8888": {
+   "status": "found",
+   "rir": "arin",
+   "net_name": "GOOGLE-IPV6",
+   "cidr": "2001:4860::/32",
+   "cidrs": [
+    "2001:4860::/32"
+   ],
+   "country": null,
+   "org": "Google LLC",
+   "asns": [
+    15169
+   ],
+   "source": "rdap:arin + ripestat-bgp",
+   "query": "2001:4860:4860::8888",
+   "kind": "ip",
+   "category": "ipv6-arin"
+  },
+  "ip-2606-4700-4700-1111": {
+   "status": "found",
+   "rir": "arin",
+   "net_name": "CLOUDFLARENET",
+   "cidr": "2606:4700::/32",
+   "cidrs": [
+    "2606:4700::/32"
+   ],
+   "country": null,
+   "org": "Cloudflare, Inc.",
+   "asns": [
+    13335
+   ],
+   "source": "rdap:arin + ripestat-bgp",
+   "query": "2606:4700:4700::1111",
+   "kind": "ip",
+   "category": "ipv6-arin"
+  },
+  "ip-2001-67c-2e8-22-c100-68b": {
+   "status": "found",
+   "rir": "ripe",
+   "net_name": "RIPE-NCC-NET",
+   "cidr": "2001:67c:2e8::/48",
+   "cidrs": [
+    "2001:67c:2e8::/48"
+   ],
+   "country": "NL",
+   "org": "Reseaux IP Europeens Network Coordination Centre (RIPE NCC)",
+   "asns": [
+    3333
+   ],
+   "source": "rdap:ripe + ripestat-bgp",
+   "query": "2001:67c:2e8:22::c100:68b",
+   "kind": "ip",
+   "category": "ipv6-ripe"
+  },
+  "ip-2001-dc3-35": {
+   "status": "found",
+   "rir": "apnic",
+   "net_name": "M-ROOT-DNS-IPv6-20030619",
+   "cidr": "2001:dc3::/32",
+   "cidrs": [
+    "2001:dc3::/32"
+   ],
+   "country": "JP",
+   "org": null,
+   "asns": [
+    7500
+   ],
+   "source": "rdap:apnic + ripestat-bgp",
+   "query": "2001:dc3::35",
+   "kind": "ip",
+   "category": "ipv6-apnic"
+  },
+  "ip-2001-12ff-0-4-22": {
+   "status": "found",
+   "rir": "lacnic",
+   "net_name": "106736",
+   "cidr": "2001:12ff::/32",
+   "cidrs": [
+    "2001:12ff::/32"
+   ],
+   "country": "BR",
+   "org": "Núcleo de Inf. e Coord. do Ponto BR - NIC.BR",
+   "asns": [
+    22548
+   ],
+   "source": "rdap:lacnic + ripestat-bgp",
+   "query": "2001:12ff:0:4::22",
+   "kind": "ip",
+   "category": "ipv6-lacnic"
+  },
+  "ip-2001-43f8-110-10": {
+   "status": "found",
+   "rir": "afrinic",
+   "net_name": "ORG-AFNC1-AFRINIC",
+   "cidr": "2001:43f8:110::/48",
+   "cidrs": [
+    "2001:43f8:110::/48"
+   ],
+   "country": "ZA",
+   "org": "African Network Information Center - (AfriNIC) Ltd",
+   "asns": [
+    37181
+   ],
+   "source": "rdap:afrinic + ripestat-bgp",
+   "query": "2001:43f8:110::10",
+   "kind": "ip",
+   "category": "ipv6-afrinic"
+  }
+ }
+}

@@ -1,0 +1,882 @@
+{
+ "_about": "Hand-checked answers for registries without RDAP, read from the raw WHOIS in truth_raw/. null means the registry does not publish the field. Checked 2026-11-17.",
+ "d-spiegel-de": {
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "note": "DENIC publishes only nameservers and status"
+ },
+ "d-www-spiegel-de": {
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "note": "DENIC publishes only nameservers and status"
+ },
+ "d-xn-bcher-kva-de": {
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "note": "DENIC publishes only nameservers and status"
+ },
+ "d-xn-mnchen-3ya-de": {
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "note": "DENIC publishes only nameservers and status"
+ },
+ "d-corriere-it": {
+  "registrar": "Tuonome Registrar S.r.l.",
+  "nameservers": [
+   "dnsgeo5.tuonomeregistrar.com",
+   "dnsgeo6.tuonomeregistrar.net",
+   "dnsgeo7.tuonomeregistrar.org",
+   "dnsgeo8.tuonomeregistrar.info"
+  ]
+ },
+ "d-rtbf-be": {
+  "registrar": "BELNET",
+  "expires": null,
+  "nameservers": [
+   "ns1.belnet.be",
+   "ns2.belnet.be",
+   "ns3.belnet.be",
+   "ns1.rtbf.be",
+   "ns2.rtbf.be"
+  ],
+  "note": "DNS Belgium publishes no expiry"
+ },
+ "d-orf-at": {
+  "registrar": "APA-IT Informations Technologie GmbH",
+  "expires": null,
+  "note": "nic.at publishes no expiry"
+ },
+ "d-svt-se": {
+  "note": "draft confirmed"
+ },
+ "d-dr-dk": {
+  "registrar": null,
+  "nameservers": [
+   "a1-63.akam.net",
+   "a10-66.akam.net",
+   "a11-67.akam.net",
+   "a24-64.akam.net",
+   "a26-65.akam.net",
+   "a3-66.akam.net"
+  ],
+  "note": "Punktum publishes no registrar"
+ },
+ "d-yandex-ru": {
+  "note": "draft confirmed"
+ },
+ "d-xn-d1acpjx3f-xn-p1ai": {
+  "note": "draft confirmed"
+ },
+ "d-baidu-cn": {
+  "created": "2003-03-17"
+ },
+ "d-yahoo-co-jp": {
+  "registrar": null,
+  "created": "2019-09-27",
+  "expires": "2027-09-30",
+  "nameservers": [
+   "ns01.yahoo.co.jp",
+   "ns02.yahoo.co.jp",
+   "ns11.yahoo.co.jp",
+   "ns12.yahoo.co.jp"
+  ],
+  "note": "JPRS: registration date and the 'Connected (until)' date; no registrar in the default view"
+ },
+ "d-unam-mx": {
+  "nameservers": [
+   "ns3.unam.mx",
+   "ns4.unam.mx"
+  ]
+ },
+ "d-emol-cl": {
+  "registrar": "NIC Chile"
+ },
+ "d-stuff-co-nz": {
+  "registrar": "Metaname",
+  "expires": null,
+  "note": "InternetNZ publishes no expiry"
+ },
+ "d-rte-ie": {
+  "registrar": "Blacknight Solutions"
+ },
+ "d-sapo-pt": {
+  "registrar": null,
+  "note": "DNS.PT publishes no registrar"
+ },
+ "d-hurriyet-com-tr": {
+  "registrar": "ODTÜ GELİŞTİRME VAKFI BİLGİ TEKNOLOJİLERİ SAN. VE TİC. A.Ş.",
+  "created": "1996-10-31",
+  "expires": "2029-10-30",
+  "nameservers": [
+   "ns-63.awsdns-07.com",
+   "ns-1789.awsdns-31.co.uk",
+   "ns-601.awsdns-11.net",
+   "ns-1172.awsdns-18.org"
+  ]
+ },
+ "d-ynet-co-il": {
+  "registrar": "Domain The Net Technologies Ltd",
+  "created": "2016-11-01",
+  "expires": "2027-11-01",
+  "note": "dates are DD-MM-YYYY"
+ },
+ "d-hku-hk": {
+  "registrar": "Hong Kong Domain Name Registration Company Limited",
+  "created": "1990-01-03",
+  "expires": "2033-06-07",
+  "nameservers": [
+   "ns1.hku.hk",
+   "ns2.cuhk.edu.hk",
+   "ns2.hku.hk",
+   "ns3.hku.hk",
+   "ns4.hku.hk",
+   "ns10.gdnsdef.com",
+   "ns10.gdnsec.com"
+  ],
+  "note": "dates are DD-MM-YYYY"
+ },
+ "d-github-io": {
+  "registrar": "MarkMonitor Inc."
+ },
+ "d-notion-so": {
+  "registrar": "1API"
+ },
+ "d-youtu-be": {
+  "registrar": "Markmonitor Inc.",
+  "expires": null,
+  "nameservers": [
+   "ns1.google.com",
+   "ns2.google.com",
+   "ns3.google.com",
+   "ns4.google.com"
+  ],
+  "note": "DNS Belgium publishes no expiry"
+ },
+ "d-google-me": {
+  "registrar": "MarkMonitor Inc."
+ },
+ "d-ix-lt": {
+  "note": "draft confirmed"
+ },
+ "d-delfi-ee": {
+  "registrar": "Zone Media OÜ"
+ },
+ "d-index-hu": {
+  "registrar": null,
+  "created": "1999-05-17",
+  "expires": null,
+  "nameservers": null,
+  "note": "domain.hu publishes only the creation date"
+ },
+ "d-whoq-bench-q7x2m9v4k1-de": {
+  "note": "Status: free"
+ },
+ "d-whoq-bench-q7x2m9v4k1-io": {
+  "note": "Domain not found"
+ },
+ "d-whoq-bench-q7x2m9v4k1-jp": {
+  "note": "No match"
+ },
+ "d-zeit-de": {
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "note": "DENIC publishes only nameservers and status"
+ },
+ "d-heise-de": {
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "note": "DENIC publishes only nameservers and status"
+ },
+ "d-repubblica-it": {
+  "registrar": "Gandi SAS",
+  "nameservers": [
+   "ns-1541.awsdns-00.co.uk",
+   "ns-1477.awsdns-56.org",
+   "ns-723.awsdns-26.net",
+   "ns-353.awsdns-44.com"
+  ]
+ },
+ "d-gazzetta-it": {
+  "registrar": "Tuonome Registrar S.r.l.",
+  "nameservers": [
+   "dnsgeo5.tuonomeregistrar.com",
+   "dnsgeo6.tuonomeregistrar.net",
+   "dnsgeo7.tuonomeregistrar.org",
+   "dnsgeo8.tuonomeregistrar.info"
+  ]
+ },
+ "d-standaard-be": {
+  "registrar": "Mediahuis Technology & Product Studio NV",
+  "created": "1995-02-24",
+  "expires": null,
+  "nameservers": [
+   "elliot.ns.cloudflare.com",
+   "erin.ns.cloudflare.com"
+  ],
+  "note": "DNS Belgium publishes no expiry"
+ },
+ "d-hln-be": {
+  "registrar": "Registrar.eu",
+  "created": "1999-03-11",
+  "expires": null,
+  "nameservers": [
+   "eur2.akam.net",
+   "eur6.akam.net",
+   "ns1-25.akam.net",
+   "eur5.akam.net",
+   "ns1-125.akam.net",
+   "usc2.akam.net",
+   "use2.akam.net",
+   "use5.akam.net"
+  ],
+  "note": "DNS Belgium publishes no expiry"
+ },
+ "d-derstandard-at": {
+  "registrar": null,
+  "created": "2000-08-25",
+  "expires": null,
+  "note": "registrar field empty; nic.at publishes no expiry"
+ },
+ "d-krone-at": {
+  "registrar": null,
+  "created": "2000-08-25",
+  "expires": null,
+  "note": "registrar field empty; nic.at publishes no expiry"
+ },
+ "d-dn-se": {
+  "note": "draft confirmed"
+ },
+ "d-aftonbladet-se": {
+  "note": "draft confirmed"
+ },
+ "d-tv2-dk": {
+  "registrar": "Eurodns S.A",
+  "nameservers": [
+   "ns1-04.azure-dns.com",
+   "ns2-04.azure-dns.net",
+   "ns3-04.azure-dns.org",
+   "ns4-04.azure-dns.info"
+  ]
+ },
+ "d-politiken-dk": {
+  "registrar": null,
+  "nameservers": [
+   "ns-1307.awsdns-35.org",
+   "ns-155.awsdns-19.com",
+   "ns-1951.awsdns-51.co.uk",
+   "ns-534.awsdns-02.net"
+  ],
+  "note": "no registrar shown"
+ },
+ "d-mail-ru": {
+  "note": "draft confirmed"
+ },
+ "d-rbc-ru": {
+  "note": "draft confirmed"
+ },
+ "d-kommersant-ru": {
+  "note": "draft confirmed"
+ },
+ "d-xn-80ac9br-xn-p1ai": {
+  "note": "draft confirmed"
+ },
+ "d-sina-cn": {
+  "created": "2003-03-17"
+ },
+ "d-rakuten-co-jp": {
+  "registrar": null,
+  "created": "1997-02-07",
+  "expires": "2027-02-28",
+  "nameservers": [
+   "ns02.rakuten.co.jp",
+   "ns06.rakuten.co.jp",
+   "ns01.rakuten.ad.jp",
+   "ns02.rakuten.ad.jp"
+  ],
+  "note": "JPRS registration date and Connected-until date"
+ },
+ "d-nikkei-co-jp": {
+  "registrar": null,
+  "created": "1993-05-27",
+  "expires": "2027-05-31",
+  "nameservers": [
+   "ns-448.awsdns-56.com",
+   "ns-1228.awsdns-25.org",
+   "ns-762.awsdns-31.net",
+   "ns-1885.awsdns-43.co.uk"
+  ],
+  "note": "JPRS registration date and Connected-until date"
+ },
+ "d-itam-mx": {
+  "nameservers": [
+   "esparta.itam.mx",
+   "hopper2.itam.mx"
+  ]
+ },
+ "d-latercera-cl": {
+  "registrar": "NIC Chile"
+ },
+ "d-nzherald-co-nz": {
+  "registrar": "Netregistry PTY Ltd/TA Webcentral and Melbourne IT",
+  "expires": null,
+  "note": "no expiry published"
+ },
+ "d-independent-ie": {
+  "registrar": "Letshost/ Team Blue Internet Services IE Ltd"
+ },
+ "d-publico-pt": {
+  "registrar": null,
+  "note": "DD/MM/YYYY dates; no registrar shown"
+ },
+ "d-milliyet-com-tr": {
+  "registrar": "ODTÜ GELİŞTİRME VAKFI BİLGİ TEKNOLOJİLERİ SAN. VE TİC. A.Ş.",
+  "created": "1996-10-15",
+  "expires": "2029-10-14",
+  "nameservers": [
+   "ns-98.awsdns-12.com",
+   "ns-1504.awsdns-60.org",
+   "ns-766.awsdns-31.net",
+   "ns-1815.awsdns-34.co.uk"
+  ]
+ },
+ "d-haaretz-co-il": {
+  "registrar": "Israel Internet Association ISOC-IL",
+  "created": "1995-03-27",
+  "expires": null,
+  "note": "validity N/A"
+ },
+ "d-cuhk-edu-hk": {
+  "registrar": "Hong Kong Domain Name Registration Company Limited",
+  "created": "1995-11-16",
+  "expires": "2032-09-01",
+  "nameservers": [
+   "dns1.cuhk.edu.hk",
+   "dns2.cuhk.edu.hk",
+   "anyns.cuhk.edu.hk",
+   "ns4.gdnsec.com",
+   "ns4.gdnsdef.com"
+  ],
+  "note": "DD-MM-YYYY dates"
+ },
+ "d-fly-io": {
+  "registrar": "MarkMonitor Inc."
+ },
+ "d-about-me": {
+  "registrar": "NameCheap, Inc."
+ },
+ "d-lrt-lt": {
+  "note": "draft confirmed"
+ },
+ "d-err-ee": {
+  "registrar": "Zone Media OÜ"
+ },
+ "d-origo-hu": {
+  "registrar": null,
+  "created": "1998-11-30",
+  "expires": null,
+  "nameservers": null,
+  "note": "domain.hu publishes only the creation date"
+ },
+ "d-whoq-holdout-r8p3w6n2-it": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-holdout-r8p3w6n2-be": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-holdout-r8p3w6n2-dk": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-holdout-r8p3w6n2-com-tr": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-holdout-r8p3w6n2-ee": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-holdout-r8p3w6n2-ru": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-holdout-r8p3w6n2-co-jp": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-holdout-r8p3w6n2-at": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-holdout-r8p3w6n2-hk": {
+  "status": "available",
+  "note": "The domain has not been registered."
+ },
+ "d-whoq-holdout-r8p3w6n2-co-il": {
+  "status": "available",
+  "note": "No data was found to match the request criteria."
+ },
+ "d-delfi-lt": {
+  "note": "draft confirmed"
+ },
+ "d-rtp-pt": {
+  "registrar": null,
+  "note": "no registrar shown; DD/MM/YYYY dates"
+ },
+ "d-biobiochile-cl": {
+  "registrar": "NIC Chile"
+ },
+ "d-eluniversal-com-mx": {
+  "nameservers": [
+   "lola.ns.cloudflare.com",
+   "mark.ns.cloudflare.com"
+  ]
+ },
+ "d-rnz-co-nz": {
+  "registrar": "Metaname",
+  "expires": null
+ },
+ "d-irishtimes-ie": {
+  "registrar": "Blacknight Solutions"
+ },
+ "d-telex-hu": {
+  "registrar": null,
+  "created": "2020-09-25",
+  "expires": null,
+  "nameservers": null,
+  "note": "domain.hu publishes only the creation date"
+ },
+ "d-people-cn": {
+  "created": "2003-03-10"
+ },
+ "d-delfi-lv": {
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "note": "NIC.LV publishes no registrar or dates"
+ },
+ "d-sme-sk": {
+  "registrar": "Petit Printing Press, a.s., organizačná zložka",
+  "note": "Registrar field is the handle PPRP-0001; its Name line gives the name"
+ },
+ "d-digi24-ro": {
+  "note": "draft confirmed; no expiry published"
+ },
+ "d-dnevnik-bg": {
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": [
+   "curt.ns.cloudflare.com",
+   "sneh.ns.cloudflare.com"
+  ],
+  "note": "Register.bg publishes nameservers and status only"
+ },
+ "d-rtl-lu": {
+  "registrar": "EuroDNS SA",
+  "created": null,
+  "expires": null
+ },
+ "d-index-hr": {
+  "registrar": "Tomsoft d.o.o.",
+  "expires": "2028-09-13"
+ },
+ "d-tengrinews-kz": {
+  "registrar": "ICPS",
+  "created": "2010-09-14",
+  "note": "Current Registrar"
+ },
+ "d-sverigesradio-se": {
+  "note": "draft confirmed"
+ },
+ "d-whoq-fresh-k4t9z1q7-se": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-fresh-k4t9z1q7-lt": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-fresh-k4t9z1q7-pt": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-fresh-k4t9z1q7-cl": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-fresh-k4t9z1q7-co-nz": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-fresh-k4t9z1q7-ie": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-fresh-k4t9z1q7-hu": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-fresh-k4t9z1q7-cn": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-fresh-k4t9z1q7-lv": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-fresh-k4t9z1q7-sk": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-fresh-k4t9z1q7-ro": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-fresh-k4t9z1q7-hr": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-fresh-k4t9z1q7-rs": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-fresh-k4t9z1q7-kz": {
+  "note": "registry says not found/available"
+ },
+ "d-whoq-fresh-k4t9z1q7-com-mx": {
+  "status": "available",
+  "note": "registry says not found/available"
+ },
+ "d-whoq-fresh-k4t9z1q7-bg": {
+  "status": "available",
+  "note": "registry says not found/available"
+ },
+ "d-whoq-fresh-k4t9z1q7-lu": {
+  "status": "available",
+  "note": "registry says not found/available"
+ },
+ "d-google-ae": {
+  "registrar": "MarkMonitor",
+  "created": null,
+  "expires": null,
+  "note": "Registrar Name line; no dates published"
+ },
+ "d-google-am": {
+  "nameservers": [
+   "ns1.google.com",
+   "ns2.google.com",
+   "ns3.google.com",
+   "ns4.google.com"
+  ],
+  "note": "nameservers listed under \"DNS servers:\""
+ },
+ "d-google-co": {
+  "registrar": "MarkMonitor, Inc.",
+  "note": "Registrar: line, not the WHOIS Server line"
+ },
+ "d-google-gg": {
+  "registrar": "MarkMonitor Inc.",
+  "created": "2003-04-30",
+  "expires": null,
+  "nameservers": [
+   "ns1.google.com",
+   "ns2.google.com",
+   "ns3.google.com",
+   "ns4.google.com"
+  ],
+  "note": "\"Registered on 30th April 2003\"; fee due yearly, no expiry date"
+ },
+ "d-google-je": {
+  "registrar": "MarkMonitor Inc.",
+  "created": "2002-10-31",
+  "expires": null,
+  "nameservers": [
+   "ns1.google.com",
+   "ns2.google.com",
+   "ns3.google.com",
+   "ns4.google.com"
+  ],
+  "note": "\"Registered on 31st October 2002\"; no expiry date"
+ },
+ "d-google-im": {
+  "registrar": null,
+  "created": null,
+  "note": "only an expiry date and nameservers are published"
+ },
+ "d-google-ir": {
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "note": "details hidden by holder; nameservers only"
+ },
+ "d-google-md": {
+  "registrar": null,
+  "note": "no registrar published"
+ },
+ "d-google-mk": {
+  "registrar": "UNET-REG",
+  "created": "2008-05-13",
+  "expires": "2027-05-13",
+  "note": "registry publishes the registrar handle only"
+ },
+ "d-google-mn": {
+  "registrar": "MarkMonitor Inc.",
+  "note": "Registrar: line"
+ },
+ "d-google-my": {
+  "registrar": "MarkMonitor Inc.",
+  "note": "Registrar: line"
+ },
+ "d-google-om": {
+  "registrar": "Abu Ghazaleh Intellectual Property (AGIP)",
+  "created": null,
+  "expires": null,
+  "note": "no dates published"
+ },
+ "d-google-pk": {
+  "registrar": null,
+  "note": "no registrar published"
+ },
+ "d-google-qa": {
+  "created": null,
+  "expires": null,
+  "note": "no dates published"
+ },
+ "d-google-sa": {
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "note": "registrant and nameservers only"
+ },
+ "d-google-su": {
+  "note": "draft matches"
+ },
+ "d-google-tn": {
+  "registrar": "ELB",
+  "created": "2018-12-05",
+  "expires": null,
+  "nameservers": [
+   "ns1.google.com",
+   "ns2.google.com",
+   "ns3.google.com",
+   "ns4.google.com"
+  ],
+  "note": ".tn dates are day-first (23-07-2002 elsewhere); nameservers as Name lines under \"DNS servers\""
+ },
+ "d-google-ug": {
+  "registrar": null,
+  "note": "no registrar published"
+ },
+ "d-google-us": {
+  "registrar": "MarkMonitor, Inc.",
+  "note": "Registrar: line"
+ },
+ "d-google-com-ve": {
+  "registrar": "NIC-VE",
+  "created": "2002-06-05",
+  "expires": "2027-05-06",
+  "note": "registry is the registrar (NIC-VE)"
+ },
+ "d-google-ws": {
+  "registrar": "MarkMonitor Inc.",
+  "expires": "2027-03-04",
+  "note": "Registrar: line; expiry from Registrar Registration Expiration Date"
+ },
+ "d-google-eu": {
+  "registrar": "Markmonitor Inc.",
+  "created": null,
+  "expires": null,
+  "nameservers": [
+   "ns1.google.com",
+   "ns2.google.com",
+   "ns3.google.com",
+   "ns4.google.com"
+  ],
+  "note": "Name under Registrar:; no dates published"
+ },
+ "d-google-by": {
+  "note": "draft matches"
+ },
+ "d-google-ge": {
+  "note": "draft matches"
+ },
+ "d-whoq-fresh2-m5x8c3v6-ae": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-am": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-by": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-co": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-ge": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-gg": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-im": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-ir": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-je": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-md": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-mk": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-mn": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-my": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-om": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-pk": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-qa": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-sa": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-su": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-tn": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-us": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-ve": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-ws": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoq-fresh2-m5x8c3v6-eu": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "registry reports no such domain"
+ },
+ "d-whoqfreshtwo-ug": {
+  "status": "available",
+  "registrar": null,
+  "created": null,
+  "expires": null,
+  "nameservers": null,
+  "note": "\"Domain not Found\"; the hyphenated name was rejected as invalid"
+ }
+}

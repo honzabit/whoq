@@ -5,7 +5,8 @@ use chrono::{DateTime, NaiveDate, NaiveDateTime, Utc};
 
 /// Parse the zoo of date formats registries emit into RFC 3339 (UTC).
 pub fn parse_date(s: &str) -> Option<String> {
-    let s = s.trim();
+    // "1996-Oct-31." (.tr), "1996. 07. 20." (.kr)
+    let s = s.trim().trim_end_matches('.');
     let try_one = |s: &str| -> Option<DateTime<Utc>> {
         if let Ok(d) = DateTime::parse_from_rfc3339(s) {
             return Some(d.with_timezone(&Utc));
@@ -29,7 +30,22 @@ pub fn parse_date(s: &str) -> Option<String> {
             }
         }
         for f in
-            ["%Y-%m-%d", "%Y.%m.%d", "%Y/%m/%d", "%d.%m.%Y", "%d-%b-%Y", "%d-%B-%Y", "%d/%m/%Y", "%Y%m%d", "%b %d %Y"]
+            // Day-first where ambiguous: registries using NN-NN-YYYY (.il, .hk) are day-first.
+            [
+                "%Y-%m-%d",
+                "%Y.%m.%d",
+                "%Y/%m/%d",
+                "%d.%m.%Y",
+                "%d-%b-%Y",
+                "%d-%B-%Y",
+                "%d/%m/%Y",
+                "%d-%m-%Y",
+                "%Y-%b-%d",
+                "%Y. %m. %d",
+                "%a %b %d %Y",
+                "%Y%m%d",
+                "%b %d %Y",
+            ]
         {
             if let Ok(d) = NaiveDate::parse_from_str(s, f) {
                 return Some(d.and_hms_opt(0, 0, 0)?.and_utc());
