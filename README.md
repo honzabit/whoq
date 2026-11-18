@@ -169,7 +169,7 @@ Modes: `annotate` (default; NDJSON or `-o tsv`), `unique` (NDJSON, CSV or table)
 
 Claude Code: `claude mcp add whoq -- whoq mcp`
 
-Tools: `lookup` (queries, fields, brief, `max_age`: e.g. `"6h"`, or `0` to force fresh; `dns`, `mail` and `tls`: live checks as above), `check_availability` (domains) and `enrich_ips` (up to 1,000 IPs or log fragments; `rdap`, `summary`, `dns` for reverse DNS). All are read-only. Output is
+Tools: `lookup` (queries, fields, brief, `max_age`: e.g. `"6h"`, or `0` to force fresh; `dns`, `mail` and `tls`: live checks as above; `asn`: origin AS for IPs), `check_availability` (domains) and `enrich_ips` (up to 1,000 IPs or log fragments; `rdap`, `summary`, `dns` for reverse DNS). All are read-only. Output is
 wrapped in `<untrusted-registry-data>` and the tool descriptions warn the model that registrant-controlled
 strings are data, not instructions.
 

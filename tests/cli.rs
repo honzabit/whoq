@@ -162,6 +162,7 @@ fn asn_flag_adds_the_origin_as() {
     let brief = json(&env.run(&["--json", "--brief", "--asn", "8.8.8.8"], None));
     assert_eq!(brief["origin.asn"], 15169);
     assert_eq!(brief["origin.prefix"], "8.8.8.0/24");
+    assert_eq!(brief["origin.country"], "US");
 }
 
 #[test]
