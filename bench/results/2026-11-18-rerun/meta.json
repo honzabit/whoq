@@ -1,0 +1,11 @@
+{
+ "started_at": "20261118T035523Z",
+ "truth_built_at": "2026-11-17T18:11:48Z",
+ "tools": {
+  "whoq": {
+   "describe": "whoq --json (/Users/zamanfoo/faw/target/release/whoq)",
+   "version": "whoq 0.1.1"
+  }
+ },
+ "items": 275
+}

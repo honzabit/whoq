@@ -134,6 +134,11 @@ fn falls_back_to_port_43_for_tlds_without_rdap() {
     let out = env.run(&["--json", "nope.legacy"], None);
     assert_eq!(code(&out), 10);
     assert_eq!(json(&out)["result"], "available");
+    assert_eq!(
+        env.whois.all(),
+        vec!["legacy", "old.legacy", "nope.legacy"],
+        "the IANA answer came from the disk cache on the second run"
+    );
 }
 
 #[test]
@@ -163,6 +168,19 @@ fn rate_limits_retry_then_report() {
     assert_eq!(v["result"], "error");
     assert_eq!(v["error"]["code"], "rate_limited");
     assert_eq!(env.http.hits_for(path), 3, "two retries before giving up");
+}
+
+#[test]
+fn long_retry_after_fails_at_once() {
+    let env = Env::new("429long");
+    let path = "/rir/ip/198.51.100.9";
+    env.http.route_with(path, 429, "{}", vec![("Retry-After", "60")]);
+    let t0 = std::time::Instant::now();
+    let out = env.run(&["--json", "198.51.100.9"], None);
+    assert!(t0.elapsed() < std::time::Duration::from_secs(3), "slept on a 60 s Retry-After");
+    let v = json(&out);
+    assert_eq!(v["error"]["code"], "rate_limited");
+    assert_eq!(env.http.hits_for(path), 1, "no retry the server already refused");
 }
 
 #[test]

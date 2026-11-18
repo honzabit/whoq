@@ -24,6 +24,9 @@ fn chain(e: &dyn std::error::Error) -> String {
     s
 }
 
+/// The longest Retry-After we sleep through before retrying.
+const MAX_RETRY_WAIT: Duration = Duration::from_secs(3);
+
 pub async fn get(ctx: &Ctx, url: &str) -> Result<Got, LookupError> {
     let host = reqwest::Url::parse(url).ok().and_then(|u| u.host_str().map(str::to_string)).unwrap_or_default();
     let sem = ctx.host_limit(&host);
@@ -48,17 +51,19 @@ pub async fn get(ctx: &Ctx, url: &str) -> Result<Got, LookupError> {
             return Ok(Got::NotFound);
         }
         if st == StatusCode::TOO_MANY_REQUESTS || st == StatusCode::SERVICE_UNAVAILABLE {
-            if last {
-                return Err(LookupError::RateLimited(format!("{host}: HTTP {st}")));
-            }
-            let wait = resp
+            let asked = resp
                 .headers()
                 .get(RETRY_AFTER)
                 .and_then(|v| v.to_str().ok())
-                .and_then(|v| v.parse::<u64>().ok())
-                .map(|s| Duration::from_secs(s.min(10)))
-                .unwrap_or(backoff);
-            tokio::time::sleep(wait).await;
+                .and_then(|v| v.trim().parse::<u64>().ok())
+                .map(Duration::from_secs);
+            // Retrying before the server said to only earns another 429, so when it asks for
+            // longer than we will wait, report it now instead of sleeping for nothing.
+            if last || asked.is_some_and(|a| a > MAX_RETRY_WAIT) {
+                let after = asked.map(|a| format!(" (retry after {}s)", a.as_secs())).unwrap_or_default();
+                return Err(LookupError::RateLimited(format!("{host}: HTTP {st}{after}")));
+            }
+            tokio::time::sleep(asked.unwrap_or(backoff)).await;
             backoff *= 2;
             continue;
         }

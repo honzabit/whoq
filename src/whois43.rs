@@ -56,16 +56,36 @@ async fn connect_any(server: &str, timeout: std::time::Duration) -> std::io::Res
     Err(last)
 }
 
-/// Ask IANA which WHOIS server handles a TLD.
+/// How long IANA's answer about a TLD's WHOIS server is reused. These change rarely, and asking
+/// IANA costs a round trip on every port-43 lookup.
+const SERVER_TTL: std::time::Duration = std::time::Duration::from_secs(7 * 24 * 3600);
+
+/// Ask IANA which WHOIS server handles a TLD, remembering the answer in memory and on disk.
 async fn server_for(ctx: &Ctx, tld: &str) -> Result<Option<String>, LookupError> {
     if let Some(s) = ctx.whois_servers.lock().unwrap().get(tld) {
         return Ok(s.clone());
     }
-    let resp = query(ctx, "whois.iana.org", tld).await?;
-    let server = resp
-        .lines()
-        .find_map(|l| l.trim().strip_prefix("whois:").map(|s| s.trim().to_string()))
-        .filter(|s| !s.is_empty());
+    let cached = |b: Vec<u8>| {
+        serde_json::from_slice::<serde_json::Value>(&b).ok().map(|v| v["server"].as_str().map(String::from))
+    };
+    let server = match ctx.cache_get("whois-servers", tld, SERVER_TTL, false).await.and_then(cached) {
+        Some(s) => s,
+        None => match query(ctx, "whois.iana.org", tld).await {
+            Ok(resp) => {
+                let s = resp
+                    .lines()
+                    .find_map(|l| l.trim().strip_prefix("whois:").map(|s| s.trim().to_string()))
+                    .filter(|s| !s.is_empty());
+                ctx.cache_put("whois-servers", tld, serde_json::json!({ "server": s }).to_string().as_bytes()).await;
+                s
+            }
+            // IANA unreachable: an old answer beats none.
+            Err(e) => match ctx.cache_get("whois-servers", tld, SERVER_TTL, true).await.and_then(cached) {
+                Some(s) => s,
+                None => return Err(e),
+            },
+        },
+    };
     ctx.whois_servers.lock().unwrap().insert(tld.to_string(), server.clone());
     Ok(server)
 }
