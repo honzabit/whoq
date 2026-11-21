@@ -545,6 +545,26 @@ fn looks_registered(r: &Record) -> bool {
     r.created.is_some() || r.expires.is_some() || !r.nameservers.is_empty() || r.registrar.is_some()
 }
 
+/// A record with no dates, nameservers or registrar that still names the domain and lists
+/// who holds it, as .im does for its own nic.im ("Domain Name:nic.im", then "Domain Managers").
+/// Only checked after `says_available`, since .im echoes "Domain Name:" for unregistered names too.
+fn echoes_holder(text: &str, domain: &str) -> bool {
+    let mut echoed = false;
+    let mut holder = false;
+    for line in text.lines().map(str::trim) {
+        let l = line.to_lowercase();
+        if let Some((k, v)) = split_kv(line)
+            && k == "domain name"
+            && v.trim_end_matches('.').eq_ignore_ascii_case(domain)
+        {
+            echoed = true;
+        } else if l.starts_with("domain managers") || l.starts_with("domain owners") || l.starts_with("registrant") {
+            holder = true;
+        }
+    }
+    echoed && holder
+}
+
 /// Full port-43 domain lookup, following one registrar referral.
 pub async fn lookup_domain(
     ctx: &Ctx,
@@ -577,6 +597,8 @@ pub async fn lookup_domain(
         }
     } else if says_available(&text) {
         r.result = Outcome::Available;
+    } else if echoes_holder(&text, domain) {
+        r.result = Outcome::Registered;
     } else {
         let l = text.to_lowercase();
         if l.contains("limit exceeded") || l.contains("rate limit") || l.contains("too many") {
@@ -602,6 +624,21 @@ pub async fn lookup_domain(
 mod tests {
     use super::*;
     use crate::model::Kind;
+
+    #[test]
+    fn registry_record_with_only_a_holder_counts_as_registered() {
+        let own = "\nDomain Name:nic.im\nDomain Managers\nName\nThe IM Registry\nAddress\nIsle of Man\n";
+        let mut r = Record::new("nic.im", Kind::Domain);
+        let mut red = false;
+        parse(&mut r, own, &mut red);
+        assert!(!looks_registered(&r));
+        assert!(!says_available(own));
+        assert!(echoes_holder(own, "nic.im"));
+        assert!(!echoes_holder(own, "other.im"));
+        let missing = "\nDomain Name:\tzz-none.im\nThe domain zz-none.im was not found.\n";
+        assert!(says_available(missing));
+        assert!(!echoes_holder(missing, "zz-none.im"));
+    }
 
     #[test]
     fn parses_uk_style_blocks() {
