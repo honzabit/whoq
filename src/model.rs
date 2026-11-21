@@ -109,7 +109,8 @@ pub struct Signals {
     /// Transferred between registrars within the last 60 days.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub recently_transferred: Option<bool>,
-    /// Registrant data is redacted or behind a privacy service.
+    /// Registrant data is redacted or behind a privacy service. Absent when the registry
+    /// publishes no registrant, so it can't be told either way.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub privacy_redacted: Option<bool>,
     /// A hold / pending-delete / redemption status is set (domain likely not resolving).

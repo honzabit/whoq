@@ -515,10 +515,28 @@ pub fn parse(r: &mut Record, text: &str, redacted: &mut bool) -> Option<String> 
     if r.abuse_email.is_none() {
         r.abuse_email = r.registrar.as_ref().and_then(|g| g.abuse_email.clone());
     }
+    if who.name.is_none() {
+        who.name = listed_holder(text, redacted);
+    }
     if who != Contact::default() && r.registrant.is_none() {
         r.registrant = Some(who);
     }
     referral
+}
+
+/// The holder from .im's block layout: a "Domain Owners / Registrant" heading, or "Domain
+/// Managers" when that's all there is, followed by "Name: X" or by "Name" and X on the next line.
+fn listed_holder(text: &str, redacted: &mut bool) -> Option<String> {
+    let lines: Vec<&str> = text.lines().map(str::trim).filter(|l| !l.is_empty()).collect();
+    let at = |heading: &str| lines.iter().position(|l| l.to_lowercase().starts_with(heading));
+    let i = at("domain owners").or_else(|| at("domain managers"))?;
+    let next = *lines.get(i + 1)?;
+    let name = match split_kv(next) {
+        Some((k, v)) if k == "name" => v,
+        None if next.eq_ignore_ascii_case("name") => lines.get(i + 2)?.to_string(),
+        _ => return None,
+    };
+    real(Some(name), redacted)
 }
 
 /// A registry handle rather than a name: one word of capitals, digits and dashes with a digit
@@ -638,6 +656,23 @@ mod tests {
         let missing = "\nDomain Name:\tzz-none.im\nThe domain zz-none.im was not found.\n";
         assert!(says_available(missing));
         assert!(!echoes_holder(missing, "zz-none.im"));
+    }
+
+    #[test]
+    fn reads_the_holder_from_im_blocks() {
+        let own = "Domain Name:nic.im\nDomain Managers\nName\nThe IM Registry\nAddress\nIsle of Man\n";
+        let mut r = Record::new("nic.im", Kind::Domain);
+        let mut red = false;
+        parse(&mut r, own, &mut red);
+        assert_eq!(r.registrant.and_then(|c| c.name).as_deref(), Some("The IM Registry"));
+        assert!(!red);
+
+        let hidden = "Domain Name:\tgoogle.im\nDomain Managers\nName: Redacted\nAddress\nRedacted\nDomain Owners / Registrant\nName: Redacted\nAddress\nRedacted\nExpiry Date: 16/08/2027 23:59:39\n";
+        let mut r = Record::new("google.im", Kind::Domain);
+        let mut red = false;
+        parse(&mut r, hidden, &mut red);
+        assert!(r.registrant.is_none());
+        assert!(red);
     }
 
     #[test]

@@ -3,7 +3,7 @@
 use crate::bootstrap;
 use crate::ctx::{Ctx, Live, LookupError};
 use crate::model::{Kind, Outcome, Record, Source};
-use crate::normalize::signals;
+use crate::normalize::{privacy_redacted, signals};
 use crate::query::{self, Query};
 use crate::rdap::{self, Got};
 use crate::{sanitize, whois43};
@@ -134,9 +134,9 @@ async fn registration(ctx: &Ctx, input: &str, max_age: std::time::Duration) -> R
     match res {
         Ok(src) => {
             rec.source = Some(src);
-            let has_registrant = rec.registrant.as_ref().is_some_and(|c| c.name.is_some() || c.org.is_some());
-            let privacy =
-                (rec.kind == Kind::Domain && rec.result == Outcome::Registered).then_some(redacted || !has_registrant);
+            let privacy = (rec.kind == Kind::Domain && rec.result == Outcome::Registered)
+                .then(|| privacy_redacted(rec.registrant.as_ref(), redacted))
+                .flatten();
             rec.signals = signals(&rec, privacy);
         }
         Err(e) => {

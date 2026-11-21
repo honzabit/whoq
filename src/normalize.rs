@@ -1,6 +1,6 @@
 //! Shared normalization: dates, status codes, redaction detection, signals.
 
-use crate::model::{Record, Signals};
+use crate::model::{Contact, Record, Signals};
 use chrono::{DateTime, NaiveDate, NaiveDateTime, Utc};
 
 /// Parse the zoo of date formats registries emit into RFC 3339 (UTC).
@@ -153,6 +153,17 @@ pub fn dedupe(v: &mut Vec<String>) {
     v.retain(|x| seen.insert(x.clone()));
 }
 
+/// Whether the registrant is hidden: true on a redaction marker or a contact with its identity
+/// removed, false when a name or organization is shown, and unknown (`None`) when the registry
+/// publishes no registrant at all, since that alone doesn't show anything was redacted.
+pub fn privacy_redacted(registrant: Option<&Contact>, marked: bool) -> Option<bool> {
+    match registrant {
+        _ if marked => Some(true),
+        Some(c) => Some(c.name.is_none() && c.org.is_none()),
+        None => None,
+    }
+}
+
 pub fn signals(r: &Record, privacy_redacted: Option<bool>) -> Option<Signals> {
     let now = Utc::now();
     let days = |s: &Option<String>| -> Option<i64> {
@@ -194,6 +205,17 @@ pub fn signals(r: &Record, privacy_redacted: Option<bool>) -> Option<Signals> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn privacy_is_only_claimed_on_evidence() {
+        let named = Contact { org: Some("Example Ltd".into()), ..Contact::default() };
+        let country_only = Contact { country: Some("US".into()), ..Contact::default() };
+        assert_eq!(privacy_redacted(None, false), None);
+        assert_eq!(privacy_redacted(None, true), Some(true));
+        assert_eq!(privacy_redacted(Some(&named), false), Some(false));
+        assert_eq!(privacy_redacted(Some(&named), true), Some(true));
+        assert_eq!(privacy_redacted(Some(&country_only), false), Some(true));
+    }
 
     #[test]
     fn dates() {
