@@ -14,7 +14,7 @@ github.com  ● registered
   Status        client delete prohibited, client transfer prohibited, client update prohibited
   Nameservers   dns1.p08.nsone.net, dns2.p08.nsone.net, … ns-421.awsdns-52.com, ns-520.awsdns-01.net
   DNSSEC        unsigned
-  Registrant    redacted · US
+  Registrant    redacted · CA, US
   Abuse         abusecomplaints@markmonitor.com
   Source        rdap · https://rdap.verisign.com/com/v1/domain/github.com
 ```

@@ -3,7 +3,7 @@
 use crate::bootstrap;
 use crate::ctx::{Ctx, Live, LookupError};
 use crate::model::{Kind, Outcome, Record, Source};
-use crate::normalize::{privacy_redacted, signals};
+use crate::normalize::{drop_placeholder_expiry, privacy_redacted, signals};
 use crate::query::{self, Query};
 use crate::rdap::{self, Got};
 use crate::{sanitize, whois43};
@@ -103,6 +103,7 @@ async fn registration(ctx: &Ctx, input: &str, max_age: std::time::Duration) -> R
         if let Some(s) = &mut rec.source {
             s.cached = true;
         }
+        drop_placeholder_expiry(&mut rec);
         // recompute time-relative signals; they drift while cached
         let privacy = rec.signals.as_ref().and_then(|s| s.privacy_redacted);
         rec.signals = signals(&rec, privacy);
@@ -134,6 +135,7 @@ async fn registration(ctx: &Ctx, input: &str, max_age: std::time::Duration) -> R
     match res {
         Ok(src) => {
             rec.source = Some(src);
+            drop_placeholder_expiry(&mut rec);
             let privacy = (rec.kind == Kind::Domain && rec.result == Outcome::Registered)
                 .then(|| privacy_redacted(rec.registrant.as_ref(), redacted))
                 .flatten();

@@ -32,6 +32,8 @@ NOT_FOUND = re.compile(
     r"nothing found|not registered|object does not exist|\"(?:result|status)\":\s*\"available\"",
     re.I,
 )
+# whoq's error codes for a registry server it couldn't reach, as opposed to a reply it misread.
+UNREACHABLE = re.compile(r'"code"\s*:\s*"(?:network|timeout)"')
 DOMAIN_FIELDS = ("status", "registrar", "created", "expires", "nameservers")
 IP_FIELDS = ("org", "cidr", "country", "asn")
 
@@ -146,7 +148,8 @@ def main() -> int:
                 if not ok:
                     misses[r["tool"]].append({"id": r["id"], "query": t["query"], "field": f,
                                               "want": t.get(f if f not in ("cidr", "asn") else f + "s"),
-                                              "got": (got or {}).get(f), "exit": r["exit"]})
+                                              "got": (got or {}).get(f), "exit": r["exit"],
+                                              "unreachable": bool(UNREACHABLE.search(out))})
             for m, ok in measures:
                 for d, key in ((by_cat, cat), (by_field, f)):
                     d[r["tool"]][m][key][0] += ok
@@ -177,9 +180,13 @@ def main() -> int:
                 L.append(f"| {k} | " + " | ".join(pct(*d[n][m][k]) for n in names) + " |")
     L += ["", "## whoq misses (as field)", ""]
     if misses["whoq"]:
-        L += ["| Query | Field | Answer key | whoq |", "|---|---|---|---|"]
+        down = sum(x["unreachable"] for x in misses["whoq"])
+        L += [f"{down} of {len(misses['whoq'])} misses were a registry that could not be reached; "
+              f"{len(misses['whoq']) - down} were answers whoq got wrong.", "",
+              "| Query | Field | Cause | Answer key | whoq |", "|---|---|---|---|---|"]
         for x in misses["whoq"]:
-            L.append(f"| {x['query']} | {x['field']} | {json.dumps(x['want'], ensure_ascii=False)} | {json.dumps(x['got'], ensure_ascii=False)} |")
+            cause = "registry unreachable" if x["unreachable"] else "wrong answer"
+            L.append(f"| {x['query']} | {x['field']} | {cause} | {json.dumps(x['want'], ensure_ascii=False)} | {json.dumps(x['got'], ensure_ascii=False)} |")
     else:
         L.append("None.")
     (run / "correctness.md").write_text("\n".join(L) + "\n")

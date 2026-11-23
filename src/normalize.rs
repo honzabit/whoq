@@ -153,6 +153,19 @@ pub fn dedupe(v: &mut Vec<String>) {
     v.retain(|x| seen.insert(x.clone()));
 }
 
+/// An expiry over a century away isn't a real date: registries write one (gov.sg has
+/// 3000-01-01) for names that never expire.
+pub fn is_placeholder_expiry(s: &str) -> bool {
+    DateTime::parse_from_rfc3339(s).is_ok_and(|d| (d.with_timezone(&Utc) - Utc::now()).num_days() > 100 * 366)
+}
+
+/// Report a placeholder expiry as no expiry, so it can't feed date signals.
+pub fn drop_placeholder_expiry(r: &mut Record) {
+    if r.expires.as_deref().is_some_and(is_placeholder_expiry) {
+        r.expires = None;
+    }
+}
+
 /// Whether the registrant is hidden: true on a redaction marker or a contact with its identity
 /// removed, false when a name or organization is shown, and unknown (`None`) when the registry
 /// publishes no registrant at all, since that alone doesn't show anything was redacted.
@@ -205,6 +218,18 @@ pub fn signals(r: &Record, privacy_redacted: Option<bool>) -> Option<Signals> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn placeholder_expiry_is_no_expiry() {
+        let mut r = Record::new("gov.sg", crate::model::Kind::Domain);
+        r.expires = Some("3000-01-01T00:00:00Z".into());
+        drop_placeholder_expiry(&mut r);
+        assert_eq!(r.expires, None);
+        let soon = (Utc::now() + chrono::Duration::days(10 * 365)).to_rfc3339();
+        r.expires = Some(soon.clone());
+        drop_placeholder_expiry(&mut r);
+        assert_eq!(r.expires, Some(soon));
+    }
 
     #[test]
     fn privacy_is_only_claimed_on_evidence() {

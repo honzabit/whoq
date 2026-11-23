@@ -191,7 +191,13 @@ fn severity(field: &str, removed: &[Value]) -> (&'static str, Option<String>) {
 }
 
 pub fn diff(old: &Record, new: &Record, ignore: &[String]) -> Vec<Change> {
-    let (a, mut b) = (stable(old), stable(new));
+    let (mut a, mut b) = (stable(old), stable(new));
+    // Snapshots from before whoq dropped placeholder expiries still hold one.
+    for m in [&mut a, &mut b] {
+        if m.get("expires").and_then(Value::as_str).is_some_and(crate::normalize::is_placeholder_expiry) {
+            m.remove("expires");
+        }
+    }
     // Baselines saved before whoq read the registrant's state have none: not a change.
     if !a.contains_key("registrant.state") {
         b.remove("registrant.state");
@@ -434,6 +440,15 @@ mod tests {
         r.expires = Some("2027-01-01T00:00:00Z".into());
         r.registrar = Some(Registrar { name: Some("Good Registrar".into()), ..Default::default() });
         r
+    }
+
+    #[test]
+    fn placeholder_expiry_in_an_old_snapshot_is_not_a_change() {
+        let mut old = rec();
+        old.expires = Some("3000-01-01T00:00:00Z".into());
+        let mut new = rec();
+        new.expires = None;
+        assert!(diff(&old, &new, &[]).is_empty());
     }
 
     #[test]

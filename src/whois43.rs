@@ -10,7 +10,38 @@ use tokio::net::TcpStream;
 const MAX_RESPONSE: usize = 512 * 1024;
 
 pub async fn query(ctx: &Ctx, server: &str, q: &str) -> Result<String, LookupError> {
-    query_within(ctx, server, q, ctx.opts.timeout).await
+    let timeout = ctx.opts.timeout;
+    retry_network(|| query_within(ctx, server, q, timeout)).await.map_err(|e| unreachable(server, timeout, e))
+}
+
+/// Try again once after a connection failure, which is often momentary. A timeout isn't
+/// retried: it has already used the whole deadline, and a second would double the wait.
+async fn retry_network<T, F, Fut>(mut attempt: F) -> Result<T, LookupError>
+where
+    F: FnMut() -> Fut,
+    Fut: std::future::Future<Output = Result<T, LookupError>>,
+{
+    match attempt().await {
+        Err(LookupError::Network(_)) => {
+            tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+            attempt().await
+        }
+        other => other,
+    }
+}
+
+/// Say plainly that the registry's server is the problem, keeping the error code.
+fn unreachable(server: &str, timeout: std::time::Duration, e: LookupError) -> LookupError {
+    match e {
+        LookupError::Network(m) => {
+            let detail = m.strip_prefix(&format!("{server}:43: ")).unwrap_or(&m);
+            LookupError::Network(format!("{server}: registry unreachable ({detail})"))
+        }
+        LookupError::Timeout(_) => {
+            LookupError::Timeout(format!("{server}: registry did not answer within {}s", timeout.as_secs()))
+        }
+        other => other,
+    }
 }
 
 /// [`query`] with an explicit deadline, for requests that carry a lot of work (bulk Cymru).
@@ -661,6 +692,45 @@ mod tests {
         let missing = "\nDomain Name:\tzz-none.im\nThe domain zz-none.im was not found.\n";
         assert!(says_available(missing));
         assert!(!echoes_holder(missing, "zz-none.im"));
+    }
+
+    #[tokio::test(start_paused = true)]
+    async fn retries_a_failed_connection_once() {
+        let calls = std::cell::Cell::new(0);
+        let r = retry_network(|| {
+            calls.set(calls.get() + 1);
+            let n = calls.get();
+            async move { if n == 1 { Err(LookupError::Network("refused".into())) } else { Ok(n) } }
+        })
+        .await;
+        assert_eq!(r.unwrap(), 2);
+
+        calls.set(0);
+        let r: Result<(), _> = retry_network(|| {
+            calls.set(calls.get() + 1);
+            async { Err(LookupError::Network("refused".into())) }
+        })
+        .await;
+        assert!(r.is_err());
+        assert_eq!(calls.get(), 2);
+
+        calls.set(0);
+        let r: Result<(), _> = retry_network(|| {
+            calls.set(calls.get() + 1);
+            async { Err(LookupError::Timeout("slow".into())) }
+        })
+        .await;
+        assert!(r.is_err());
+        assert_eq!(calls.get(), 1, "a timeout isn't retried");
+    }
+
+    #[test]
+    fn says_when_the_registry_is_unreachable() {
+        let t = std::time::Duration::from_secs(15);
+        let e = unreachable("whois.example", t, LookupError::Network("whois.example:43: refused".into()));
+        assert_eq!((e.code(), e.message()), ("network", "whois.example: registry unreachable (refused)"));
+        let e = unreachable("whois.example", t, LookupError::Timeout("x".into()));
+        assert_eq!((e.code(), e.message()), ("timeout", "whois.example: registry did not answer within 15s"));
     }
 
     #[test]
