@@ -191,7 +191,11 @@ fn severity(field: &str, removed: &[Value]) -> (&'static str, Option<String>) {
 }
 
 pub fn diff(old: &Record, new: &Record, ignore: &[String]) -> Vec<Change> {
-    let (a, b) = (stable(old), stable(new));
+    let (a, mut b) = (stable(old), stable(new));
+    // Baselines saved before whoq read the registrant's state have none: not a change.
+    if !a.contains_key("registrant.state") {
+        b.remove("registrant.state");
+    }
     let keys: BTreeSet<&String> = a.keys().chain(b.keys()).collect();
     // A live section is compared only when both runs have a usable copy: turning --dns/--mail/
     // --tls on or off, or a transient failure, is not a change.
@@ -430,6 +434,21 @@ mod tests {
         r.expires = Some("2027-01-01T00:00:00Z".into());
         r.registrar = Some(Registrar { name: Some("Good Registrar".into()), ..Default::default() });
         r
+    }
+
+    #[test]
+    fn state_missing_from_an_old_baseline_is_not_a_change() {
+        let with = |s: &str| {
+            let mut r = rec();
+            r.registrant = Some(crate::model::Contact { state: Some(s.into()), ..Default::default() });
+            r
+        };
+        let mut old = rec();
+        old.registrant = Some(crate::model::Contact { country: Some("GR".into()), ..Default::default() });
+        let mut new = with("Attica");
+        new.registrant.as_mut().unwrap().country = Some("GR".into());
+        assert!(diff(&old, &new, &[]).is_empty());
+        assert_eq!(diff(&with("Attica"), &with("Crete"), &[]).len(), 1);
     }
 
     #[test]

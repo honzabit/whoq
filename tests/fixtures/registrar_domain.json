@@ -8,7 +8,7 @@
       "vcardArray": ["vcard", [["version", {}, "text", "4.0"],
         ["fn", {}, "text", "REDACTED FOR PRIVACY"],
         ["org", {}, "text", "Example Holdings Ltd"],
-        ["adr", { "cc": "GB" }, "text", ["", "", "", "", "", "", ""]],
+        ["adr", { "cc": "GB" }, "text", ["", "", "", "", "Greater London", "", ""]],
         ["email", {}, "text", "Please query the RDDS service of the Registrar of Record"]]]
     }
   ],

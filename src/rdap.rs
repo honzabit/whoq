@@ -104,6 +104,12 @@ fn vcard_country(entity: &Value) -> Option<String> {
     adr[3].as_array()?.get(6)?.as_str().filter(|s| !s.is_empty()).map(str::to_string)
 }
 
+/// The vCard address's region ("Attica"), the field before the postal code.
+fn vcard_state(entity: &Value) -> Option<String> {
+    let adr = vcard(entity, "adr")?;
+    adr[3].as_array()?.get(4)?.as_str().map(str::trim).filter(|s| !s.is_empty()).map(str::to_string)
+}
+
 fn has_role(e: &Value, role: &str) -> bool {
     e["roles"].as_array().is_some_and(|r| r.iter().any(|x| x.as_str() == Some(role)))
 }
@@ -221,6 +227,7 @@ pub fn apply_domain(r: &mut Record, v: &Value, redacted: &mut bool) {
         let mut c = Contact {
             name: real(vcard_text(e, "fn"), redacted),
             org: real(vcard_text(e, "org"), redacted),
+            state: real(vcard_state(e), redacted),
             country: vcard_country(e),
             email: real(vcard_text(e, "email"), redacted),
         };
@@ -232,6 +239,7 @@ pub fn apply_domain(r: &mut Record, v: &Value, redacted: &mut bool) {
             let cur = r.registrant.get_or_insert_with(Contact::default);
             set(&mut cur.name, c.name);
             set(&mut cur.org, c.org);
+            set(&mut cur.state, c.state);
             set(&mut cur.country, c.country);
             set(&mut cur.email, c.email);
         }

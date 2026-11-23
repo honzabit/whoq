@@ -265,6 +265,7 @@ enum Field {
     Dnssec,
     HolderName,
     HolderOrg,
+    HolderState,
     HolderCountry,
     HolderEmail,
 }
@@ -379,6 +380,9 @@ fn classify(key: &str) -> Option<Field> {
         }
         if starts("country") {
             return Some(HolderCountry);
+        }
+        if is("state") || is("province") {
+            return Some(HolderState);
         }
         if starts("mail") || is("email") {
             return Some(HolderEmail);
@@ -503,6 +507,7 @@ pub fn parse(r: &mut Record, text: &str, redacted: &mut bool) -> Option<String> 
             }
             HolderName => first(&mut who.name, real(Some(v), redacted)),
             HolderOrg => first(&mut who.org, real(Some(v), redacted)),
+            HolderState => first(&mut who.state, real(Some(v), redacted)),
             HolderCountry => first(&mut who.country, Some(v)),
             HolderEmail => first(&mut who.email, real(Some(v), redacted)),
         }
@@ -656,6 +661,23 @@ mod tests {
         let missing = "\nDomain Name:\tzz-none.im\nThe domain zz-none.im was not found.\n";
         assert!(says_available(missing));
         assert!(!echoes_holder(missing, "zz-none.im"));
+    }
+
+    #[test]
+    fn reads_the_registrant_state() {
+        let text = "Domain Name: example.org\nRegistrar: Example\nRegistrant Name: REDACTED FOR PRIVACY\nRegistrant State/Province: Attica\nRegistrant Country: GR\n";
+        let mut r = Record::new("example.org", Kind::Domain);
+        let mut red = false;
+        parse(&mut r, text, &mut red);
+        let c = r.registrant.unwrap();
+        assert_eq!((c.state.as_deref(), c.country.as_deref()), (Some("Attica"), Some("GR")));
+
+        let hidden = "Domain Name: example.org\nRegistrar: Example\nRegistrant State/Province: REDACTED FOR PRIVACY\n";
+        let mut r = Record::new("example.org", Kind::Domain);
+        let mut red = false;
+        parse(&mut r, hidden, &mut red);
+        assert!(r.registrant.is_none());
+        assert!(red);
     }
 
     #[test]

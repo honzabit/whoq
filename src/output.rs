@@ -166,8 +166,9 @@ pub fn pretty(rec: &Record, st: &Style) -> String {
         row("DNSSEC", if d { st.paint("32", "signed") } else { st.dim("unsigned") });
     }
     if let Some(c) = &rec.registrant {
-        let mut parts: Vec<String> =
-            [&c.org, &c.name, &c.country, &c.email].iter().filter_map(|x| (*x).clone()).collect();
+        let place = [c.state.as_deref(), c.country.as_deref()].into_iter().flatten().collect::<Vec<_>>().join(", ");
+        let place = (!place.is_empty()).then_some(place);
+        let mut parts: Vec<String> = [&c.org, &c.name, &place, &c.email].iter().filter_map(|x| (*x).clone()).collect();
         if c.name.is_none() && c.org.is_none() {
             parts.insert(0, st.dim("redacted"));
         }

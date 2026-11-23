@@ -51,6 +51,9 @@ pub struct Contact {
     pub name: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub org: Option<String>,
+    /// State, province or region.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub country: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

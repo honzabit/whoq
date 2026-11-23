@@ -96,6 +96,7 @@ pub fn record(r: &mut Record) {
     if let Some(x) = &mut r.registrant {
         opt(&mut x.name);
         opt(&mut x.org);
+        opt(&mut x.state);
         opt(&mut x.country);
         opt(&mut x.email);
     }

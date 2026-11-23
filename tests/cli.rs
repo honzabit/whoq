@@ -35,7 +35,7 @@ fn domain_lookup_follows_registry_to_registrar() {
     assert_eq!(v["status"], json!(["client transfer prohibited", "server delete prohibited"]));
     assert_eq!(v["dnssec"], true);
     // Registrant from the registrar hop; redaction placeholders dropped, real values kept.
-    assert_eq!(v["registrant"], json!({ "org": "Example Holdings Ltd", "country": "GB" }));
+    assert_eq!(v["registrant"], json!({ "org": "Example Holdings Ltd", "state": "Greater London", "country": "GB" }));
     assert_eq!(v["signals"]["privacy_redacted"], true);
     assert_eq!(v["signals"]["young"], false);
     assert_eq!(v["source"]["protocol"], "rdap");
