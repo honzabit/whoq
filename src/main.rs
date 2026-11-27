@@ -243,11 +243,14 @@ struct LookupArgs {
     /// Force legacy port-43 WHOIS for domains
     #[arg(long)]
     whois: bool,
-    /// Add live DNS: reverse DNS (forward-confirmed) for IPs; addresses, hosting network, DNS
-    /// provider and CAA for domains. Queries your resolver (or WHOQ_DNS_SERVER) and Team Cymru;
-    /// never connects to the target itself.
+    /// Add live DNS for domains: addresses, hosting network, DNS provider and CAA. Queries your
+    /// resolver (or WHOQ_DNS_SERVER) and Team Cymru; never connects to the target itself.
+    /// IPs get reverse DNS without it.
     #[arg(long)]
     dns: bool,
+    /// Skip the reverse DNS (PTR) lookup IPs otherwise get
+    #[arg(long)]
+    no_rdns: bool,
     /// Add mail posture for domains: MX and provider, SPF, DMARC, DKIM (common selectors),
     /// MTA-STS, TLS-RPT, BIMI. About 25 DNS queries per domain.
     #[arg(long)]
@@ -346,7 +349,8 @@ async fn run_watch(w: WatchArgs) -> i32 {
         use_cache: false,
         raw: false,
         force_whois: false,
-        live: Live { dns: w.dns, mail: w.mail, tls: w.tls, origin: false },
+        // Watch compares rDNS between runs, so it stays behind --dns there.
+        live: Live { dns: w.dns, rdns: w.dns, mail: w.mail, tls: w.tls, origin: false },
     };
     let ctx = Ctx::new(opts).unwrap_or_else(|e| fatal(!pretty, "init", &e.to_string()));
     let style = output::Style { color: tty && !w.no_color && std::env::var_os("NO_COLOR").is_none() };
@@ -735,7 +739,7 @@ async fn run(a: LookupArgs) -> i32 {
         &a.common,
         a.raw,
         a.whois,
-        Live { dns: a.dns, mail: a.mail, tls: a.tls, origin: a.asn },
+        Live { dns: a.dns, rdns: !a.no_rdns, mail: a.mail, tls: a.tls, origin: a.asn },
     )) {
         Ok(c) => c,
         Err(e) => fatal(machine, "init", &e.to_string()),

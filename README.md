@@ -60,7 +60,7 @@ cat domains.txt | whoq -j 16 -o ndjson
 Want to know more than who registered it? Add live checks:
 
 ```
-whoq --dns example.com 8.8.8.8        # who hosts it, which DNS provider, CAA, reverse DNS
+whoq --dns example.com                # who hosts it, which DNS provider, CAA
 whoq --mail example.com               # who handles its mail; SPF, DMARC, DKIM
 whoq --tls https://shop.example.com   # the certificate: issuer, names, expiry, valid?
 whoq --asn 8.8.8.8                    # which network announces this IP in BGP
@@ -97,10 +97,10 @@ $ whoq --dns --mail github.com
 ### `--dns`: who hosts it
 
 - **On a domain**, it adds `dns`: the A/AAAA records, the networks announcing them, the nameservers and a recognized DNS provider, and CAA. About 5 queries.
-- **On an IP**, it adds `rdns`: the PTR names, and whether they're **verified** (the name resolves back to the IP). That's how you tell a real Googlebot from a fake: anyone can set a PTR that says `googlebot.com`, but only Google can make it resolve back.
+- **On an IP**, you get `rdns` without asking (`--no-rdns` skips it): the PTR names, and whether they're **verified** (the name resolves back to the IP). That's how you tell a real Googlebot from a fake: anyone can set a PTR that says `googlebot.com`, but only Google can make it resolve back.
 
   ```
-  $ whoq --dns 66.249.66.1
+  $ whoq 66.249.66.1
     …
     rDNS          crawl-66-249-66-1.googlebot.com  ✓ forward-confirmed
   ```

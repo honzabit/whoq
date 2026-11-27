@@ -37,9 +37,9 @@ fn tools() -> Value {
                     "max_age": { "type": ["string", "integer"],
                                  "description": "Serve a cached result only if younger than this, otherwise fetch fresh: \
     seconds, or a string like \"30m\", \"6h\", \"2d\". 0 forces a fresh lookup. Default: the server's --max-age (1h)." },
-                    "dns": { "type": "boolean", "description": "Add live DNS (default false): for IPs, reverse DNS with forward \
-    confirmation (rdns.verified is how real crawlers are told from fakes); for domains, addresses and hosting network, DNS provider \
-    and CAA, plus signals resolves and parked. Never contacts the target's servers directly." },
+                    "dns": { "type": "boolean", "description": "Live DNS. For IPs, reverse DNS with forward confirmation \
+    (rdns.verified is how real crawlers are told from fakes) is on unless this is false. For domains (default false), addresses and \
+    hosting network, DNS provider and CAA, plus signals resolves and parked. Never contacts the target's servers directly." },
                     "mail": { "type": "boolean", "description": "Add mail posture for domains (default false): MX and mail provider, \
     SPF, DMARC policy, DKIM selectors (common names only), MTA-STS, TLS-RPT, BIMI, plus signals accepts_mail and spoofable. \
     About 25 DNS queries per domain." },
@@ -146,7 +146,8 @@ async fn call(ctx: &Arc<Ctx>, name: &str, args: &Value) -> Result<Value, String>
                 _ => return Err("`max_age` must be seconds or a string like \"30m\"".into()),
             };
             let flag = |k: &str| args[k].as_bool().unwrap_or(false);
-            let live = Live { dns: flag("dns"), mail: flag("mail"), tls: flag("tls"), origin: flag("asn") };
+            let rdns = args["dns"].as_bool().unwrap_or(true);
+            let live = Live { dns: flag("dns"), rdns, mail: flag("mail"), tls: flag("tls"), origin: flag("asn") };
             let recs = run_batch(ctx, qs, max_age, live).await;
             let results: Vec<Value> = recs
                 .iter()

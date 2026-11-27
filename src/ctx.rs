@@ -52,8 +52,10 @@ pub struct Options {
 /// Live (uncached) checks layered on top of registration data.
 #[derive(Debug, Clone, Copy, Default, PartialEq)]
 pub struct Live {
-    /// rdns for IPs; addresses, hosting network, NS provider and CAA for domains.
+    /// Addresses, hosting network, NS provider and CAA for domains.
     pub dns: bool,
+    /// Reverse DNS (forward-confirmed) for IPs.
+    pub rdns: bool,
     /// MX, SPF, DMARC, DKIM, MTA-STS, TLS-RPT, BIMI for domains.
     pub mail: bool,
     /// The certificate the host presents. Unlike the others, this connects to the target.
@@ -64,7 +66,7 @@ pub struct Live {
 
 impl Live {
     pub fn any(self) -> bool {
-        self.dns || self.mail || self.tls || self.origin
+        self.dns || self.rdns || self.mail || self.tls || self.origin
     }
 }
 

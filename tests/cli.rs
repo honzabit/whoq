@@ -551,15 +551,20 @@ fn ip_rdns_is_forward_confirmed() {
     env.dns.add("8.100.51.198.in-addr.arpa", vec![Rr::Ptr("crawl-8.googlebot.test")]);
     env.dns.add("crawl-8.googlebot.test", vec![Rr::A("203.0.113.1")]); // a liar's PTR
 
-    let out = env.run(&["-o", "ndjson", "--dns", "198.51.100.7", "198.51.100.8", "198.51.100.9"], None);
+    let out = env.run(&["-o", "ndjson", "198.51.100.7", "198.51.100.8", "198.51.100.9"], None);
     let v = ndjson(&out);
     assert_eq!(v[0]["rdns"], json!({ "ptr": ["crawl-7.bot.test"], "verified": true }));
     assert_eq!(v[1]["rdns"], json!({ "ptr": ["crawl-8.googlebot.test"], "verified": false }));
     assert_eq!(v[2]["rdns"], json!({}), "no PTR record");
     assert_eq!(v[0]["network"]["org"], "Fixture Networks BV");
 
-    let pretty = stdout(&env.run(&["-o", "pretty", "--dns", "198.51.100.7"], None));
+    let pretty = stdout(&env.run(&["-o", "pretty", "198.51.100.7"], None));
     assert!(pretty.contains("crawl-7.bot.test  ✓ forward-confirmed"), "{pretty}");
+
+    let off = ndjson(&env.run(&["-o", "ndjson", "--no-rdns", "198.51.100.7"], None));
+    assert!(off[0].get("rdns").is_none(), "--no-rdns skips it");
+    let with_dns = ndjson(&env.run(&["-o", "ndjson", "--dns", "198.51.100.7"], None));
+    assert_eq!(with_dns[0]["rdns"]["verified"], true, "--dns keeps it");
 }
 
 #[test]

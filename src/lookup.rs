@@ -62,7 +62,7 @@ pub async fn lookup_with(ctx: &Ctx, input: &str, max_age: std::time::Duration, l
         let tls_target = if live.tls && checkable { query::endpoint(input) } else { None };
         let dns_pass = async {
             match &q {
-                Some(Query::Ip(ip)) if live.dns => {
+                Some(Query::Ip(ip)) if live.rdns => {
                     rec.rdns = Some(crate::dns::rdns(ctx, *ip).await);
                 }
                 Some(Query::Domain { ascii, .. }) if checkable && (live.dns || live.mail) => {
